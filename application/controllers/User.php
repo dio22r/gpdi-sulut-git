@@ -135,13 +135,17 @@ class user extends CI_Controller {
 
 	public function form($id = "") {
         $arrPost = $this->input->post();
+        $statErr = false;
+        $arrError = array();
         if ($arrPost) {
             $arrRes = $this->submit();
+            $statErr = !$arrRes["status"];
+
             if ($arrRes["status"] === true) {
-                $id = $arrRes["arrDet"]["id"];
-                redirect($this->thisurl . "/after_submit/".$id, "refresh");
+                $idData = $arrRes["arrDet"]["id"];
+                redirect($this->thisurl . "/after_submit/".$idData, "refresh");
             } else {
-                print_r($arrRes);
+                $arrError = $arrRes["arrDet"];
             }
         }
 
@@ -150,6 +154,17 @@ class user extends CI_Controller {
 
         if ($arrData) {
             $arrData = $arrData[0];
+        }
+
+        if ($arrPost) {
+            $arrData = $arrPost;
+            if ($arrPost["tu_tipe_user"] == 3) {
+                $arrData["tu_tipe_id"] = $arrPost["tipe_id_wil"];
+            } else if ($arrPost["tu_tipe_user"] == 5) {
+                $arrData["tu_tipe_id"] = $arrPost["tipe_id_gem"];
+            } else {
+                $arrData["tu_tipe_id"] = 0;
+            }
         }
 
         $arrWilayah = $this->tbl_wilayah->retrieve_wilayah();
@@ -163,10 +178,12 @@ class user extends CI_Controller {
         $arrForm = array(
             "ctlArrData" => $arrData,
             "ctlArrTipe" => $arrTipe,
-            "ctlUrlSubmit" => $this->thisurl . "/submit/",
+            "ctlUrlSubmit" => $this->thisurl."/form/".$id,
             "ctlUrlCancel" => $this->thisurl,
             "ctlArrMw" => $arrWilayah,
-            "ctlArrGembala" => array()
+            "ctlArrGembala" => array(),
+            "ctlStatErr" => $statErr,
+            "ctlArrErr" => $arrError
         );
 
         $arrData = array(
@@ -196,16 +213,17 @@ class user extends CI_Controller {
         $arrError = array();
 
         $isAllow = true;
-        if ($arrPost["password_baru"] != ""
-            && $arrPost["password_baru"] == $arrPost["password_confirm"]
-        ) {
-            $arrInput["tu_password"] = md5($arrPost["password_baru"]);
-        } else {
-            $arrError[] = "Password tidak boleh kosong dan harus sama dengan konfirmasi";
-        }
+
         
         if ($arrInput["tu_id"] != "") {
             unset($arrInput["tu_username"]);
+            if ($arrPost["password_baru"] != "") {
+                if ($arrPost["password_baru"] == $arrPost["password_confirm"]) {
+                    $arrInput["tu_password"] = md5($arrPost["password_baru"]);
+                } else {
+                    $arrError[] = "Password harus sama dengan konfirmasi password";
+                }
+            }
         } else {
             $arrUser = $this->tbl_user->select_by_username(
                 $arrInput["tu_username"]
@@ -216,14 +234,21 @@ class user extends CI_Controller {
             } else if ($arrInput["tu_username"] == "") {
                 $arrError[] = "Username tidak boleh kosong";
             }
+
+            if ($arrPost["password_baru"] != ""
+                && $arrPost["password_baru"] == $arrPost["password_confirm"]
+            ) {
+                $arrInput["tu_password"] = md5($arrPost["password_baru"]);
+            } else {
+                $arrError[] = "Password tidak boleh kosong dan harus sama dengan konfirmasi";
+            }
         }
 
         if (trim($arrInput["tu_display_name"]) == "") {
             $arrError[] = "Nama tidak boleh kosong";
-        } else if (strlen(trim($arrInput["tu_display_name"])) > 5) {
+        } else if (strlen(trim($arrInput["tu_display_name"])) < 5) {
             $arrError[] = "Nama harus lebih dari 5 karakter";
         }
-
 
         $statusSubmit = true;
         if ($arrPost["tu_tipe_user"] == 3) {
@@ -234,20 +259,25 @@ class user extends CI_Controller {
             $arrInput["tu_tipe_id"] = 0;
         }
 
+        $id = 0;
         $result = false;
         if (count($arrError) == 0) {
             if ($arrInput["tu_id"] == "") { // insert
                 $result = $this->tbl_user->insertdata(array($arrInput));
+                $id = $this->tbl_user->last_insert_id();
             } else {
                 $id = $arrInput["tu_id"];
                 $result = $this->tbl_user->updatedata($arrInput, $id);
             }
         }
         
-        print_r($arrError);
+        
         if ($result) {
             return array(
-                "status" => true
+                "status" => true,
+                "arrDet" => array(
+                    "id" => $id
+                )
             );
         } else {
             return array(
@@ -258,7 +288,40 @@ class user extends CI_Controller {
     }
 
     public function after_submit($id) {
+        $arrData = $this->tbl_user->select_by_id($id);
+
         
+        if (!$arrData) {
+            show_404();
+        }
+
+        $arrData[0]["tu_status"] = $this->arrStatus[$arrData[0]["tu_status"]];
+        $arrData[0]["tu_tipe_user"] = $this->arrTipe[$arrData[0]["tu_tipe_user"]];
+
+        $arrView = array(
+            "ctlArrData" => $arrData[0],
+            "ctlFormUrl" => $this->thisurl . "/form/" . $id,
+            "ctlProfileUrl" => $this->thisurl . "/form/" . $id
+        );
+
+        $arrData = array(
+            "ctlTitle" => "Data User",
+            "ctlSubTitle" => "GPdI Sulawesi Utara",
+            
+            "ctlSideBar" => $this->lib_defaultView->retrieve_menu("user"),
+            "ctlHeaderBar" => $this->lib_defaultView->retrieve_header(),
+            "ctlContentArea" => $this->load->view("user/vw_profile_user", $arrView, true),
+            "ctlSideBarR" => $this->lib_defaultView->retrieve_sidebar_r(),
+            "ctlArrJs" => array(
+            ),
+            "ctlArrCss" => array(
+                base_url("assets/css/jquery-ui.structure.min.css"),
+                base_url("assets/css/jquery-ui.theme.min.css"),
+                base_url("assets/css/jquery-ui.css"),
+            )
+        );
+        $this->load->view('master_view/master_index', $arrData);
+
     }
 
     public function profile($id = "") {

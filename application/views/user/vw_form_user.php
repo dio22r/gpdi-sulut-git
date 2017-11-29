@@ -15,6 +15,18 @@
               			)
           			);
 				?>
+
+				<?php if($ctlStatErr == true) { ?>
+				<div class="alert alert-danger alert-dismissible">
+	                <h4><i class="icon fa fa-ban"></i> Maaf ada kesalahan!</h4>
+	                <?php echo ul($ctlArrErr); ?>
+              	</div>
+				<?php } ?>
+
+				<div class="row">
+
+				</div>
+
 				<div class="row">
 					<div class="col-md-6">
 		                <div class="form-group">

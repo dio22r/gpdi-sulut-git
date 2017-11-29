@@ -11,6 +11,7 @@ class tbl_user extends CI_Model {
     
     public function insertdata($arrInsert = array()) {
         $return = $this->db->insert_batch($this->table1, $arrInsert);
+
         return $return;
     }
     
@@ -77,5 +78,10 @@ class tbl_user extends CI_Model {
         );
 
         return $arrTipe;
+    }
+
+    public function last_insert_id() {
+         $insertId = $this->db->insert_id();
+         return $insertId;
     }
 }
