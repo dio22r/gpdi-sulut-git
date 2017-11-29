@@ -289,19 +289,32 @@ class user extends CI_Controller {
 
     public function after_submit($id) {
         $arrData = $this->tbl_user->select_by_id($id);
-
-        
+                
         if (!$arrData) {
             show_404();
         }
 
+        $this->load->model("tbl_wilayah");
+
+        $idTipe = $arrData[0]["tu_tipe_id"];
+        if ($arrData[0]["tu_tipe_user"] == 3) {
+            $arrDetail = $this->tbl_wilayah->select_by_id($idTipe);
+            $strNama = "Wilayah ". $arrDetail[0]["tw_nomor_induk"] ." ". $arrDetail[0]["tw_nama"];
+        } elseif ($arrData[0]["tu_tipe_user"] == 5) {
+            //$arrDetail = $this->tbl_wilayah->select_by_id($id);
+            $strNama = "";
+        }
+
         $arrData[0]["tu_status"] = $this->arrStatus[$arrData[0]["tu_status"]];
-        $arrData[0]["tu_tipe_user"] = $this->arrTipe[$arrData[0]["tu_tipe_user"]];
+        $arrData[0]["tu_tipe_user_str"] = $this->arrTipe[$arrData[0]["tu_tipe_user"]];
+        $arrData[0]["tu_tipe_user_det"] = $strNama;
+
 
         $arrView = array(
             "ctlArrData" => $arrData[0],
             "ctlFormUrl" => $this->thisurl . "/form/" . $id,
-            "ctlProfileUrl" => $this->thisurl . "/form/" . $id
+            "ctlProfileUrl" => $this->thisurl . "/profile/" . $id,
+            "ctlHomeUrl" => $this->thisurl
         );
 
         $arrData = array(
@@ -310,7 +323,7 @@ class user extends CI_Controller {
             
             "ctlSideBar" => $this->lib_defaultView->retrieve_menu("user"),
             "ctlHeaderBar" => $this->lib_defaultView->retrieve_header(),
-            "ctlContentArea" => $this->load->view("user/vw_profile_user", $arrView, true),
+            "ctlContentArea" => $this->load->view("user/vw_after_submit", $arrView, true),
             "ctlSideBarR" => $this->lib_defaultView->retrieve_sidebar_r(),
             "ctlArrJs" => array(
             ),
@@ -326,6 +339,7 @@ class user extends CI_Controller {
 
     public function profile($id = "") {
         $arrData = $this->tbl_user->select_by_id($id);
+
 
         if (!$arrData) {
             show_404();
