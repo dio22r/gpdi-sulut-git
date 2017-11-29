@@ -1,0 +1,143 @@
+@CHARSET "UTF-8";
+
+
+body, html {
+	margin: 0px;
+	padding: 0px;
+}
+
+#header .header-home img {
+	width:100%;
+}
+
+.each-menu:hover * {
+    cursor: pointer;
+}
+
+.each-menu {
+	padding: 0px 0px 0px 0px;
+	float: left;
+	width: 100%;
+}
+
+.each-menu.kuning {
+	background: #ffff00;
+}
+
+.each-menu.merah {
+    background: #800000;
+}
+
+.each-menu.biru {
+    background: #0070ff;
+}
+
+.each-menu:hover, .each-menu.active  {
+    background: #aaa;	
+}
+/*
+.each-menu.kuning.active, .each-menu.kuning:hover {
+    background: #ff6600;
+}
+
+.each-menu.merah.active, .each-menu.merah:hover {
+    background: #ff0000;
+}
+
+.each-menu.biru.active, .each-menu.biru:hover {
+    background: #008080;
+}
+*/
+
+.each-menu .menu-logo {
+	margin: 5px 10px;
+}
+
+#footer {
+    background: #0057ff;
+    margin: 10px 0px 5px 0px;
+    text-align: right;
+    font-family: serif;
+    color: white;
+}
+
+#footer .ayat .kop {
+	padding: 5px 0px 0px 0px;
+	margin: 0px;
+	font-size: 25px;
+}
+
+#footer .ayat .isi {
+    padding: 0px 0px 0px 0px;
+    margin: 0px 0px 5px 0px;
+    font-weight: bold;
+}
+
+
+.header-detail img {
+	margin: 3px 10px;
+}
+
+.header-detail .space {
+    line-height: 9px;
+}
+
+.header-detail.kuning {
+	background: #ffff00;
+}
+
+.header-detail.kuning .space {
+    background: #808000;
+}
+
+.header-detail.merah {
+    background: #800000;
+}
+
+.header-detail.merah .space {
+    background: #999999;
+}
+
+.header-detail.biru {
+    background: #0070ff;
+}
+
+.header-detail.biru .space {
+    background: #0000ff;
+}
+
+.body-warper {
+	margin: 5px 0px;
+	padding: 5px 3px;
+	background: #fff;
+}
+
+.content h3 {
+    margin: 20px 0px 0px 0px;
+    padding: 0px;
+    border-bottom: 1px solid #555;
+}
+/** kantin **/
+
+.content.kantin table th{
+    border-bottom: 1px solid #333;
+}
+.content.kantin table td{
+	border-bottom: 1px solid #ccc;
+}
+
+.harga {
+    font-weight: bold;
+    text-align: right;	
+}
+
+/** peta **/
+.peta img {
+    width: 100%;	
+}
+
+
+
+.clear {
+    clear:both;	
+}

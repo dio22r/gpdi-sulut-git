@@ -1,0 +1,221 @@
+@CHARSET "UTF-8";
+
+@font-face {
+    font-family: "Covered By Your Grace";
+    src: url("../font/CoveredByYourGrace.ttf");
+}
+
+body, html {
+    margin: 0px;
+    padding: 0px;
+    background: #e6e6e6 ;
+}
+
+
+.g-preview-navtop {
+	
+}
+
+.g-preview-navtop {
+	padding: 10px 20px 0px 20px;
+	background: white;
+	border-bottom: 4px solid #4d4d4d;
+}
+
+.g-preview-navtop .g-warper-page-sign {
+    border-top: 3px solid #4d4d4d;
+    text-align :right; 
+}
+
+.g-preview-navtop .g-page-sign {
+	height: 80px;
+	width: 190px;
+	display: inline-block;
+	margin-right: 20px;
+}
+
+#g-pbl-header .g-warper-page-sign {
+	border-top: 3px solid #4d4d4d;
+	width: 700px;
+	margin: 20px auto 0px auto;
+}
+
+#g-pbl-header .g-page-sign {
+	height: 80px;
+    width: 190px;
+    margin: 0px auto;
+}
+
+.g-page-sign.login {
+    background: url("../img/sprite-tipe-halaman.png") 0px 0px;
+}
+
+.g-page-sign.lirik {
+    background: url("../img/sprite-tipe-halaman.png") -190px 0px;
+}
+
+.g-page-sign.admin {
+    background: url("../img/sprite-tipe-halaman.png") -380px 0px;
+}
+
+.g-page-sign.preview {
+    background: url("../img/sprite-tipe-halaman.png") -570px 0px;
+}
+
+
+.g-show-hide-more-info {
+	border-top: 1px solid #4d4d4d;
+	margin-top: 20px;
+}
+
+.g-show-hide-more-info .g-icon-btn-small {
+    height: 25px;
+    width: 85px;
+    margin: 0px auto;
+}
+
+.g-icon-btn-small.g-show {
+    background: url("../img/sprite-small-dec85x25.png") 0px 0px;
+}
+
+.g-icon-btn-small.g-hide {
+    background: url("../img/sprite-small-dec85x25.png") -85px 0px;
+}
+
+
+
+.g-nav-button {
+	margin: -55px 0px 30px 0px;
+}
+
+
+#g-pbl-header {
+    border-bottom: 2px solid #4D4D4D;	
+}
+
+.g-form-warper {
+	width: 850px;
+	margin: 0px auto 20px auto;
+}
+
+.g-logo-warper {
+    display:inline-block;
+    height: 97px;
+   	vertical-align: top;
+   	margin-right: 30px;
+}
+
+.g-input-warper {
+	height: 97px;
+	display: inline-block;
+	width: 640px;
+	vertical-align: top;
+}
+
+.g-input-warper > * {
+	height: 55px !important;
+	background: #4d4d4d !important;
+	padding: 0px !important;
+    border: 0px !important;
+    vertical-align:top !important;
+    margin-top: 23px;
+    border-radius: 0px !important;
+}
+
+.g-search-input {
+	width: 570px !important;
+	font-size: 30px !important;
+	line-height: 55px !important;
+	font-family: serif !important;
+	font-style: italic !important;
+	padding-left: 10px !important;
+	color: white !important;
+}
+
+.g-link-lirik-top {
+	text-align: right;
+	margin: 5px 10px
+}
+
+.g-link-lirik-top a {
+	font-family: serif;
+	font-style: italic;
+	font-weight: bold;
+	font-size: 18px;
+	color: #4d4d4d;
+}
+
+#g-pbl-body {
+    margin: 10px 20px;
+}
+
+.g-lyric-title {
+	font-size: 45px;
+	font-weight: bold;
+	width: 700px;
+}
+
+.g-lyric {
+	margin:  30px 0px 30px 30px;
+	font-size: 20px;
+	line-height: 25px;
+	font-family: serif;
+	font-style: italic;
+	color: black;
+}
+
+.g-info {
+	font-family: serif;
+	font-style: italic;
+	font-weight: bold;
+	color: #4d4d4d;
+	text-align: right;
+}
+
+#g-pbl-footer .warper {
+    border-top: 2px solid #4d4d4d;
+    margin: 20px 40px 0px 40px;
+    height: 50px;
+}
+
+#g-pbl-footer .copyright {
+    text-align: right;
+    color: #4d4d4d;
+    margin-top: 5px;
+    
+}
+
+.g-btn-info {
+	cursor: pointer;
+}
+
+.g-btn-info:hover .g-icon-btn-small {
+    opacity: 0.8;
+}
+
+.g-more-info {
+	display: none;
+}
+
+.g-add-note {
+	margin-left: 20px;
+}
+
+.clear {
+    clear:both;	
+}
+
+.g-pict-warper img {
+	float: right;
+	width: 200px;
+}
+
+.g-pict-warper {
+	float: right;
+	padding: 5px;
+	background: white;
+	border-right: 1px solid #AAA;
+	border-bottom: 1px solid #777;
+	border-top: 1px solid #DDD;
+	border-left: 1px solid #DDD;	
+}
