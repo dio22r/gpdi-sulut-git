@@ -79,7 +79,7 @@
 		                  			"placeholder" => "Password Baru",
 		                  			"type" => "password"
 		                  		);
-		                  		echo form_input($id, "", $arrAttr);
+		                  		echo form_password($id, "", $arrAttr);
                   			?>
 		                  </div>
 		                </div>
@@ -99,7 +99,7 @@
 		                  			"placeholder" => "Konfirmasi Password",
 		                  			"type" => "password"
 		                  		);
-		                  		echo form_input($id, "", $arrAttr);
+		                  		echo form_password($id, "", $arrAttr);
                   			?>
 		                  </div>
 		                </div>
@@ -137,7 +137,7 @@
 		                  		<?php
 		                  			$id = "tipe_id_wil";
 		                  			$val = misc_helper::get_form_value(
-		                  				$ctlArrData, $id
+		                  				$ctlArrData, "tu_tipe_id"
 		                  			);
 
 		                  			$arrAttr = array(
@@ -162,7 +162,7 @@
 		                  		<?php
 		                  			$id = "tipe_id_gem";
 		                  			$val = misc_helper::get_form_value(
-		                  				$ctlArrData, $id
+		                  				$ctlArrData, "tu_tipe_id"
 		                  			);
 
 		                  			$arrAttr = array(

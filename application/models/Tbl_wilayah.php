@@ -30,7 +30,7 @@ class tbl_wilayah extends CI_Model {
             ->join($this->table3 . " t3", "t1.tkab_id = t3.tkab_id", "left")
             ->where("t1.tw_status", 1)
             ->limit($limit, $start)
-            ->group_by("tw_id");
+            ->group_by("t1.tw_id");
 
         $result = $this->db->get();
         $result = $result->result_array();
@@ -39,11 +39,12 @@ class tbl_wilayah extends CI_Model {
     }
 
     public function select_by_id($id) {
-        $query = $this->db->select("t1.*, t3.*, count(t2.tw_id) as total")
+        $query = $this->db->select("t1.*, t3.*, count(t2.tg_id) as total")
             ->from($this->table1 . " t1")
-            ->join($this->table2 . " t2", "t1.tw_id = t2.tw_id", "left")
+            ->join($this->table2 . " t2", "t2.tw_id = t2.tw_id", "left")
             ->join($this->table3 . " t3", "t1.tkab_id = t3.tkab_id", "left")
-            ->group_by("t1.tw_id")
+            ->where("t1.tw_status", 1)
+            ->group_by("t1.tw_nama")
             ->where("t1.tw_id", $id);
 
         $result = $this->db->get();

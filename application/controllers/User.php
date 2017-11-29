@@ -134,8 +134,18 @@ class user extends CI_Controller {
     }
 
 	public function form($id = "") {
-        $this->load->model("tbl_wilayah");
+        $arrPost = $this->input->post();
+        if ($arrPost) {
+            $arrRes = $this->submit();
+            if ($arrRes["status"] === true) {
+                $id = $arrRes["arrDet"]["id"];
+                redirect($this->thisurl . "/after_submit/".$id, "refresh");
+            } else {
+                print_r($arrRes);
+            }
+        }
 
+        $this->load->model("tbl_wilayah");
         $arrData = $this->tbl_user->select_by_id($id);
 
         if ($arrData) {
@@ -182,16 +192,38 @@ class user extends CI_Controller {
     public function submit() {
         $arrPost = $this->input->post();
 
-        if (!$arrPost) {
-            show_404();
-        }
-
         $arrInput = misc_helper::get_form_arrData_todb($arrPost, "tu_");
+        $arrError = array();
+
+        $isAllow = true;
         if ($arrPost["password_baru"] != ""
             && $arrPost["password_baru"] == $arrPost["password_confirm"]
         ) {
             $arrInput["tu_password"] = md5($arrPost["password_baru"]);
+        } else {
+            $arrError[] = "Password tidak boleh kosong dan harus sama dengan konfirmasi";
         }
+        
+        if ($arrInput["tu_id"] != "") {
+            unset($arrInput["tu_username"]);
+        } else {
+            $arrUser = $this->tbl_user->select_by_username(
+                $arrInput["tu_username"]
+            );
+
+            if ($arrUser) {
+                $arrError[] = "Username sudah ada";
+            } else if ($arrInput["tu_username"] == "") {
+                $arrError[] = "Username tidak boleh kosong";
+            }
+        }
+
+        if (trim($arrInput["tu_display_name"]) == "") {
+            $arrError[] = "Nama tidak boleh kosong";
+        } else if (strlen(trim($arrInput["tu_display_name"])) > 5) {
+            $arrError[] = "Nama harus lebih dari 5 karakter";
+        }
+
 
         $statusSubmit = true;
         if ($arrPost["tu_tipe_user"] == 3) {
@@ -201,8 +233,28 @@ class user extends CI_Controller {
         } else {
             $arrInput["tu_tipe_id"] = 0;
         }
+
+        $result = false;
+        if (count($arrError) == 0) {
+            if ($arrInput["tu_id"] == "") { // insert
+                $result = $this->tbl_user->insertdata(array($arrInput));
+            } else {
+                $id = $arrInput["tu_id"];
+                $result = $this->tbl_user->updatedata($arrInput, $id);
+            }
+        }
         
-        print_r($arrInput);
+        print_r($arrError);
+        if ($result) {
+            return array(
+                "status" => true
+            );
+        } else {
+            return array(
+                "status" => false,
+                "arrDet" => $arrError
+            );
+        }
     }
 
     public function after_submit($id) {

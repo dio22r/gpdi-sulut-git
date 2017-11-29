@@ -26,6 +26,7 @@ class wilayah extends CI_Controller {
 
         $this->load->model("tbl_wilayah");
         $this->load->model("tbl_kabupaten");
+        $this->load->model("tbl_gereja");
 
         $arrConfig = array("session" => $this->session);
         $this->lib_login = new lib_login($arrConfig);
@@ -134,9 +135,15 @@ class wilayah extends CI_Controller {
             show_404();
         }
 
+        $arrGereja = $this->tbl_gereja->retrieve_data(
+            array("t1.tw_id" => $id)
+        );
+
         $arrForm = array(
             "ctlArrData" => $arrData[0],
-            "ctlUrlEdit" => $this->thisurl . "/form/" . $id
+            "ctlUrlEdit" => $this->thisurl . "/form/" . $id,
+            "ctlArrGereja" => $arrGereja,
+            "ctlUrlBaseTbl" => base_url("index.php/gereja/")
         );
 
         $arrData = array(

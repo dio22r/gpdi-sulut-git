@@ -15,8 +15,10 @@ class tbl_user extends CI_Model {
     }
     
     public function updatedata($arrUpdate = array(), $id = "") {
-        unset($arrUpdate["as_id"]);
-        $return = $this->db->update($this->table1, $arrUpdate, "as_id = ".$id);
+        unset($arrUpdate["tu_id"]);
+        $return = $this->db->update(
+            $this->table1, $arrUpdate, "tu_id = '".$id."'"
+        );
         
         return $return;
     }
