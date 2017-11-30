@@ -19,7 +19,7 @@ class tbl_pengumuman extends CI_Model {
     public function updatedata($arrUpdate = array(), $id = "") {
         unset($arrUpdate["tu_id"]);
         $return = $this->db->update(
-            $this->table1, $arrUpdate, "tu_id = '".$id."'"
+            $this->table1, $arrUpdate, "tpeng_id = '".$id."'"
         );
         
         return $return;

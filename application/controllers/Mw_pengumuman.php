@@ -74,8 +74,7 @@ class mw_pengumuman extends CI_Controller {
         );
         $this->load->view('master_view/master_index', $arrData);
     }
-	
-
+    
     public function berita($search = "all", $start = 0) {
         
         //print_r($this->arrSession);

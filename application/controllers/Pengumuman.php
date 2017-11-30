@@ -25,7 +25,7 @@ class pengumuman extends CI_Controller {
         $this->load->library("image_lib");
         $this->load->library("default_view");
 
-        //$this->load->model("tbl_arsip_surat");
+        $this->load->model("tbl_pengumuman");
         
         // load libraries
 
@@ -46,6 +46,8 @@ class pengumuman extends CI_Controller {
     }
     
     public function index($search = "all", $start = 0) {
+        
+        $arrData = $this->tbl_pengumuman->retrieve_data(array(), 0, 30);
 		
         //print_r($this->arrSession);
         
@@ -53,7 +55,10 @@ class pengumuman extends CI_Controller {
             "ctlUrlSubmit" => $this->thisurl . "/index",
             "ctlUrlPengumuman" => $this->thisurl . "/index",
             "ctlUrlBerita" => $this->thisurl . "/berita",
+            "ctlArrData" => $arrData
         );
+
+        $arrData = $this->tbl_pengumuman->retrieve_data(array(), 0, 30);
 
         $arrData = array(
             "ctlTitle" => "Pengumuman",
@@ -72,6 +77,16 @@ class pengumuman extends CI_Controller {
         $this->load->view('master_view/master_index', $arrData);
     }
 	
+    public function submit() {
+        $arrPost = $this->input->post();
+
+        $arrInsert = array(
+
+        );
+
+        $this->tbl_pengumuman->insertdata($arrInsert);
+        
+    }
 
     public function berita($search = "all", $start = 0) {
         

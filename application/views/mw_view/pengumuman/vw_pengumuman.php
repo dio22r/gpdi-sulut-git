@@ -53,8 +53,6 @@
                   $datetime2 = new DateTime();
                   $difference = $datetime1->diff($datetime2);
 
-                  echo $difference->d . " hari";
-
                 if ($date != $tempDate) {
                     $date = $tempDate;
 
