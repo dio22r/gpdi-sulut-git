@@ -18,13 +18,23 @@ class lib_login {
             
             return false;
         } else {
-            return true;
+            $isAllow = $this->check_previlage();
+
+            if ($isAllow) {
+                return true;
+            } else {
+                show_404();
+            }
         }
+    }
+
+    public function check_previlage() {
+        
+        return true;
     }
 
     public function set_cookies($arrCookies) {
         $date = date("Y-m-d H:i:s", strtotime("+ 30 Minutes"));
-        
         foreach ($arrCookies as $key => $val) {
             set_cookie($key, $val, $date, "localhost");
         }

@@ -26,93 +26,78 @@
         </div>
     </div>
 
+            <?php
+
+            $date = "";
+            ?>
+
             <ul class="timeline">
 
-                <!-- timeline time label -->
-                <li class="time-label">
-                    <span class="bg-red">
-                        11 Nov. 2017
-                    </span>
-                </li>
-                <!-- /.timeline-label -->
+                <?php
 
-                <!-- timeline item -->
-                <li>
-                    <!-- timeline icon -->
-                    <i class="fa fa-envelope bg-yellow"></i>
-                    <div class="timeline-item">
-                        <span class="time"><i class="fa fa-clock-o"></i> Sabtu, 11 November 2017</span>
+                $arrColor = array("bg-yellow", "bg-red", "bg-blue");
 
-                        <h3 class="timeline-header"><a href="#">Sekretaris MD :</a> Undangan Sosialisasi</h3>
-
-                        <div class="timeline-body">
-                            Diharapkan untuk seluruh Sekretaris Majelis Wilayah agar dapat
-                            menghadiri Sosialisasi Website dan database GPdI Sulut. yang akan dilaksanakan pada hari <b>Senin, 13 November 2017</b>
-                        </div>
-                    </div>
-                </li>
-                <!-- END timeline item -->
+                foreach($ctlArrData as $key => $arrVal) {
 
 
-                <!-- timeline item -->
-                <li>
-                    <!-- timeline icon -->
-                    <i class="fa fa-envelope bg-red"></i>
-                    <div class="timeline-item">
-                        <span class="time"><i class="fa fa-clock-o"></i> Sabtu, 11 November 2017</span>
+                $tempTime = explode(" ", $arrVal["tpeng_datetime"]);
 
-                        <h3 class="timeline-header"><a href="#">Sekretaris MD :</a> Undangan Sosialisasi</h3>
+                $tempDate = $tempTime[0];
+                
+                $strIdDate = misc_helper::format_idDate($tempDate);
+                $strDay = misc_helper::str_idDay($tempDate);
 
-                        <div class="timeline-body">
-                            Diharapkan untuk seluruh Sekretaris Majelis Wilayah agar dapat
-                            menghadiri Sosialisasi Website dan database GPdI Sulut. yang akan dilaksanakan pada hari <b>Senin, 13 November 2017</b>
-                        </div>
-                    </div>
-                </li>
-                <!-- END timeline item -->
+                $idColor = $key % 3;
 
+                  $datetime1 = new DateTime($arrVal["tpeng_datetime"]);
+                  $datetime2 = new DateTime();
+                  $difference = $datetime1->diff($datetime2);
 
-                <!-- timeline item -->
-                <li>
-                    <!-- timeline icon -->
-                    <i class="fa fa-envelope bg-blue"></i>
-                    <div class="timeline-item">
-                        <span class="time"><i class="fa fa-clock-o"></i> Sabtu, 11 November 2017</span>
+                  echo $difference->d . " hari";
 
-                        <h3 class="timeline-header"><a href="#">Sekretaris MD :</a> Undangan Sosialisasi</h3>
+                if ($date != $tempDate) {
+                    $date = $tempDate;
 
-                        <div class="timeline-body">
-                            Diharapkan untuk seluruh Sekretaris Majelis Wilayah agar dapat
-                            menghadiri Sosialisasi Website dan database GPdI Sulut. yang akan dilaksanakan pada hari <b>Senin, 13 November 2017</b>
-                        </div>
-                    </div>
-                </li>
-                <!-- END timeline item -->
+                ?>
+
 
                 <!-- timeline time label -->
                 <li class="time-label">
                     <span class="bg-red">
-                        10 Nov. 2017
+                        <?php echo date("d M. Y", strtotime($date)); ?>
                     </span>
                 </li>
                 <!-- /.timeline-label -->
 
+                <?php
+
+                }
+
+                ?>
                 <!-- timeline item -->
                 <li>
                     <!-- timeline icon -->
-                    <i class="fa fa-envelope bg-yellow"></i>
+                    <i class="fa fa-envelope <?php echo $arrColor[$idColor]; ?>"></i>
                     <div class="timeline-item">
-                        <span class="time"><i class="fa fa-clock-o"></i> Sabtu, 11 November 2017</span>
+                        <span class="time">
+                            <i class="fa fa-clock-o"></i>
+                            <?php echo $strDay . ", " . $strIdDate; ?>
+                        </span>
 
-                        <h3 class="timeline-header"><a href="#">Sekretaris MD :</a> Undangan Sosialisasi</h3>
+                        <h3 class="timeline-header">
+                            <a href="#">
+                                <?php echo $arrVal["tu_display_name"]; ?>:
+                            </a> <?php echo $arrVal["tpeng_judul"]; ?>
+                        </h3>
 
                         <div class="timeline-body">
-                            Diharapkan untuk seluruh Sekretaris Majelis Wilayah agar dapat
-                            menghadiri Sosialisasi Website dan database GPdI Sulut. yang akan dilaksanakan pada hari <b>Senin, 13 November 2017</b>
+                            <?php echo nl2br($arrVal["tpeng_isi"]); ?>
                         </div>
                     </div>
                 </li>
                 <!-- END timeline item -->
+
+                <?php } ?>
 
 
                 <li>

@@ -326,6 +326,7 @@ class user extends CI_Controller {
             "ctlContentArea" => $this->load->view("user/vw_after_submit", $arrView, true),
             "ctlSideBarR" => $this->lib_defaultView->retrieve_sidebar_r(),
             "ctlArrJs" => array(
+                
             ),
             "ctlArrCss" => array(
                 base_url("assets/css/jquery-ui.structure.min.css"),

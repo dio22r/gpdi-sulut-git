@@ -25,7 +25,7 @@ class mw_pengumuman extends CI_Controller {
         $this->load->library("image_lib");
         $this->load->library("default_view");
 
-        //$this->load->model("tbl_arsip_surat");
+        $this->load->model("tbl_pengumuman");
         
         // load libraries
 
@@ -47,12 +47,15 @@ class mw_pengumuman extends CI_Controller {
     
     public function index($search = "all", $start = 0) {
 		
+        $arrData = $this->tbl_pengumuman->retrieve_data(array(), 0, 30);
+
         //print_r($this->arrSession);
         
         $arrView = array(
             "ctlUrlSubmit" => $this->thisurl . "/index",
             "ctlUrlPengumuman" => $this->thisurl . "/index",
             "ctlUrlBerita" => $this->thisurl . "/berita",
+            "ctlArrData" => $arrData
         );
 
         $arrData = array(

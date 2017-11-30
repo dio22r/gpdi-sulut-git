@@ -95,16 +95,16 @@ class default_view {
 				  	"title" => "Wilayah",
 				  	"class" => ""
 		        ),
-				"gembala" => array(
-					"icon" => "fa-graduation-cap",
-					"href" => $baseUrl . "/gembala",
-				  	"title" => "Gembala",
-				  	"class" => ""
-		        ),
 				"gereja" => array(
 					"icon" => "fa-home",
 					"href" => $baseUrl . "/gereja",
 				  	"title" => "Gereja",
+				  	"class" => ""
+		        ),
+				"gembala" => array(
+					"icon" => "fa-graduation-cap",
+					"href" => $baseUrl . "/gembala",
+				  	"title" => "Gembala",
 				  	"class" => ""
 		        ),
 				"jemaat" => array(
@@ -152,16 +152,16 @@ class default_view {
 				  	"title" => "Pengumuman",
 				  	"class" => ""
 				),
-				"gembala" => array(
-					"icon" => "fa-graduation-cap",
-					"href" => $baseUrl . "/mw_gembala",
-				  	"title" => "Gembala",
-				  	"class" => ""
-		        ),
 				"gereja" => array(
 					"icon" => "fa-home",
 					"href" => $baseUrl . "/mw_gereja",
 				  	"title" => "Gereja",
+				  	"class" => ""
+		        ),
+				"gembala" => array(
+					"icon" => "fa-graduation-cap",
+					"href" => $baseUrl . "/mw_gembala",
+				  	"title" => "Gembala",
 				  	"class" => ""
 		        ),
 				"jemaat" => array(
@@ -178,9 +178,8 @@ class default_view {
 		        )
 			)
 		);
-
+    	
     	if (!isset($arrMenu[$usertype])) {
-
     		redirect(base_url("index.php/login/logout"), "refresh");
     	} else {
     		return $arrMenu[$usertype];

@@ -5,6 +5,7 @@
 		<h3 class="box-title">Form Input Data User</h3>
 	</div>
 	<form class="form-horizontal" method="post"
+		autocomplete="off"
 		action="<?php echo $ctlUrlSubmit; ?>" >
 		<div class="box-body">
 				<?php
@@ -63,7 +64,8 @@
 		                  		$arrAttr = array(
 		                  			"class" => "form-control",
 		                  			"id" => $id,
-		                  			"placeholder" => "Username"
+		                  			"placeholder" => "Username",
+		                  			"autocomplete" => "off"
 		                  		);
 		                  		echo form_input(
 		                  			$id,
@@ -89,7 +91,8 @@
 		                  			"class" => "form-control",
 		                  			"id" => $id,
 		                  			"placeholder" => "Password Baru",
-		                  			"type" => "password"
+		                  			"type" => "password",
+		                  			"autocomplete" => "off"
 		                  		);
 		                  		echo form_password($id, "", $arrAttr);
                   			?>
@@ -109,7 +112,8 @@
 		                  			"class" => "form-control",
 		                  			"id" => $id,
 		                  			"placeholder" => "Konfirmasi Password",
-		                  			"type" => "password"
+		                  			"type" => "password",
+		                  			"autocomplete" => "off"
 		                  		);
 		                  		echo form_password($id, "", $arrAttr);
                   			?>
