@@ -25,7 +25,9 @@ class dashboard extends CI_Controller {
         $this->load->library("image_lib");
         $this->load->library("default_view");
 
-        //$this->load->model("tbl_arsip_surat");
+        $this->load->model("tbl_wilayah");
+        $this->load->model("tbl_gereja");
+        $this->load->model("tbl_gembala");
         
         // load libraries
 
@@ -50,9 +52,9 @@ class dashboard extends CI_Controller {
 		$codeWilayah = "";
 
         $arrView = array(
-            "ctlCntGereja" => 0,
-            "ctlCntWilayah" => 0,
-            "ctlCntGbl" => 0,
+            "ctlCntGereja" => $this->tbl_gereja->count_data(array("t1.tg_status" => 1)),
+            "ctlCntWilayah" => $this->tbl_wilayah->count_data(),
+            "ctlCntGbl" => $this->tbl_gembala->count_data(),
             "ctlCntJemaat" => 0,
             "ctlCntPelprip" => 0,
             "ctlCntPelwap" => 0,
@@ -68,7 +70,7 @@ class dashboard extends CI_Controller {
 
             "ctlSideBar" => $this->lib_defaultView->retrieve_menu("dashboard"),
             "ctlHeaderBar" => $this->lib_defaultView->retrieve_header(),
-            "ctlContentArea" => $this->load->view("dashboard/vw_main", array(), true),
+            "ctlContentArea" => $this->load->view("dashboard/vw_main", $arrView, true),
             "ctlSideBarR" => $this->load->view("master_view/master_sidebar_r", array(), true),
 
             "ctlArrJs" => array(

@@ -24,7 +24,7 @@
                 <li class="list-group-item">
                   <b>Jumlah Gereja</b>
                   <a class="pull-right">
-                    <?php echo $ctlArrData["total"]; ?>
+                    <?php echo $ctlCountGereja; ?>
                   </a>
                 </li>          
               </ul>

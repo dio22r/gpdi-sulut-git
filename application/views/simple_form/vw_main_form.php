@@ -38,31 +38,6 @@
 		                
 
 		                <div class="form-group">
-		                  	<label for="tg_nama" class="col-sm-4 control-label">
-		                  		Nama Gereja
-	                  		</label>
-
-		                  <div class="col-sm-8">
-		                  	<?php
-		                  		$id = "tg_nama";
-		                  		$arrAttr = array(
-		                  			"class" => "form-control",
-		                  			"id" => $id,
-		                  			"placeholder" => "Nama Gereja",
-		                  			
-		                  		);
-		                  		echo form_input(
-		                  			$id,
-		                  			misc_helper::get_form_value(
-		                  				$ctlArrData, $id
-		                  			),
-		                  			$arrAttr
-	                  			);
-                  			?>
-		                  </div>
-		                </div>
-
-		                <div class="form-group">
 		                  	<label for="tgem_nama" class="col-sm-4 control-label">
 		                  		Nama Gembala
 	                  		</label>
@@ -83,6 +58,31 @@
 		                  			),
 		                  			$arrAttr
 		                  		);
+                  			?>
+		                  </div>
+		                </div>
+
+		                <div class="form-group">
+		                  	<label for="tg_nama" class="col-sm-4 control-label">
+		                  		Nama Gereja
+	                  		</label>
+
+		                  <div class="col-sm-8">
+		                  	<?php
+		                  		$id = "tg_nama";
+		                  		$arrAttr = array(
+		                  			"class" => "form-control",
+		                  			"id" => $id,
+		                  			"placeholder" => "Nama Gereja",
+		                  			
+		                  		);
+		                  		echo form_input(
+		                  			$id,
+		                  			misc_helper::get_form_value(
+		                  				$ctlArrData, $id
+		                  			),
+		                  			$arrAttr
+	                  			);
                   			?>
 		                  </div>
 		                </div>
@@ -145,11 +145,50 @@
 		<div class="box-footer">
 			<div class="col-md-6" style="text-align:center">
 			    <a href="<?php echo $ctlUrlCancel; ?>"
-		    		type="submit" class="btn btn-default">Cancel</a>
+		    		type="submit" class="btn btn-default">Reset</a>
 			    <button type="submit" class="btn btn-info">
 			    	<i class="glyphicon glyphicon-saved"></i> Simpan
 		    	</button>
 		    </div>
 	  	</div>
  	</form>
+</div>
+
+<div class="box box-primary">
+	<div class="box-header">
+		<h3 class="box-title">Yang baru di Input</h3>
+	</div>
+
+	<div class="box-body">
+		<table class="table table-bordered table-hover">
+            <thead>
+            <tr role="row">
+                <th  width="25%">
+                  Gembala
+                </th>
+                <th width="25%">
+                  Nama Gereja
+                </th>
+                <th width="25%">
+                  No. Telephone
+                </th>
+                <th width="25%">
+                  Wilayah
+                </th>
+            </tr>
+            </thead>
+            <tbody>
+
+              <?php foreach ($ctlArrRecent as $key => $arrVal) { ?>
+                <tr>
+                  <td><?php echo $arrVal["tgem_nama"]; ?></td>
+                  <td><?php echo $arrVal["tg_nama"]; ?></td>
+                  <td><?php echo $arrVal["tgem_no_telp"]; ?></td>
+                  <td><?php echo $arrVal["tw_nama"]; ?></td>
+                </tr>
+              <?php } ?>
+
+            </tbody>
+        </table>
+	</div>
 </div>

@@ -26,6 +26,7 @@ class simple_form extends CI_Controller {
         $this->load->library("default_view");
 
         $this->load->model("tbl_user");
+        $this->load->model("tbl_gereja");
         $this->load->model("tbl_simple_form");
         // load libraries
 
@@ -84,13 +85,13 @@ class simple_form extends CI_Controller {
             $arrData = $arrData[0];
         }
 
-
         if ($arrPost) {
             $arrData = $arrPost;
         }
 
-        $arrWilayah = $this->tbl_wilayah->retrieve_wilayah();
+        $arrRecent = $this->tbl_gereja->retrieve_recent();
 
+        $arrWilayah = $this->tbl_wilayah->retrieve_wilayah();
         $arrWilayah = misc_helper::db_to_dropdown(
             "tw_id", "tw_nama", $arrWilayah
         );
@@ -106,14 +107,15 @@ class simple_form extends CI_Controller {
             "ctlArrGembala" => array(),
             "ctlStatErr" => $statErr,
             "ctlArrErr" => $arrError,
-            "ctlStatSubmit" => $statSubmit
+            "ctlStatSubmit" => $statSubmit,
+            "ctlArrRecent" => $arrRecent
         );
 
         $arrData = array(
             "ctlTitle" => "Data User",
             "ctlSubTitle" => "GPdI Sulawesi Utara",
 
-            "ctlSideBar" => $this->lib_defaultView->retrieve_menu("user"),
+            "ctlSideBar" => $this->lib_defaultView->retrieve_menu("simple_form"),
             "ctlHeaderBar" => $this->lib_defaultView->retrieve_header(),
             "ctlContentArea" => $this->load->view("simple_form/vw_main_form", $arrForm, true),
             "ctlSideBarR" => $this->lib_defaultView->retrieve_sidebar_r(),
@@ -179,6 +181,7 @@ class simple_form extends CI_Controller {
 
         $this->load->model("tbl_wilayah");
         $arrData = $this->tbl_user->select_by_id($id);
+
 
         if ($arrData) {
             $arrData = $arrData[0];
@@ -251,7 +254,7 @@ class simple_form extends CI_Controller {
         } else {
             $arrError[] = "Nama Gembala tidak boleh kosong";
         }
-
+        
         if ($arrPost["tg_nama"] != "") {
             $arrGereja = array(
                 "tg_nama" => $arrPost["tg_nama"],

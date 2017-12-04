@@ -53,7 +53,7 @@ class tbl_wilayah extends CI_Model {
         return $result;   
     }
 
-    public function count_data($arrWhere) {
+    public function count_data($arrWhere = array()) {
         $query = $this->db->select("count(*) as total")
             ->from($this->table1 . " t1")
             ->where("t1.tw_status", 1);
