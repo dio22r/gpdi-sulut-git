@@ -3,7 +3,7 @@
           <!-- small box -->
           <div class="small-box bg-yellow">
             <div class="inner">
-              <h3>150</h3>
+              <h3><?php echo $ctlCntGbl; ?></h3>
 
               <p>Gembala</p>
             </div>
@@ -18,7 +18,7 @@
           <!-- small box -->
           <div class="small-box bg-red">
             <div class="inner">
-              <h3>158</h3>
+              <h3><?php echo $ctlCntGereja; ?></h3>
 
               <p>Gereja</p>
             </div>
@@ -33,7 +33,7 @@
           <!-- small box -->
           <div class="small-box bg-blue">
             <div class="inner">
-              <h3>44</h3>
+              <h3><?php echo $ctlCntWilayah; ?></h3>
 
               <p>Wilayah</p>
             </div>
@@ -48,7 +48,7 @@
           <!-- small box -->
           <div class="small-box bg-aqua">
             <div class="inner">
-              <h3>100 rb</h3>
+              <h3><?php echo $ctlCntJemaat; ?></h3>
 
               <p>Jemaat</p>
             </div>
