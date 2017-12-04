@@ -131,6 +131,13 @@ class default_view {
 				  	"title" => "User",
 				  	"class" => "",
 				  	"style" => ""
+		        ),
+		        "simple_form" => array(
+					"icon" => "fa-sun-o text-aqua",
+					"href" => $baseUrl . "/simple_form",
+				  	"title" => "Hepler Form",
+				  	"class" => "",
+				  	"style" => ""
 		        )
 			),
 			"mw" => array(

@@ -47,8 +47,20 @@ class dashboard extends CI_Controller {
     }
     
     public function index($search = "all", $start = 0) {
-		
-        //print_r($this->arrSession);
+		$codeWilayah = "";
+
+        $arrView = array(
+            "ctlCntGereja" => 0,
+            "ctlCntWilayah" => 0,
+            "ctlCntGbl" => 0,
+            "ctlCntJemaat" => 0,
+            "ctlCntPelprip" => 0,
+            "ctlCntPelwap" => 0,
+            "ctlCntPelpap" => 0,
+            "ctlCntPelrap" => 0,
+            "ctlCntPelnap" => 0,
+            "ctlCntPelhat" => 0
+        );
         
         $arrData = array(
             "ctlTitle" => "Dashboard",
