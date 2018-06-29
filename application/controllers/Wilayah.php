@@ -139,14 +139,11 @@ class wilayah extends CI_Controller {
             array("t1.tw_id" => $id)
         );
 
-        $count = count($arrGereja);
-
         $arrForm = array(
             "ctlArrData" => $arrData[0],
             "ctlUrlEdit" => $this->thisurl . "/form/" . $id,
             "ctlArrGereja" => $arrGereja,
-            "ctlUrlBaseTbl" => base_url("index.php/gereja/"),
-            "ctlCountGereja" => $count
+            "ctlUrlBaseTbl" => base_url("index.php/gereja/")
         );
 
         $arrData = array(

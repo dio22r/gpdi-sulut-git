@@ -24,15 +24,21 @@ class tbl_gereja extends CI_Model {
         return $return;
     }
 
-    public function retrieve_data($arrWhere, $start = 0, $limit = 20) {
-        $query = $this->db->select("t1.*, t2.*, count(t3.tj_id) as total")
+    public function retrieve_data($arrWhere, $start = 0, $limit = 20, $order_by = "") {
+        $query = $this->db->select("t1.*, t2.*, count(t3.tj_id) as total, t4.*")
             ->from($this->table1 . " t1")
             ->join($this->table2 . " t2", "t1.tgem_id = t2.tgem_id", "left")
             ->join($this->table3 . " t3", "t1.tg_id = t3.tg_id", "left")
+            ->join($this->table4 . " t4", "t1.tw_id = t4.tw_id", "left")
             ->where("t1.tg_status", 1)
             ->group_by("t1.tg_id")
-            ->order_by("t1.tg_nama ASC");
+            ->limit($limit, $start);
 
+        if ($order_by) {
+            $query->order_by($order_by);
+        } else {
+            $query->order_by("t1.tg_nama ASC");
+        }
         if ($arrWhere) {
             $query->where($arrWhere);
         }
@@ -79,6 +85,10 @@ class tbl_gereja extends CI_Model {
         $query = $this->db->select("count(*) as total")
             ->from($this->table1 . " t1")
             ->where("t1.tg_status", 1);
+
+        if ($arrWhere) {
+            $query->where($arrWhere);
+        }
 
         $result = $this->db->get();
         $result = $result->result_array();

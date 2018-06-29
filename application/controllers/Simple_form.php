@@ -60,7 +60,7 @@ class simple_form extends CI_Controller {
     }
     
     public function index($id = "") {
-		
+        
         $arrPost = $this->input->post();
         $statErr = false;
         $arrError = array();
@@ -103,6 +103,7 @@ class simple_form extends CI_Controller {
             "ctlArrTipe" => $arrTipe,
             "ctlUrlSubmit" => $this->thisurl."/index/".$id,
             "ctlUrlCancel" => $this->thisurl,
+            "ctlEditForm" => $this->thisurl."/edit_table/",
             "ctlArrMw" => $arrWilayah,
             "ctlArrGembala" => array(),
             "ctlStatErr" => $statErr,
@@ -128,8 +129,7 @@ class simple_form extends CI_Controller {
             )
         );
         $this->load->view('master_view/master_index', $arrData);
-    }	
-
+    }   
 
     protected function _pagination($url, $totalRows, $perpage, $uriSegment) {
         $this->load->library('pagination');
@@ -161,45 +161,73 @@ class simple_form extends CI_Controller {
         return $pagination;
     }
 
-	public function form($id = "") {
+    protected function _get_data($search, $start, $perpage) {
+        $arrData = $this->tbl_gereja->retrieve_data(
+            $search, $start, $perpage, "t1.tg_id DESC"
+        );
+
+        return $arrData;
+    }
+
+    protected function _get_count_data() {
+        $count = $this->tbl_gereja->count_data(array());
+
+        return $count;
+    }
+
+	public function edit_table($start = 0, $idEdit = "", $uriStats = "") {
+
         $arrPost = $this->input->post();
         $statErr = false;
         $arrError = array();
+        $statSubmit = false;
+
+        $ctlArrEditData = array();
+
         if ($arrPost) {
-            $arrRes = $this->submit();
+            $arrRes = $this->submitEdit();
             $statErr = !$arrRes["status"];
 
             if ($arrRes["status"] === true) {
                 $idData = $arrRes["arrDet"]["id"];
-
-                print_r($arrRes);
-                //redirect($this->thisurl . "/after_submit/".$idData, "refresh");
+                $statSubmit = true;
             } else {
                 $arrError = $arrRes["arrDet"];
             }
         }
 
-        $this->load->model("tbl_wilayah");
-        $arrData = $this->tbl_user->select_by_id($id);
-
-
-        if ($arrData) {
-            $arrData = $arrData[0];
+        if ($idEdit) {
+            $arrWhere = array("t1.tg_id" => $idEdit);
+            $ctlArrEditData = $this->_get_data($arrWhere, 0, 1);
+            $ctlArrEditData = $ctlArrEditData[0];
         }
 
-        if ($arrPost) {
-            $arrData = $arrPost;
-            if ($arrPost["tu_tipe_user"] == 3) {
-                $arrData["tu_tipe_id"] = $arrPost["tipe_id_wil"];
-            } else if ($arrPost["tu_tipe_user"] == 5) {
-                $arrData["tu_tipe_id"] = $arrPost["tipe_id_gem"];
+        if ($uriStats == "delete") {
+            $arrRes = $this->deleteData(
+                $idEdit, $ctlArrEditData["tgem_id"]
+            );
+            
+            if ($arrRes["status"] === true) {
+                $idData = $arrRes["arrDet"]["id"];
+                $statSubmit = true;
             } else {
-                $arrData["tu_tipe_id"] = 0;
+                $arrError = $arrRes["arrDet"];
             }
         }
 
-        $arrWilayah = $this->tbl_wilayah->retrieve_wilayah();
+        
+        $this->load->model("tbl_wilayah");
+        
+        $perpage = 20;
+        $arrData = $this->_get_data("", $start, $perpage);
+        $totalData = $this->_get_count_data();
 
+        $paging = $this->_pagination(
+            $this->thisurl."/edit_table/", $totalData, $perpage, 3
+        );
+
+
+        $arrWilayah = $this->tbl_wilayah->retrieve_wilayah();
         $arrWilayah = misc_helper::db_to_dropdown(
             "tw_id", "tw_nama", $arrWilayah
         );
@@ -207,26 +235,30 @@ class simple_form extends CI_Controller {
         $arrTipe = $this->tbl_user->retrieve_tipe_user();
 
         $arrForm = array(
+            "ctlArrEditData" => $ctlArrEditData,
             "ctlArrData" => $arrData,
-            "ctlArrTipe" => $arrTipe,
-            "ctlUrlSubmit" => $this->thisurl."/form/".$id,
+            "ctlUrlSubmit" => current_url(),
+            "ctlUrlEdit" => $this->thisurl . "/edit_table/" . $start,
             "ctlUrlCancel" => $this->thisurl,
             "ctlArrMw" => $arrWilayah,
             "ctlArrGembala" => array(),
             "ctlStatErr" => $statErr,
-            "ctlArrErr" => $arrError
+            "ctlArrErr" => $arrError,
+            "ctlStatSubmit" => $statSubmit,
+            "ctlPaging" => $paging,
+            "ctlStart" => $start
         );
 
         $arrData = array(
-            "ctlTitle" => "Data User",
+            "ctlTitle" => "Data Gereja & Gembala",
             "ctlSubTitle" => "GPdI Sulawesi Utara",
 
-            "ctlSideBar" => $this->lib_defaultView->retrieve_menu("user"),
+            "ctlSideBar" => $this->lib_defaultView->retrieve_menu("simple_form"),
             "ctlHeaderBar" => $this->lib_defaultView->retrieve_header(),
-            "ctlContentArea" => $this->load->view("user/vw_form_user", $arrForm, true),
+            "ctlContentArea" => $this->load->view("simple_form/vw_edit_form", $arrForm, true),
             "ctlSideBarR" => $this->lib_defaultView->retrieve_sidebar_r(),
             "ctlArrJs" => array(
-                base_url("assets/js/controller/user.js"),
+                base_url("assets/js/controller/simple_form.js"),
                 base_url("assets/js/select2.full.min.js")
             ),
             "ctlArrCss" => array(
@@ -234,8 +266,82 @@ class simple_form extends CI_Controller {
             )
         );
         $this->load->view('master_view/master_index', $arrData);
-
 	}
+
+    public function edit_form($id = "") {
+        
+    }
+
+    public function submitEdit() {
+        $arrPost = $this->input->post();
+
+        $arrGereja = array(
+            "update" => array(
+                "tg_nama" => $arrPost["tg_nama"],
+                "tw_id" => $arrPost["tw_id"]
+            ),
+            "where" => array(
+                "tg_id" => $arrPost["tg_id"]
+            )
+        );
+
+        $arrGembala = array(
+            "update" => array(
+                "tgem_nama" => $arrPost["tgem_nama"],
+                "tgem_no_telp" => $arrPost["tgem_no_telp"]
+            ),
+            "where" => array(
+                "tgem_id" => $arrPost["tgem_id"]
+            )
+        );
+
+        $status = $this->tbl_simple_form->updateGereja(
+            $arrGereja, $arrGembala
+        );
+
+        if ($status) {
+            return array(
+                "status" => true,
+                "arrDet" => array("id" => $arrPost["tg_id"])
+            );
+        } else {
+            return array("status" => false);
+        }
+    }
+
+    public function deleteData($tg_id, $tgem_id) {
+        
+        $arrGereja = array(
+            "update" => array(
+                "tg_status" => 0
+            ),
+            "where" => array(
+                "tg_id" => $tg_id
+            )
+        );
+
+        $arrGembala = array(
+            "update" => array(
+                "tgem_status" => 0
+            ),
+            "where" => array(
+                "tgem_id" => $tgem_id
+            )
+        );        
+
+        $status = $this->tbl_simple_form->updateGereja(
+            $arrGereja, $arrGembala
+        );
+
+        if ($status) {
+            return array(
+                "status" => true,
+                "arrDet" => array("id" => $tg_id)
+            );
+        } else {
+            return array("status" => false);
+        }
+    }
 
     public function submit() {
         $arrPost = $this->input->post();
@@ -254,7 +360,7 @@ class simple_form extends CI_Controller {
         } else {
             $arrError[] = "Nama Gembala tidak boleh kosong";
         }
-        
+
         if ($arrPost["tg_nama"] != "") {
             $arrGereja = array(
                 "tg_nama" => $arrPost["tg_nama"],
@@ -267,7 +373,7 @@ class simple_form extends CI_Controller {
 
         if ($arrPost["tg_id"] != "") {
             // cek nama gereja
-            $id = $this->tbl_simple_form->get_last_id();
+
             $result = false;
         } else {
             $result = $this->tbl_simple_form->insertdata(
@@ -291,91 +397,5 @@ class simple_form extends CI_Controller {
         }
     }
 
-    public function after_submit($id) {
-        $arrData = $this->tbl_user->select_by_id($id);
-                
-        if (!$arrData) {
-            show_404();
-        }
-
-        $this->load->model("tbl_wilayah");
-
-        $idTipe = $arrData[0]["tu_tipe_id"];
-        if ($arrData[0]["tu_tipe_user"] == 3) {
-            $arrDetail = $this->tbl_wilayah->select_by_id($idTipe);
-            $strNama = "Wilayah ". $arrDetail[0]["tw_nomor_induk"] ." ". $arrDetail[0]["tw_nama"];
-        } elseif ($arrData[0]["tu_tipe_user"] == 5) {
-            //$arrDetail = $this->tbl_wilayah->select_by_id($id);
-            $strNama = "";
-        }
-
-        $arrData[0]["tu_status"] = $this->arrStatus[$arrData[0]["tu_status"]];
-        $arrData[0]["tu_tipe_user_str"] = $this->arrTipe[$arrData[0]["tu_tipe_user"]];
-        $arrData[0]["tu_tipe_user_det"] = $strNama;
-
-
-        $arrView = array(
-            "ctlArrData" => $arrData[0],
-            "ctlFormUrl" => $this->thisurl . "/form/" . $id,
-            "ctlProfileUrl" => $this->thisurl . "/profile/" . $id,
-            "ctlHomeUrl" => $this->thisurl
-        );
-
-        $arrData = array(
-            "ctlTitle" => "Data User",
-            "ctlSubTitle" => "GPdI Sulawesi Utara",
-            
-            "ctlSideBar" => $this->lib_defaultView->retrieve_menu("user"),
-            "ctlHeaderBar" => $this->lib_defaultView->retrieve_header(),
-            "ctlContentArea" => $this->load->view("user/vw_after_submit", $arrView, true),
-            "ctlSideBarR" => $this->lib_defaultView->retrieve_sidebar_r(),
-            "ctlArrJs" => array(
-                
-            ),
-            "ctlArrCss" => array(
-                base_url("assets/css/jquery-ui.structure.min.css"),
-                base_url("assets/css/jquery-ui.theme.min.css"),
-                base_url("assets/css/jquery-ui.css"),
-            )
-        );
-        $this->load->view('master_view/master_index', $arrData);
-
-    }
-
-    public function profile($id = "") {
-        $arrData = $this->tbl_user->select_by_id($id);
-
-
-        if (!$arrData) {
-            show_404();
-        }
-
-        $arrData[0]["tu_status"] = $this->arrStatus[$arrData[0]["tu_status"]];
-        $arrData[0]["tu_tipe_user"] = 
-            $this->arrTipe[$arrData[0]["tu_tipe_user"]];
-
-        $arrView = array(
-            "ctlArrData" => $arrData[0],
-            "ctlFormUrl" => $this->thisurl . "/form/" . $arrData[0]["tu_id"]
-        );
-
-        $arrData = array(
-            "ctlTitle" => "Data User",
-            "ctlSubTitle" => "GPdI Sulawesi Utara",
-            
-            "ctlSideBar" => $this->lib_defaultView->retrieve_menu("user"),
-            "ctlHeaderBar" => $this->lib_defaultView->retrieve_header(),
-            "ctlContentArea" => $this->load->view("user/vw_profile_user", $arrView, true),
-            "ctlSideBarR" => $this->lib_defaultView->retrieve_sidebar_r(),
-            "ctlArrJs" => array(
-            ),
-            "ctlArrCss" => array(
-                base_url("assets/css/jquery-ui.structure.min.css"),
-                base_url("assets/css/jquery-ui.theme.min.css"),
-                base_url("assets/css/jquery-ui.css"),
-            )
-        );
-        $this->load->view('master_view/master_index', $arrData);
-    }
 }
     

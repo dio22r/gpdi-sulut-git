@@ -4,29 +4,45 @@
           <!-- Profile Image -->
           <div class="box box-primary">
             <div class="box-body box-profile">
-              <h3 class="profile-username text-center">GPdI Immanuel Rerer-satu</h3>
+              <h3 class="profile-username text-center">
+                <?php echo $ctlArrData["tg_nama"] ?>
+              </h3>
 
-              <p class="text-muted text-center">Pdt. Vecky Mamentu STh.</p>
+              <p class="text-muted text-center">
+                <?php echo $ctlArrData["tgem_nama"] ?>
+              </p>
 
               <ul class="list-group list-group-unbordered">
                 <li class="list-group-item">
-                  <b>Wilayah</b> <a class="pull-right">L Kombi</a>
+                  <b>Wilayah</b>
+                  <a class="pull-right">
+                  <?php
+                    echo $ctlArrData["tw_nomor_induk"] . " "
+                      . $ctlArrData["tw_nama"];
+                  ?>
+                  </a>
                 </li>
                 <li class="list-group-item">
-                  <b>Contact</b> <a class="pull-right">08534092132</a>
+                  <b>Contact</b> <a class="pull-right">
+                    <?php echo $ctlArrData["tgem_no_telp"]; ?>
+                  </a>
                 </li>
                 <li class="list-group-item">
-                  <b>Tgl Berdiri</b> <a class="pull-right">30 September 2010</a>
+                  <b>Tgl Berdiri</b> <a class="pull-right">
+                    <?php echo $ctlArrData["tg_tgl_berdiri"]; ?>
+                  </a>
                 </li>                
               </ul>
 
               <strong><i class="fa fa-map-marker margin-r-5"></i> Lokasi</strong>
 
-              <p class="text-muted">Desa Rerer-satu, Kec. Kombi - Minahasa</p>
+              <p class="text-muted">
+                <?php echo $ctlArrData["tg_lokasi"]; ?>
+              </p>
 
               <hr>
 
-              <a href="#" class="btn btn-warning btn-block">
+              <a href="<?php echo $ctlUrlEdit; ?>" class="btn btn-warning btn-block">
                 <span class="glyphicon glyphicon-edit"></span> <b>Edit Data Gereja</b>
               </a>
             </div>
@@ -66,6 +82,10 @@
                 Jumat, Pkl. 19.00 ~ Ibadah Pelprap & Kel. Muda - di 
 
                 Sabtu, Pkl. 17.00 ~ Doa & Latihan Pelayan Altar untuk Ibadah Raya - di Gereja";
+
+                if ($ctlArrData["tg_jadwal_ibadah"]) {
+                  $jadwal = $ctlArrData["tg_jadwal_ibadah"];
+                }
                 echo nl2br($jadwal);
                 ?>
 
@@ -82,6 +102,10 @@
                 - Peralatan Musik
                 - Pastori";
                 
+                if ($ctlArrData["tg_inventaris"]) {
+                  $inventaris = $ctlArrData["tg_inventaris"];
+                }
+
                 echo nl2br($inventaris);
                 ?>
 

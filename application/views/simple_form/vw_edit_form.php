@@ -2,17 +2,8 @@
 
 <div class="box box-warning">
 	<div class="box-header">
-		<h3 class="box-title">Form Input Data User</h3>
-
-		<div class="box-tools">
-
-          
-             <a href="<?php echo $ctlEditForm; ?>" class="btn btn-warning">
-                <i class="glyphicon glyphicon-plus"></i> Edit Data
-             </a>
-
-        </div>
-      </div>
+		<h3 class="box-title">Form Input Data Gereja</h3>
+	</div>
 	<form class="form-horizontal" method="post"
 		autocomplete="off"
 		action="<?php echo $ctlUrlSubmit; ?>" >
@@ -21,7 +12,14 @@
 					echo form_hidden(
 						"tg_id", 
              			misc_helper::get_form_value(
-              				$ctlArrData, "tg_id"
+              				$ctlArrEditData, "tg_id"
+              			)
+          			);
+
+					echo form_hidden(
+						"tgem_id", 
+             			misc_helper::get_form_value(
+              				$ctlArrEditData, "tgem_id"
               			)
           			);
 				?>
@@ -63,7 +61,7 @@
 		                  		echo form_input(
 		                  			$id, 
 		                  			misc_helper::get_form_value(
-		                  				$ctlArrData, $id
+		                  				$ctlArrEditData, $id
 		                  			),
 		                  			$arrAttr
 		                  		);
@@ -88,7 +86,7 @@
 		                  		echo form_input(
 		                  			$id,
 		                  			misc_helper::get_form_value(
-		                  				$ctlArrData, $id
+		                  				$ctlArrEditData, $id
 		                  			),
 		                  			$arrAttr
 	                  			);
@@ -113,7 +111,7 @@
 		                  		echo form_input(
 		                  			$id,
 		                  			misc_helper::get_form_value(
-		                  				$ctlArrData, $id
+		                  				$ctlArrEditData, $id
 		                  			), $arrAttr
 		                  		);
                   			?>
@@ -129,7 +127,7 @@
 		                  		<?php
 		                  			$id = "tw_id";
 		                  			$val = misc_helper::get_form_value(
-		                  				$ctlArrData, "tw_id"
+		                  				$ctlArrEditData, "tw_id"
 		                  			);
 
 		                  			$arrAttr = array(
@@ -165,7 +163,7 @@
 
 <div class="box box-primary">
 	<div class="box-header">
-		<h3 class="box-title">Yang baru di Input</h3>
+		<h3 class="box-title">Data Gembala</h3>
 	</div>
 
 	<div class="box-body">
@@ -178,26 +176,56 @@
                 <th width="25%">
                   Nama Gereja
                 </th>
-                <th width="25%">
+                <th width="20%">
                   No. Telephone
                 </th>
-                <th width="25%">
+                <th width="20%">
                   Wilayah
                 </th>
+                <th width="10%">
+                	Edit
+                </th>
+
             </tr>
             </thead>
             <tbody>
 
-              <?php foreach ($ctlArrRecent as $key => $arrVal) { ?>
+              <?php foreach ($ctlArrData as $key => $arrVal) { ?>
                 <tr>
                   <td><?php echo $arrVal["tgem_nama"]; ?></td>
                   <td><?php echo $arrVal["tg_nama"]; ?></td>
                   <td><?php echo $arrVal["tgem_no_telp"]; ?></td>
                   <td><?php echo $arrVal["tw_nama"]; ?></td>
+                  <td>
+                  	<?php
+                  		$urlEdit = $ctlUrlEdit . "/" . $arrVal["tg_id"];
+                  		echo anchor(
+                  			$urlEdit, 'Edit',
+                  			array('class' => 'btn btn-xs btn-warning')
+                  		);
+
+                  		$urlEdit = $ctlUrlEdit . "/" . $arrVal["tg_id"]
+                  			. "/delete";
+              			echo anchor(
+              				$urlEdit, 'Delete',
+              				array('class' => 'btn btn-xs btn-warning')
+              			);
+
+              		?>	
+              		</td>
                 </tr>
               <?php } ?>
 
             </tbody>
         </table>
+	</div>
+
+	<div class="row">
+	    <div class="col-sm-5">
+	      	<ul class="pagination pagination-sm no-margin">
+				<?php echo $ctlPaging; ?>
+
+			</ul>
+		</div>
 	</div>
 </div>

@@ -2,6 +2,7 @@
 
 class mw_jemaat extends CI_Controller {
 
+    protected $idWilayah;
     protected $activeMenu = "jemaat";
     protected $title = "Data Arsip Surat";
     protected $arrViewContentHeader = array(
@@ -25,9 +26,8 @@ class mw_jemaat extends CI_Controller {
         $this->load->library("image_lib");
         $this->load->library("default_view");
 
-        //$this->load->model("tbl_arsip_surat");
-        
-        // load libraries
+
+        $this->load->model("tbl_gereja");
 
         $arrConfig = array("session" => $this->session);
         $this->lib_login = new lib_login($arrConfig);
@@ -35,25 +35,33 @@ class mw_jemaat extends CI_Controller {
         $this->lib_login->redir_ifnot_login();
         $this->isLogin = $this->lib_login->check_login();
         $this->arrSession = $this->lib_login->get_session_data();
-        // endof load libraries
+        
+        $this->idWilayah = $this->arrSession["arrUser"]["usrt_id"];
         
         $this->lib_login->redir_ifnot_login();
         
         $this->lib_defaultView = new default_view($this->load, $this->lib_login);
         $this->lib_defaultView->set_libLogin($this->lib_login);
 
-        $this->thisurl = base_url("index.php/dashboard");
+        $this->thisurl = base_url("index.php/".__CLASS__);
     }
     
     public function index($search = "all", $start = 0) {
-        
+        $idWilayah = $this->idWilayah;
+
+        $arrView = array(
+            "arrData" => array(),
+            "ctlUrlAdd" => $this->thisurl . "/pilih_gereja/"
+        );
+
         $arrData = array(
             "ctlTitle" => "Data Jemaat",
             "ctlSubTitle" => "GPdI Sulawesi Utara",
 
             "ctlSideBar" => $this->lib_defaultView->retrieve_menu($this->activeMenu),
             "ctlHeaderBar" => $this->lib_defaultView->retrieve_header(),
-            "ctlContentArea" => $this->load->view("jemaat/vw_main", array(), true),
+            "ctlContentArea" => $this->load->view("jemaat/vw_main",
+                $arrView, true),
             "ctlSideBarR" => $this->load->view("master_view/master_sidebar_r", array(), true),
 
             "ctlArrJs" => array(),
@@ -62,8 +70,20 @@ class mw_jemaat extends CI_Controller {
         $this->load->view('master_view/master_index', $arrData);
     }   
 
-    public function form($id = "") {
-        $arrForm = array();
+    public function pilih_gereja() {
+        $idWilayah = $this->idWilayah;
+
+        $arrWhere = array("t1.tw_id" => $idWilayah);
+        $arrGereja = $this->tbl_gereja->retrieve_data($arrWhere);
+
+        $arrView = array(
+            "ctlArrGereja" => $arrGereja,
+            "ctlUrl" => $this->thisurl . "/form/"
+        );
+        
+        $content = $this->load->view(
+            "mw_view/jemaat/vw_form_pilih_gereja", $arrView, true
+        );
 
         $arrData = array(
             "ctlTitle" => "Data Jemaat",
@@ -71,7 +91,47 @@ class mw_jemaat extends CI_Controller {
 
             "ctlSideBar" => $this->lib_defaultView->retrieve_menu($this->activeMenu),
             "ctlHeaderBar" => $this->lib_defaultView->retrieve_header(),
-            "ctlContentArea" => $this->load->view("jemaat/vw_form_jemaat", $arrForm, true),
+            "ctlContentArea" => $content,
+            "ctlSideBarR" => $this->load->view("master_view/master_sidebar_r", array(), true),
+
+            "ctlArrJs" => array(),
+            "ctlArrCss" => array()
+        );
+        $this->load->view('master_view/master_index', $arrData);
+    }
+
+    public function form($idGereja = "", $idJemaat = "") {
+        if (!is_numeric($idGereja)) {
+            show_404();
+        }
+        $idWilayah = $this->idWilayah;
+
+        $arrWhere = array(
+            "t1.tw_id" => $idWilayah,
+            "t1.tg_id" => $idGereja
+        );
+        $arrGereja = $this->tbl_gereja->retrieve_data($arrWhere);
+
+        if (!$arrGereja) {
+            show_404();
+        }
+
+        $arrForm = array(
+            "ctlUrlSubmit" => $this->thisurl . "/submit",
+            "ctlPilihGereja" => $this->thisurl . "/pilih_gereja",
+            "ctlArrGereja" => $arrGereja[0]
+        );
+        $content = $this->load->view(
+            "jemaat/vw_form_jemaat", $arrForm, true
+        );
+
+        $arrData = array(
+            "ctlTitle" => "Data Jemaat",
+            "ctlSubTitle" => "GPdI Sulawesi Utara",
+
+            "ctlSideBar" => $this->lib_defaultView->retrieve_menu($this->activeMenu),
+            "ctlHeaderBar" => $this->lib_defaultView->retrieve_header(),
+            "ctlContentArea" => $content,
             "ctlSideBarR" => $this->lib_defaultView->retrieve_sidebar_r(),
             "ctlArrJs" => array(
                 base_url("assets/js/bootstrap-datepicker.min.js"),

@@ -13,7 +13,8 @@
 
                   <div class="input-group-btn">
                     <button type="submit" class="btn btn-default"><i class="fa fa-search"></i></button>
-                     <a href="<?php echo base_url("index.php/jemaat/form/"); ?>" class="btn btn-warning">
+                     <a href="<?php echo $ctlUrlAdd; ?>"
+                      class="btn btn-warning">
                         <i class="glyphicon glyphicon-plus"></i> Tambah Data
                      </a>
                   </div>

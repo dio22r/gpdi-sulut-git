@@ -49,7 +49,7 @@ class dashboard extends CI_Controller {
     }
     
     public function index($search = "all", $start = 0) {
-		$codeWilayah = "";
+        $codeWilayah = "";
 
         $arrView = array(
             "ctlCntGereja" => $this->tbl_gereja->count_data(array("t1.tg_status" => 1)),
@@ -80,7 +80,7 @@ class dashboard extends CI_Controller {
         );
         $this->load->view('master_view/master_index', $arrData);
     }
-	
+    
     public function view_table() {
 
         $arrConfig = array(
@@ -117,7 +117,7 @@ class dashboard extends CI_Controller {
         );
     }
 
-	public function form($id = "") {
+    public function form($id = "") {
         
         
         $data = array();
@@ -170,7 +170,7 @@ class dashboard extends CI_Controller {
         );
         $this->load->view('master_view/master_index', $arrData);
 
-	}
+    }
 
     public function view_data($id = "") {
 
@@ -246,12 +246,12 @@ class dashboard extends CI_Controller {
         $filepath = APPPATH."../assets/img/sa-scan-file";
         
         $config['upload_path'] = $filepath;
-		$config['allowed_types'] = 'gif|jpg|png';
+        $config['allowed_types'] = 'gif|jpg|png';
         $config['file_name'] = date("YmdHisu");
-		$config['max_size']	= '5000';
+        $config['max_size'] = '5000';
         
         // this library must be init just in here..
-		$this->load->library('upload', $config);
+        $this->load->library('upload', $config);
 
         print_r($_FILES);
 
@@ -266,16 +266,16 @@ class dashboard extends CI_Controller {
                 "error" => $arrFileUpload["error"][$key],
                 "size" => $arrFileUpload["size"][$key],
             );
-    		if ( ! $this->upload->do_upload("surat")) {
-    			$error = array('error' => $this->upload->display_errors());
+            if ( ! $this->upload->do_upload("surat")) {
+                $error = array('error' => $this->upload->display_errors());
                 print_r($error);
-    			$status = false;
-    		}
-    		else
-    		{
-    			$data[] = array('upload_data' => $this->upload->data());
+                $status = false;
+            }
+            else
+            {
+                $data[] = array('upload_data' => $this->upload->data());
                 $status = true;
-    		}
+            }
         }
         if ($status) {
             return $data;
@@ -363,7 +363,7 @@ class dashboard extends CI_Controller {
         }
     }
     
-	public function submit() {
+    public function submit() {
         
         $arrPost = $this->input->post();
 

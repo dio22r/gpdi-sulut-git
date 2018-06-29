@@ -2,11 +2,19 @@
 
 <div class="box box-warning">
   <div class="box-header">
-    <h3 class="box-title">Nama: Dio Jay Jeremy Ratar</h3>
+    <h3 class="box-title">
+      Jemaat di :
+      <strong><u><?php echo $ctlArrGereja["tg_nama"]; ?></u></strong>
+    </h3>
   </div>
 
   <div class="box-body">
-  <form class="form-horizontal">
+  <form class="form-horizontal"
+      action="<?php echo $ctlUrlSubmit; ?>"
+      method="post">
+
+      <?php echo form_hidden("tj_id", $ctlId); ?>
+
     <ul class="nav nav-tabs">
       <li class="active"><a data-toggle="tab" href="#home">Data Diri</a></li>
       <li><a data-toggle="tab" href="#menu1">Alamat</a></li>
@@ -26,7 +34,20 @@
               </label>
 
             <div class="col-sm-9">
-              <input type="email" class="form-control" id="inputEmail3" placeholder="Nama Lengkap">
+
+              <?php
+                $id = "tj_nama";
+                $arrInput = array(
+                  'name'          => $id,
+                  'id'            => $id,
+                  'value'         => misc_helper::get_form_value($ctl,
+                  'maxlength'     => '100',
+                  'size'          => '50',
+                  'style'         => 'width:50%'
+                );
+                echo form_input("tj_id", $ctlId);
+              ?>
+              <input class="form-control" id="inputEmail3" placeholder="Nama Lengkap">
             </div>
           </div>
           <div class="form-group">
@@ -876,13 +897,21 @@
     </div>
 
 
+  </form>
+  </div>
+
+  <div class="box-footer">
+
     <div class="col-sm-12">
-      <hr />
-      <button class="btn btn-primary">
+      <a href="<?php echo $ctlPilihGereja; ?>"
+        class="btn btn-default" >
+        Pilih ulang Gereja
+      </a>
+      <button class="btn btn-primary" type="submit">
           Simpan
       </button>
     </div>
-  </form>
+
   </div>
 
 </div>

@@ -1,18 +1,10 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
+include_once "gereja.php";
 
-class mw_gereja extends CI_Controller {
+class mw_gereja extends gereja {
 
     protected $activeMenu = "dashboard";
-    protected $title = "Data Arsip Surat";
-    protected $arrViewContentHeader = array(
-        "ctlTitle" => "Arsip Surat",
-        "ctlSubtitle" => "Form Pengisian"
-    );
-    protected $arrCss = array();
-    protected $arrJs = array();
-    
-    protected $thisurl;
-    protected $lib_defaultView;
+    protected $mwId;
 
     public function __construct() {
         parent::__construct();
@@ -25,11 +17,12 @@ class mw_gereja extends CI_Controller {
         $this->load->library("image_lib");
         $this->load->library("default_view");
 
-        //$this->load->model("tbl_arsip_surat");
+        $this->load->model("tbl_gereja");
         
         // load libraries
 
         $arrConfig = array("session" => $this->session);
+
         $this->lib_login = new lib_login($arrConfig);
 
         $this->lib_login->redir_ifnot_login();
@@ -42,73 +35,25 @@ class mw_gereja extends CI_Controller {
         $this->lib_defaultView = new default_view($this->load, $this->lib_login);
         $this->lib_defaultView->set_libLogin($this->lib_login);
 
-        $this->thisurl = base_url("index.php/dashboard");
+        $this->thisurl = base_url("index.php/gereja");
+        $this->mwId = $this->session->userdata["arrUser"]["usrt_id"];
     }
     
-    public function index($search = "all", $start = 0) {
-		
-        $arrData = array(
-            "ctlTitle" => "Data Gereja",
-            "ctlSubTitle" => "GPdI Sulawesi Utara",
-
-            "ctlSideBar" => $this->lib_defaultView->retrieve_menu("gereja"),
-            "ctlHeaderBar" => $this->lib_defaultView->retrieve_header(),
-            "ctlContentArea" => $this->load->view("gereja/vw_main", array(), true),
-            "ctlSideBarR" => $this->load->view("master_view/master_sidebar_r", array(), true),
-
-            "ctlArrJs" => array(
-                
-            ),
-            "ctlArrCss" => array()
+    protected function _get_data($search, $start, $perpage) {
+        $arrWhere = array("t1.tw_id" => $this->mwId);
+        $arrData = $this->tbl_gereja->retrieve_data(
+            $arrWhere, $start, $perpage
         );
-        $this->load->view('master_view/master_index', $arrData);
-    }	
 
-	public function form($id = "") {
-        $arrForm = array();
-
-        $arrData = array(
-            "ctlTitle" => "Data Gereja",
-            "ctlSubTitle" => "GPdI Sulawesi Utara",
-
-            "ctlSideBar" => $this->lib_defaultView->retrieve_menu("gereja"),
-            "ctlHeaderBar" => $this->lib_defaultView->retrieve_header(),
-            "ctlContentArea" => $this->load->view("gereja/vw_form_gereja", $arrForm, true),
-            "ctlSideBarR" => $this->lib_defaultView->retrieve_sidebar_r(),
-            "ctlArrJs" => array(
-                base_url("assets/js/controller/arsip_surat.js"),
-                base_url("assets/js/jquery-ui.min.js"),
-            ),
-            "ctlArrCss" => array(
-                base_url("assets/css/jquery-ui.structure.min.css"),
-                base_url("assets/css/jquery-ui.theme.min.css"),
-                base_url("assets/css/jquery-ui.css"),
-            )
-        );
-        $this->load->view('master_view/master_index', $arrData);
-
-	}
-
-    public function profile($id = "") {
-        $arrForm = array();
-
-        $arrData = array(
-            "ctlTitle" => "Data Gereja",
-            "ctlSubTitle" => "GPdI Sulawesi Utara",
-            
-            "ctlSideBar" => $this->lib_defaultView->retrieve_menu("gereja"),
-            "ctlHeaderBar" => $this->lib_defaultView->retrieve_header(),
-            "ctlContentArea" => $this->load->view("gereja/vw_profile_gereja", $arrForm, true),
-            "ctlSideBarR" => $this->lib_defaultView->retrieve_sidebar_r(),
-            "ctlArrJs" => array(
-            ),
-            "ctlArrCss" => array(
-                base_url("assets/css/jquery-ui.structure.min.css"),
-                base_url("assets/css/jquery-ui.theme.min.css"),
-                base_url("assets/css/jquery-ui.css"),
-            )
-        );
-        $this->load->view('master_view/master_index', $arrData);
+        return $arrData;
     }
+
+    protected function _get_count_data() {
+        $arrWhere = array("t1.tw_id" => $this->mwId);
+        $count = $this->tbl_gereja->count_data($arrWhere);
+
+        return $count;
+    }
+	
 }
     
