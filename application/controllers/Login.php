@@ -56,6 +56,7 @@ class login extends CI_Controller {
                 $arrUserTipe = array(
                     1 => "md",
                     3 => "mw",
+                    5 => "grj"
                 );
 
                 $userData = array(

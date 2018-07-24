@@ -5,7 +5,6 @@
 		<h3 class="box-title">Form Input Data User</h3>
 	</div>
 	<form class="form-horizontal" method="post"
-		autocomplete="off"
 		action="<?php echo $ctlUrlSubmit; ?>" >
 		<div class="box-body">
 				<?php
@@ -64,8 +63,7 @@
 		                  		$arrAttr = array(
 		                  			"class" => "form-control",
 		                  			"id" => $id,
-		                  			"placeholder" => "Username",
-		                  			"autocomplete" => "off"
+		                  			"placeholder" => "Username"
 		                  		);
 		                  		echo form_input(
 		                  			$id,
@@ -91,8 +89,7 @@
 		                  			"class" => "form-control",
 		                  			"id" => $id,
 		                  			"placeholder" => "Password Baru",
-		                  			"type" => "password",
-		                  			"autocomplete" => "off"
+		                  			"type" => "password"
 		                  		);
 		                  		echo form_password($id, "", $arrAttr);
                   			?>
@@ -112,8 +109,7 @@
 		                  			"class" => "form-control",
 		                  			"id" => $id,
 		                  			"placeholder" => "Konfirmasi Password",
-		                  			"type" => "password",
-		                  			"autocomplete" => "off"
+		                  			"type" => "password"
 		                  		);
 		                  		echo form_password($id, "", $arrAttr);
                   			?>
@@ -170,13 +166,13 @@
 		                </div>
 
 		                <div class="form-group gem-dropdown">
-		                  	<label for="tipe_id_gem" class="col-sm-4 control-label">
-		                  		Gembala
+		                  	<label for="tipe_id_grj" class="col-sm-4 control-label">
+		                  		Gereja
 	                  		</label>
 
 			                  <div class="col-sm-8">
 		                  		<?php
-		                  			$id = "tipe_id_gem";
+		                  			$id = "tipe_id_grj";
 		                  			$val = misc_helper::get_form_value(
 		                  				$ctlArrData, "tu_tipe_id"
 		                  			);

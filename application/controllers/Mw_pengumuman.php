@@ -13,6 +13,7 @@ class mw_pengumuman extends CI_Controller {
     
     protected $thisurl;
     protected $lib_defaultView;
+    public $userAllowed = "mw";
 
     public function __construct() {
         parent::__construct();
@@ -33,11 +34,9 @@ class mw_pengumuman extends CI_Controller {
         $this->lib_login = new lib_login($arrConfig);
 
         $this->lib_login->redir_ifnot_login();
-        $this->isLogin = $this->lib_login->check_login();
+        //$this->lib_login->previlage($this->userAllowed);
         $this->arrSession = $this->lib_login->get_session_data();
         // endof load libraries
-        
-        $this->lib_login->redir_ifnot_login();
         
         $this->lib_defaultView = new default_view($this->load, $this->lib_login);
         $this->lib_defaultView->set_libLogin($this->lib_login);
@@ -47,10 +46,15 @@ class mw_pengumuman extends CI_Controller {
     
     public function index($search = "all", $start = 0) {
 		
-        $arrData = $this->tbl_pengumuman->retrieve_data(array(), 0, 30);
-
         //print_r($this->arrSession);
         
+        $arrWhere = array(
+            "tpeng_status" => 1,
+            "tpeng_tipe" => 1
+        );
+        $arrData = $this->tbl_pengumuman->retrieve_data($arrWhere, 0, 20, "tpeng_datetime DESC");
+
+
         $arrView = array(
             "ctlUrlSubmit" => $this->thisurl . "/index",
             "ctlUrlPengumuman" => $this->thisurl . "/index",
@@ -74,7 +78,8 @@ class mw_pengumuman extends CI_Controller {
         );
         $this->load->view('master_view/master_index', $arrData);
     }
-    
+	
+
     public function berita($search = "all", $start = 0) {
         
         //print_r($this->arrSession);

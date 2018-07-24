@@ -14,9 +14,6 @@
                       <a href="#" class="btn btn-default">
                           Ibu/Bpk. Rohani
                       </a>
-                      <a href="#" class="btn btn-default">
-                          Calon Gembala
-                      </a>
                    </div>
                  </div>
                </p>
@@ -30,17 +27,22 @@
 
               <div class="box-tools">
 
-                <div class="input-group input-group-sm" style="width: 250px;">
-                  <input type="text" name="table_search" class="form-control pull-right" placeholder="Search">
+                <form method=post>
+                  <div class="input-group input-group-sm" style="width: 250px;">
+                    <input type="text" name="table_search" class="form-control pull-right" 
+                    value="<?php echo $ctlPlainSearch; ?>"
+                    placeholder="Search">
 
-                  <div class="input-group-btn">
-                    <button type="submit" class="btn btn-default"><i class="fa fa-search"></i></button>
-                     <a href="<?php echo base_url("index.php/gembala/form/"); ?>" class="btn btn-warning">
-                        <i class="glyphicon glyphicon-plus"></i> Tambah Data
-                     </a>
+                    <div class="input-group-btn">
+                      <button type="submit" class="btn btn-default"><i class="fa fa-search"></i></button>
+                      <?php if($ctlAddDisable) { ?>
+                       <a href="<?php echo $ctlEditUrl; ?>" class="btn btn-warning">
+                          <i class="glyphicon glyphicon-plus"></i> Tambah Data
+                       </a>
+                      <?php } ?>
+                    </div>
                   </div>
-
-                </div>
+                </form>
               </div>
             </div>
             <!-- /.box-header -->
@@ -48,22 +50,28 @@
               <div id="example2_wrapper" class="dataTables_wrapper form-inline dt-bootstrap"><div class="row"><div class="col-sm-6"></div><div class="col-sm-6"></div></div><div class="row"><div class="col-sm-12"><table id="example2" class="table table-bordered table-hover dataTable" role="grid" aria-describedby="example2_info">
                 <thead>
                 <tr role="row">
-                    <th class="sorting_asc" tabindex="0" aria-controls="example2" rowspan="1" colspan="1" aria-sort="ascending" aria-label="Rendering engine: activate to sort column descending">
+                    <th width="5%">
+                      No.
+                    </th>
+                    <th width="30%">
                       Nama Gembala
                     </th>
-                    <th class="sorting" tabindex="0" aria-controls="example2" rowspan="1" colspan="1" aria-label="Browser: activate to sort column ascending">
+                    <th width="10%">
                       Jenis Kelamin
                     </th>
-                    <th class="sorting" tabindex="0" aria-controls="example2" rowspan="1" colspan="1" aria-label="Platform(s): activate to sort column ascending">
+                    <th width="10%">
+                      Umur
+                    </th>
+                    <th width="10%">
                       Tanggal Lahir
                     </th>
-                    <th class="sorting" tabindex="0" aria-controls="example2" rowspan="1" colspan="1" aria-label="Engine version: activate to sort column ascending">
+                    <th width="10%">
                       Status Nikah
                     </th>
-                    <th class="sorting" tabindex="0" aria-controls="example2" rowspan="1" colspan="1" aria-label="Engine version: activate to sort column ascending">
+                    <th width="25%">
                       Tempat Pelayanan
                     </th>
-                    <th class="sorting" tabindex="0" aria-controls="example2" rowspan="1" colspan="1" aria-label="CSS grade: activate to sort column ascending">
+                    <th width="10%">
                       Action
                     </th>
                 </tr>
@@ -71,60 +79,22 @@
                 <tbody>
                 
                 
-                <?php
-                  $ctlArrData = array(
-                      array(
-                        "tgem_nama" => "Pdt. Vecky Mamentu S.Th.",
-                        "tgem_jk" => "Pria",
-                        "tgem_tgl_lahir" => "28 Februari 1961",
-                        "tgem_status_nikah" => "Menikah",
-                        "tpt_pelayanan" => "GPdI Immanuel Rerer-satu"
-                      ),
-                      array(
-                        "tgem_nama" => "Pdt. Christian Bong",
-                        "tgem_jk" => "Pria",
-                        "tgem_tgl_lahir" => "28 Februari 1961",
-                        "tgem_status_nikah" => "Menikah",
-                        "tpt_pelayanan" => "GPdI Kristus Raja Kalawiran"
-                      ),
-                      array(
-                        "tgem_nama" => "Pdt. Marlon Pangayoan",
-                        "tgem_jk" => "Pria",
-                        "tgem_tgl_lahir" => "28 Februari 1961",
-                        "tgem_status_nikah" => "Menikah",
-                        "tpt_pelayanan" => "GPdI Pantai Ratu"
-                      ),
-                      array(
-                        "tgem_nama" => "Pdt. Joudy Kowaas S.Th.",
-                        "tgem_jk" => "Pria",
-                        "tgem_tgl_lahir" => "28 Februari 1961",
-                        "tgem_status_nikah" => "Menikah",
-                        "tpt_pelayanan" => "GPdI Rerer"
-                      ),
-                      array(
-                        "tgem_nama" => "Pdt. Manueke",
-                        "tgem_jk" => "Pria",
-                        "tgem_tgl_lahir" => "28 Februari 1961",
-                        "tgem_status_nikah" => "Menikah",
-                        "tpt_pelayanan" => "GPdI Makalisung"
-                      ),
-                  );
-
-                ?>
-                
                 <?php foreach($ctlArrData as $key => $arrVal) { ?>
                 <tr role="row" class="odd">
+                  <td ><?php echo ($ctlStart + $key + 1); ?></td>
                   <td class="sorting_1"><?php echo $arrVal["tgem_nama"]; ?></td>
                   <td><?php echo $arrVal["tgem_jk"]; ?></td>
-                  <td><?php echo $arrVal["tgem_tgl_lahir"]; ?></td>
+
+                  <td><?php echo ($arrVal["age"]) ? $arrVal["age"] . " thn" : "-"; ?></td>
+                  <td><?php echo misc_helper::format_idDate($arrVal["tgem_tgl_lahir"]); ?></td>
                   <td><?php echo $arrVal["tgem_status_nikah"]; ?></td>
-                  <td><?php echo $arrVal["tpt_pelayanan"]; ?></td>
+                  <td><?php echo $arrVal["tg_nama"]; ?></td>
                   <td>
                     <div class="input-group-btn">
-                        <a href="<?php echo base_url("index.php/gembala/form/"); ?>" class="btn btn-warning btn-xs">
+                        <a href="<?php echo $ctlEditUrl . $arrVal["tgem_id"]; ?>" class="btn btn-warning btn-xs">
                             <span class="glyphicon glyphicon-edit"></span>
                         </a>
-                        <a href="<?php echo base_url("index.php/gembala/profile/"); ?>" class="btn btn-default btn-xs">
+                        <a href="<?php echo $ctlProfileUrl . $arrVal["tgem_id"]; ?>" class="btn btn-default btn-xs">
                             <span class="glyphicon glyphicon-eye-open"></span>
                         </a>
                     </div>
@@ -138,7 +108,24 @@
               </div>
               </div>
 
-              <div class="row"><div class="col-sm-5"><div class="dataTables_info" id="example2_info" role="status" aria-live="polite">Showing 1 to 10 of 57 entries</div></div><div class="col-sm-7"><div class="dataTables_paginate paging_simple_numbers" id="example2_paginate"><ul class="pagination"><li class="paginate_button previous disabled" id="example2_previous"><a href="#" aria-controls="example2" data-dt-idx="0" tabindex="0">Previous</a></li><li class="paginate_button active"><a href="#" aria-controls="example2" data-dt-idx="1" tabindex="0">1</a></li><li class="paginate_button "><a href="#" aria-controls="example2" data-dt-idx="2" tabindex="0">2</a></li><li class="paginate_button "><a href="#" aria-controls="example2" data-dt-idx="3" tabindex="0">3</a></li><li class="paginate_button "><a href="#" aria-controls="example2" data-dt-idx="4" tabindex="0">4</a></li><li class="paginate_button "><a href="#" aria-controls="example2" data-dt-idx="5" tabindex="0">5</a></li><li class="paginate_button "><a href="#" aria-controls="example2" data-dt-idx="6" tabindex="0">6</a></li><li class="paginate_button next" id="example2_next"><a href="#" aria-controls="example2" data-dt-idx="7" tabindex="0">Next</a></li></ul></div></div></div></div>
+              <div class="row">
+                <div class="col-sm-5">
+                  <div class="dataTables_info" id="example2_info" role="status" aria-live="polite">
+                    <?php
+                      echo ($ctlStart + 1) ." - ".
+                        ($ctlStart + $ctlPerpage) . " dari ". $ctlCount ." data";
+                    ?>
+                    </div>
+                </div>
+                <div class="col-sm-7">
+                  <div class="dataTables_paginate paging_simple_numbers" id="example2_paginate">
+                    <ul class="pagination">
+                        <?php echo $ctlPagination; ?>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+            </div>
             </div>
             <!-- /.box-body -->
           </div>

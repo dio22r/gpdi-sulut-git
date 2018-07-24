@@ -29,7 +29,7 @@
                 </li>
                 <li class="list-group-item">
                   <b>Tgl Berdiri</b> <a class="pull-right">
-                    <?php echo $ctlArrData["tg_tgl_berdiri"]; ?>
+                    <?php echo misc_helper::format_idDate($ctlArrData["tg_tgl_berdiri"]); ?>
                   </a>
                 </li>                
               </ul>
@@ -56,32 +56,16 @@
           
           <!-- About Me Box -->
           <div class="box box-primary">
+            <div class="box-header with-border">
+              <h3 class="box-title"><i class="fa fa-calendar margin-r-5"></i> Jadwal Ibadah</h3>
+            </div>
             <!-- /.box-header -->
             <div class="box-body">
-
-              <strong><i class="fa fa-calendar margin-r-5"></i> Jadwal Ibadah</strong>
 
               <p class="text-muted">
                 <?php
 
-                $jadwal = "Minggu, Pkl 08.00 ~ Ibadah Raya - di Gereja
-                Minggu, Pkl 08.00 ~ Sekolah Minggu - di Gereja
-                Minggu, Pkl 19.00 ~ Ibadah P.S. Immanuel
-
-                Senin, Pkl. 18.00 ~ Doa Bidston - di Gereja
-
-                Selasa, Pkl. 15.00 ~ Ibadah Pelwap - di
-
-                Rabu, Pkl. 14.00 ~ Doa dan Puasa Umum - di Gereja
-                Rabu, Pkl. 19.00 ~ Ibadah Pelprip - di 
-
-                Kamis, Pkl. 15.00 ~ KCA - di 
-                Kamis, Pkl. 19.00 ~ Ibadah Kamis Malam - di Gereja
-
-                Jumat, Pkl. 14.00 ~ Doa dan Puasa Umum/Masal - di Gereja
-                Jumat, Pkl. 19.00 ~ Ibadah Pelprap & Kel. Muda - di 
-
-                Sabtu, Pkl. 17.00 ~ Doa & Latihan Pelayan Altar untuk Ibadah Raya - di Gereja";
+                $jadwal = " - Data Belum Di Isi -";
 
                 if ($ctlArrData["tg_jadwal_ibadah"]) {
                   $jadwal = $ctlArrData["tg_jadwal_ibadah"];
@@ -92,30 +76,68 @@
               </p>
 
               <hr>
-
-              <strong><i class="fa fa-server margin-r-5"></i> Inventaris Gereja</strong>
-
-              <p class="text-muted">
-                <?php
-
-                $inventaris = " - Gedung Gereja
-                - Peralatan Musik
-                - Pastori";
-                
-                if ($ctlArrData["tg_inventaris"]) {
-                  $inventaris = $ctlArrData["tg_inventaris"];
-                }
-
-                echo nl2br($inventaris);
-                ?>
-
-              </p>
-
-              <hr>
             </div>
             <!-- /.box-body -->
           </div>
-          
+          <div class="box box-primary">
+            <div class="box-header with-border">
+              <h3 class="box-title"><i class="fa fa-server margin-r-5"></i> Inventaris Gereja</h3>
+            </div>
+
+            <div class="box-body">
+               
+               <?php if (count($ctlArrAset) > 0) { ?>
+                <table class="table table-bordered table-hover">
+                    <tr>
+                      <th>Nama Aset</th>
+                      <th>Keterangan</th>
+                      <th></th>
+                    </tr>
+                  <?php foreach($ctlArrAset as $key => $arrVal) { ?>
+                    <tr>
+                      <td>
+                        <?php echo $arrVal["ta_nama"]; ?>
+                      </td>
+                      <td><?php echo $arrVal["ta_ket"]; ?></td>
+
+                      <?php
+                          $text = "Anda yakin ingin menghapus data ini -- Aset "
+                            .$arrVal["ta_nama"]."?";
+                      ?>
+                      <td>
+                        <a href="<?php echo $ctlUrlBase."/form_aset/".$ctlArrData["tg_id"]."/".
+                          $arrVal["ta_id"];?>"
+                          class="btn btn-xs btn-default">
+                          <i class="fa fa-pencil"></i>
+                        </a>
+
+                        <a href="<?php echo $ctlUrlBase."/delete_aset/".$ctlArrData["tg_id"]."/".
+                          $arrVal["ta_id"];?>"
+                          onclick="return confirm('<?php echo $text; ?>');"
+                          class="btn btn-xs btn-default">
+                          <i class="fa fa-times"></i>
+                        </a>
+                      </td>
+                    </tr>
+                  <?php } ?>
+                </table>
+                
+                <?php } else { ?>
+                  <div class="callout callout-warning">
+                    <h4>Data Masih Kosong.</h4>
+                  </div>
+                <?php } ?>
+
+                <hr />
+                <a href="<?php echo $ctlUrlBase."/form_aset/". $ctlArrData["tg_id"]; ?>"
+                  class="btn btn-xs btn-success pull-right">
+                  <i class="fa fa-plus"></i> Tambah Data
+                </a>
+
+
+              </div>
+              <!-- /.box-body -->
+            </div>
           <!-- /.nav-tabs-custom -->
         </div>
         <!-- /.col -->

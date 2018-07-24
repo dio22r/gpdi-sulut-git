@@ -13,14 +13,24 @@
       action="<?php echo $ctlUrlSubmit; ?>"
       method="post">
 
-      <?php echo form_hidden("tj_id", $ctlId); ?>
+      <?php
+        echo form_hidden(
+          "tj_id", misc_helper::get_form_value($ctlArrData, "tj_id")
+        );
+
+        echo form_hidden(
+          "tg_id", misc_helper::get_form_value($ctlArrGereja, "tg_id")
+        );
+      ?>
 
     <ul class="nav nav-tabs">
       <li class="active"><a data-toggle="tab" href="#home">Data Diri</a></li>
       <li><a data-toggle="tab" href="#menu1">Alamat</a></li>
       <li><a data-toggle="tab" href="#akta">Akta</a></li>
+      <!--
       <li><a data-toggle="tab" href="#pendidikan">Pendidikan</a></li>
       <li><a data-toggle="tab" href="#kerohanian">Kerohanian</a></li>
+      -->
       <li><a data-toggle="tab" href="#pekerjaan">Pekerjaan</a></li>
     </ul>
 
@@ -29,7 +39,7 @@
         <h3>Data Diri</h3>
         <div class="col-md-6">
           <div class="form-group">
-              <label for="inputPassword3" class="col-sm-3 control-label">
+              <label for="tj_nama" class="col-sm-3 control-label">
                 Nama
               </label>
 
@@ -40,32 +50,57 @@
                 $arrInput = array(
                   'name'          => $id,
                   'id'            => $id,
-                  'value'         => misc_helper::get_form_value($ctl,
-                  'maxlength'     => '100',
-                  'size'          => '50',
-                  'style'         => 'width:50%'
+                  'class'         => "form-control",
+                  'value'         => misc_helper::get_form_value(
+                    $ctlArrData, $id),
+                  'placeholder'   => "Nama Lengkap"
                 );
-                echo form_input("tj_id", $ctlId);
+                echo form_input($arrInput);
               ?>
-              <input class="form-control" id="inputEmail3" placeholder="Nama Lengkap">
+
             </div>
           </div>
           <div class="form-group">
-              <label for="inputPassword3" class="col-sm-3 control-label">
+              <label for="tj_nik" class="col-sm-3 control-label">
                 NIK
               </label>
 
             <div class="col-sm-9">
-              <input type="email" class="form-control" id="inputEmail3" placeholder="NIK sesuai KTP">
+              
+              <?php
+                $id = "tj_nik";
+                $arrInput = array(
+                  'name'          => $id,
+                  'id'            => $id,
+                  'class'         => "form-control",
+                  'value'         => misc_helper::get_form_value(
+                    $ctlArrData, $id),
+                  'placeholder'   => "No. KTP"
+                );
+                echo form_input($arrInput);
+              ?>
+
             </div>
           </div>
           <div class="form-group">
-              <label for="inputPassword3" class="col-sm-3 control-label">
+              <label for="tj_nkk" class="col-sm-3 control-label">
                 Nomor KK
               </label>
 
             <div class="col-sm-9">
-              <input type="email" class="form-control" id="inputEmail3" placeholder="Sesuai nomor kartu keluraga">
+              
+              <?php
+                $id = "tj_nkk";
+                $arrInput = array(
+                  'name'          => $id,
+                  'id'            => $id,
+                  'class'         => "form-control",
+                  'value'         => misc_helper::get_form_value(
+                    $ctlArrData, $id),
+                  'placeholder'   => "No. KK"
+                );
+                echo form_input($arrInput);
+              ?>
             </div>
           </div>
           <div class="form-group">
@@ -74,19 +109,43 @@
               </label>
 
             <div class="col-sm-6">
-              <input type="email" class="form-control" id="inputEmail3" placeholder="Tempat Lahir">
+              
+              <?php
+                $id = "tj_tempat_lahir";
+                $arrInput = array(
+                  'name'          => $id,
+                  'id'            => $id,
+                  'class'         => "form-control",
+                  'value'         => misc_helper::get_form_value(
+                    $ctlArrData, $id),
+                  'placeholder'   => "Tempat Lahir"
+                );
+                echo form_input($arrInput);
+              ?>
             </div>
           </div>
           <div class="form-group">
-              <label for="inputPassword3" class="col-sm-3 control-label">
+              <label for="tj_tgl_lahir" class="col-sm-3 control-label">
                 Tanggal Lahir
               </label>
 
             <div class="col-sm-9">
               <div class="input-group">
-                <input class="form-control datepicker" id="tglLahir" 
-                data-date-format="yyyy/mm/dd"
-                placeholder="Tanggal Lahir">
+
+                <?php
+                $id = "tj_tgl_lahir";
+                $arrInput = array(
+                  'name'          => $id,
+                  'id'            => $id,
+                  'class'         => "form-control datepicker",
+                  'value'         => misc_helper::get_form_value(
+                    $ctlArrData, $id),
+                  'placeholder'   => "Tanggal Lahir",
+                  "data-date-format" => "yyyy-mm-dd",
+                  "autocomplete" => "off"
+                );
+                echo form_input($arrInput);
+                ?>
 
                 <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
               </div>
@@ -99,10 +158,20 @@
             </label>
 
             <div class="col-sm-3">
-                <select class="form-control">
-                  <option>Laki-laki</option>
-                  <option>Perempuan</option>
-                </select>
+                <?php
+                $arrInput = array(
+                  "class" => "form-control"
+                );
+
+                $option = array(
+                  "L" => "Laki-laki",
+                  "P" => "Perempuan"
+                );
+
+                echo form_dropdown("tj_jk", $option, misc_helper::get_form_value(
+                    $ctlArrData, "tj_jk"), $arrInput
+                )
+                ?>
             </div>
             
             <label for="inputPassword3" class="col-sm-3 control-label">
@@ -110,12 +179,22 @@
             </label>
 
               <div class="col-sm-3">
-                  <select class="form-control">
-                    <option>A</option>
-                    <option>B</option>
-                    <option>AB</option>
-                    <option>O</option>
-                  </select>
+                <?php
+                $arrInput = array(
+                  "class" => "form-control"
+                );
+
+                $option = array(
+                  "A" => "A",
+                  "B" => "B",
+                  "AB" => "AB",
+                  "O" => "O"
+                );
+
+                echo form_dropdown("tj_gol_darah", $option, misc_helper::get_form_value(
+                    $ctlArrData, "tj_gol_darah"), $arrInput
+                )
+                ?>
               </div>
 
           </div>
@@ -131,14 +210,39 @@
               </label>
 
               <div class="col-sm-3">
-                  <input type="email" class="form-control" id="inputEmail3" placeholder="Tinggi: cm">
+
+              <?php
+                $id = "tj_tinggi_badan";
+                $arrInput = array(
+                  'name'          => $id,
+                  'id'            => $id,
+                  'class'         => "form-control",
+                  'value'         => misc_helper::get_form_value(
+                    $ctlArrData, $id),
+                  'placeholder'   => "Tinggi : cm"
+                );
+                echo form_input($arrInput);
+              ?>
               </div>
+            
+
               <label for="inputPassword3" class="col-sm-3 control-label">
                 Warga Negara
               </label>
 
                 <div class="col-sm-3">
-                    <input type="email" class="form-control" id="inputEmail3" placeholder="Warga Negara">
+                    <?php
+                      $id = "tj_warga_negara";
+                      $arrInput = array(
+                        'name'          => $id,
+                        'id'            => $id,
+                        'class'         => "form-control",
+                        'value'         => misc_helper::get_form_value(
+                          $ctlArrData, $id),
+                        'placeholder'   => "WNI / WNA"
+                      );
+                      echo form_input($arrInput);
+                    ?>
                 </div>
             </div>
 
@@ -148,12 +252,22 @@
                     </label>
 
                   <div class="col-sm-9">
-                      <select class="form-control">
-                        <option>Singel</option>
-                        <option>Menikah</option>
-                        <option>Janda</option>
-                        <option>Duda</option>
-                      </select>
+                      <?php
+                      $arrInput = array(
+                        "class" => "form-control"
+                      );
+
+                      $option = array(
+                        "S" => "Singel",
+                        "M" => "Menikah",
+                        "J" => "Janda",
+                        "D" => "Duda"
+                      );
+
+                      echo form_dropdown("tj_status_nikah", $option, misc_helper::get_form_value(
+                          $ctlArrData, "tj_gol_darah"), $arrInput
+                      )
+                      ?>
                   </div>
                 </div>
 
@@ -164,7 +278,18 @@
                   </label>
 
                   <div class="col-sm-9">
-                      <input type="email" class="form-control" id="inputEmail3" placeholder="Nama Ayah">
+                      <?php
+                      $id = "tj_nama_ayah";
+                      $arrInput = array(
+                        'name'          => $id,
+                        'id'            => $id,
+                        'class'         => "form-control",
+                        'value'         => misc_helper::get_form_value(
+                          $ctlArrData, $id),
+                        'placeholder'   => "Nama Ayah"
+                      );
+                      echo form_input($arrInput);
+                    ?>
                   </div>
                 </div>
 
@@ -174,7 +299,18 @@
                   </label>
 
                   <div class="col-sm-9">
-                      <input type="email" class="form-control" id="inputEmail3" placeholder="Nama Ibu">
+                      <?php
+                      $id = "tj_nama_ibu";
+                      $arrInput = array(
+                        'name'          => $id,
+                        'id'            => $id,
+                        'class'         => "form-control",
+                        'value'         => misc_helper::get_form_value(
+                          $ctlArrData, $id),
+                        'placeholder'   => "Nama Ibu"
+                      );
+                      echo form_input($arrInput);
+                    ?>
                   </div>
                 </div>
 
@@ -184,12 +320,25 @@
                   </label>
 
                   <div class="col-sm-9">
-                      <input type="email" class="form-control" id="inputEmail3" placeholder="No. Telp">
+                    <?php
+                      $id = "tj_no_telp";
+                      $arrInput = array(
+                        'name'          => $id,
+                        'id'            => $id,
+                        'class'         => "form-control",
+                        'value'         => misc_helper::get_form_value(
+                          $ctlArrData, $id),
+                        'placeholder'   => "Nomor Telepon"
+                      );
+                      echo form_input($arrInput);
+                    ?>
                   </div>
                 </div>
 
           </div>
         </div>
+
+
 
 
         <div id="menu1" class="tab-pane fade">
@@ -203,7 +352,18 @@
                   </label>
 
                   <div class="col-sm-8">
-                      <input type="email" class="form-control" id="inputEmail3" placeholder="Propinsi">
+                    <?php
+                      $id = "tj_al_propinsi";
+                      $arrInput = array(
+                        'name'          => $id,
+                        'id'            => $id,
+                        'class'         => "form-control",
+                        'value'         => misc_helper::get_form_value(
+                          $ctlArrData, $id),
+                        'placeholder'   => "Propinsi"
+                      );
+                      echo form_input($arrInput);
+                    ?>
                   </div>
                 </div>
 
@@ -213,7 +373,18 @@
                   </label>
 
                   <div class="col-sm-8">
-                      <input type="email" class="form-control" id="inputEmail3" placeholder="Kabupaten / Kodya">
+                    <?php
+                      $id = "tj_al_kab_kodya";
+                      $arrInput = array(
+                        'name'          => $id,
+                        'id'            => $id,
+                        'class'         => "form-control",
+                        'value'         => misc_helper::get_form_value(
+                          $ctlArrData, $id),
+                        'placeholder'   => "Kabupaten / Kota Madya"
+                      );
+                      echo form_input($arrInput);
+                    ?>
                   </div>
                 </div>
 
@@ -223,7 +394,18 @@
                   </label>
 
                   <div class="col-sm-8">
-                      <input type="email" class="form-control" id="inputEmail3" placeholder="Kecamatan">
+                      <?php
+                      $id = "tj_al_kec";
+                      $arrInput = array(
+                        'name'          => $id,
+                        'id'            => $id,
+                        'class'         => "form-control",
+                        'value'         => misc_helper::get_form_value(
+                          $ctlArrData, $id),
+                        'placeholder'   => "Kecamatan"
+                      );
+                      echo form_input($arrInput);
+                    ?>
                   </div>
                 </div>
 
@@ -233,7 +415,18 @@
                   </label>
 
                   <div class="col-sm-8">
-                      <input type="email" class="form-control" id="inputEmail3" placeholder="Kecamatan">
+                      <?php
+                      $id = "tj_al_desa";
+                      $arrInput = array(
+                        'name'          => $id,
+                        'id'            => $id,
+                        'class'         => "form-control",
+                        'value'         => misc_helper::get_form_value(
+                          $ctlArrData, $id),
+                        'placeholder'   => "Kelurahan / Desa"
+                      );
+                      echo form_input($arrInput);
+                    ?>
                   </div>
                 </div>
 
@@ -243,7 +436,18 @@
                   </label>
 
                   <div class="col-sm-8">
-                      <input type="email" class="form-control" id="inputEmail3" placeholder="Kecamatan">
+                      <?php
+                      $id = "tj_al_jaga";
+                      $arrInput = array(
+                        'name'          => $id,
+                        'id'            => $id,
+                        'class'         => "form-control",
+                        'value'         => misc_helper::get_form_value(
+                          $ctlArrData, $id),
+                        'placeholder'   => "Dusun / Jaga / Kampung"
+                      );
+                      echo form_input($arrInput);
+                    ?>
                   </div>
                 </div>
           </div>
@@ -256,7 +460,18 @@
                   </label>
 
                   <div class="col-sm-8">
-                      <input type="email" class="form-control" id="inputEmail3" placeholder="RT / RW / RK">
+                      <?php
+                      $id = "tj_al_rt_rw";
+                      $arrInput = array(
+                        'name'          => $id,
+                        'id'            => $id,
+                        'class'         => "form-control",
+                        'value'         => misc_helper::get_form_value(
+                          $ctlArrData, $id),
+                        'placeholder'   => "RT / RW / RK"
+                      );
+                      echo form_input($arrInput);
+                    ?>
                   </div>
                 </div>
 
@@ -266,7 +481,18 @@
                   </label>
 
                   <div class="col-sm-8">
-                      <input type="email" class="form-control" id="inputEmail3" placeholder="Kode Kota">
+                      <?php
+                      $id = "tj_al_kode_kota";
+                      $arrInput = array(
+                        'name'          => $id,
+                        'id'            => $id,
+                        'class'         => "form-control",
+                        'value'         => misc_helper::get_form_value(
+                          $ctlArrData, $id),
+                        'placeholder'   => "Kode Kota"
+                      );
+                      echo form_input($arrInput);
+                    ?>
                   </div>
                 </div>
 
@@ -276,7 +502,18 @@
                   </label>
 
                   <div class="col-sm-8">
-                      <input type="email" class="form-control" id="inputEmail3" placeholder="Kode Pos">
+                      <?php
+                      $id = "tj_al_kode_pos";
+                      $arrInput = array(
+                        'name'          => $id,
+                        'id'            => $id,
+                        'class'         => "form-control",
+                        'value'         => misc_helper::get_form_value(
+                          $ctlArrData, $id),
+                        'placeholder'   => "Kode Pos"
+                      );
+                      echo form_input($arrInput);
+                    ?>
                   </div>
                 </div>
 
@@ -286,11 +523,21 @@
                   </label>
 
                   <div class="col-sm-8">
-                      <select class="form-control">
-                        <option>Milik Keluarga</option>
-                        <option>Kontrak</option>
-                        <option>Miliki Pribadi</option>
-                      </select>
+                      <?php
+                      $arrInput = array(
+                        "class" => "form-control"
+                      );
+
+                      $option = array(
+                        "MK" => "Milik Keluarga",
+                        "K" => "Kontrak",
+                        "MP" => "Milik Pribadi",
+                      );
+
+                      echo form_dropdown("tj_al_kepemilikan_rumah", $option, misc_helper::get_form_value(
+                          $ctlArrData, "tj_al_kepemilikan_rumah"), $arrInput
+                      )
+                      ?>
                   </div>
                 </div>
 
@@ -300,10 +547,20 @@
                   </label>
 
                   <div class="col-sm-8">
-                    <select class="form-control">
-                      <option>Baik</option>
-                      <option>Kurang Baik</option>
-                    </select>
+                    <?php
+                      $arrInput = array(
+                        "class" => "form-control"
+                      );
+
+                      $option = array(
+                        "B" => "Baik",
+                        "KB" => "Kurang Baik",
+                      );
+
+                      echo form_dropdown("tj_al_kondisi_bangunan", $option, misc_helper::get_form_value(
+                          $ctlArrData, "tj_al_kondisi_bangunan"), $arrInput
+                      )
+                      ?>
                   </div>
                 </div>
           </div>
@@ -318,14 +575,36 @@
             </label>
 
             <div class="col-sm-4">
-                <input type="email" class="form-control" id="inputEmail3" placeholder="Umur: Contoh 8">
+                <?php
+                  $id = "tj_akt_usia";
+                  $arrInput = array(
+                    'name'          => $id,
+                    'id'            => $id,
+                    'class'         => "form-control",
+                    'value'         => misc_helper::get_form_value(
+                      $ctlArrData, $id),
+                    'placeholder'   => "Contoh : 15"
+                  );
+                  echo form_input($arrInput);
+                ?>
             </div>
             <label for="inputPassword3" class="col-sm-2 control-label">
               Pada Tahun
             </label>
 
             <div class="col-sm-3">
-                <input type="email" class="form-control" id="inputEmail3" placeholder="2009">
+                <?php
+                  $id = "tj_akt_tahun";
+                  $arrInput = array(
+                    'name'          => $id,
+                    'id'            => $id,
+                    'class'         => "form-control",
+                    'value'         => misc_helper::get_form_value(
+                      $ctlArrData, $id),
+                    'placeholder'   => "Contoh : 2009"
+                  );
+                  echo form_input($arrInput);
+                ?>
             </div>
 
           </div>
@@ -336,7 +615,18 @@
             </label>
 
             <div class="col-sm-9">
-              <input type="email" class="form-control" id="inputEmail3" placeholder="...">
+              <?php
+                  $id = "tj_akt_cara";
+                  $arrInput = array(
+                    'name'          => $id,
+                    'id'            => $id,
+                    'class'         => "form-control",
+                    'value'         => misc_helper::get_form_value(
+                      $ctlArrData, $id),
+                    'placeholder'   => "...."
+                  );
+                  echo form_input($arrInput);
+                ?>
             </div>
           </div>
 
@@ -346,7 +636,18 @@
             </label>
 
             <div class="col-sm-9">
-              <input type="email" class="form-control" id="inputEmail3" placeholder="...">
+              <?php
+                  $id = "tj_akt_agama_asal";
+                  $arrInput = array(
+                    'name'          => $id,
+                    'id'            => $id,
+                    'class'         => "form-control",
+                    'value'         => misc_helper::get_form_value(
+                      $ctlArrData, $id),
+                    'placeholder'   => "...."
+                  );
+                  echo form_input($arrInput);
+                ?>
             </div>
           </div>
 
@@ -356,17 +657,44 @@
             </label>
 
             <div class="col-sm-9">
-              <input type="email" class="form-control" id="inputEmail3" placeholder="...">
+              <?php
+                  $id = "tj_akt_grj_pertama";
+                  $arrInput = array(
+                    'name'          => $id,
+                    'id'            => $id,
+                    'class'         => "form-control",
+                    'value'         => misc_helper::get_form_value(
+                      $ctlArrData, $id),
+                    'placeholder'   => "...."
+                  );
+                  echo form_input($arrInput);
+                ?>
             </div>
           </div>
 
           <div class="form-group">
             <label for="inputPassword3" class="col-sm-3 control-label">
-              Bergabung di Gereja ini
+              Bergabung di Gereja ini tanggal
             </label>
 
             <div class="col-sm-9">
-              <input type="email" class="form-control" id="inputEmail3" placeholder="...">
+              <div class="input-group">
+                <?php
+                $id = "tj_akt_tgl_bergabung";
+                $arrInput = array(
+                  'name'          => $id,
+                  'id'            => $id,
+                  'class'         => "form-control datepicker",
+                  'value'         => misc_helper::get_form_value(
+                    $ctlArrData, $id),
+                  'placeholder'   => "Tanggal Bergabung",
+                  "data-date-format" => "yyyy-mm-dd"
+                );
+                echo form_input($arrInput);
+                ?>
+
+                <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+              </div>
             </div>
           </div>
 
@@ -376,9 +704,51 @@
             </label>
 
             <div class="col-sm-9">
-              <input type="email" class="form-control" id="inputEmail3" placeholder="...">
+              <?php
+                $id = "tj_akt_cara_bergabung";
+                $arrInput = array(
+                  'name'          => $id,
+                  'id'            => $id,
+                  'class'         => "form-control",
+                  'value'         => misc_helper::get_form_value(
+                    $ctlArrData, $id),
+                  'placeholder'   => "...",
+                );
+                echo form_input($arrInput);
+              ?>
             </div>
           </div>
+
+
+            <div class="form-group">
+              <label for="inputPassword3" class="col-sm-3 control-label">
+                Partisipasi Dalam Pelayanan
+              </label>
+
+              <div class="col-sm-9">
+                  <?php
+                    $arrInput = array(
+                      "class" => "form-control"
+                    );
+
+                    $option = array(
+                      "PELNAP" => "PELNAP",
+                      "PELPRUP" => "PELPRUP",
+                      "PELPRAP" => "PELPRAP",
+                      "PELPAP" => "PELPAP",
+                      "PELPRIP" => "PELPRIP",
+                      "PELWAP" => "PELWAP",
+                      "PELAHT" => "PELAHT",
+                      "BUMG" => "BUMG"
+                    );
+
+                    echo form_dropdown("tj_roh_wadah", $option, misc_helper::get_form_value(
+                        $ctlArrData, "tj_roh_wadah"), $arrInput
+                    )
+                  ?>
+              </div>
+            </div>
+
 
           <div class="col-md-6">
               <div class="col-sm-12">
@@ -392,10 +762,20 @@
                   </label>
 
                   <div class="col-sm-8">
-                      <select class="form-control">
-                        <option>Sudah diserahkan</option>
-                        <option>Belum Diserahkan</option>
-                      </select>
+                      <?php
+                      $arrInput = array(
+                        "class" => "form-control"
+                      );
+
+                      $option = array(
+                        "0" => "Belum Diserahkan",
+                        "1" => "Sudah Diserahkan",
+                      );
+
+                      echo form_dropdown("tj_akt_peny_status", $option, misc_helper::get_form_value(
+                          $ctlArrData, "tj_akt_peny_status"), $arrInput
+                      )
+                      ?>
                   </div>
                 </div>
 
@@ -405,9 +785,19 @@
                   </label>
 
                   <div class="col-sm-8">
-                      <select class="form-control">
-                        <option>Didoakan di Gereja</option>
-                      </select>
+                      <?php
+                      $arrInput = array(
+                        "class" => "form-control"
+                      );
+
+                      $option = array(
+                        "1" => "Didoakan di Gereja"
+                      );
+
+                      echo form_dropdown("tj_akt_peny_cara", $option, misc_helper::get_form_value(
+                          $ctlArrData, "tj_akt_peny_cara"), $arrInput
+                      )
+                      ?>
                   </div>
                 </div>
 
@@ -417,7 +807,18 @@
                   </label>
 
                   <div class="col-sm-8">
-                      <input type="email" class="form-control" id="inputEmail3" placeholder="Pendeta">
+                      <?php
+                        $id = "tj_akt_peny_dilayani_oleh";
+                        $arrInput = array(
+                          'name'          => $id,
+                          'id'            => $id,
+                          'class'         => "form-control",
+                          'value'         => misc_helper::get_form_value(
+                            $ctlArrData, $id),
+                          'placeholder'   => "Pdt. ",
+                        );
+                        echo form_input($arrInput);
+                      ?>
                   </div>
                 </div>
 
@@ -427,10 +828,20 @@
                   </label>
 
                   <div class="col-sm-8">
-                      <select class="form-control">
-                        <option>Sudah Punya</option>
-                        <option>Belum Punya</option>
-                      </select>
+                      <?php
+                      $arrInput = array(
+                        "class" => "form-control"
+                      );
+
+                      $option = array(
+                        "0" => "Belum Punya",
+                        "1" => "Sudah Punya",
+                      );
+
+                      echo form_dropdown("tj_akt_peny_surat", $option, misc_helper::get_form_value(
+                          $ctlArrData, "tj_akt_peny_surat"), $arrInput
+                      )
+                      ?>
                   </div>
                 </div>
 
@@ -440,7 +851,18 @@
                   </label>
 
                   <div class="col-sm-8">
-                      <input type="email" class="form-control" id="inputEmail3" placeholder="Nomor. Surat">
+                      <?php
+                        $id = "tj_akt_peny_no_surat";
+                        $arrInput = array(
+                          'name'          => $id,
+                          'id'            => $id,
+                          'class'         => "form-control",
+                          'value'         => misc_helper::get_form_value(
+                            $ctlArrData, $id),
+                          'placeholder'   => "Nomor Surat ",
+                        );
+                        echo form_input($arrInput);
+                      ?>
                   </div>
                 </div>
 
@@ -450,7 +872,18 @@
                   </label>
 
                   <div class="col-sm-8">
-                      <input type="email" class="form-control" id="inputEmail3" placeholder="Nama Gereja">
+                      <?php
+                        $id = "tj_akt_peny_jemaat";
+                        $arrInput = array(
+                          'name'          => $id,
+                          'id'            => $id,
+                          'class'         => "form-control",
+                          'value'         => misc_helper::get_form_value(
+                            $ctlArrData, $id),
+                          'placeholder'   => "Nama Gereja ",
+                        );
+                        echo form_input($arrInput);
+                      ?>
                   </div>
                 </div>
 
@@ -461,10 +894,19 @@
 
                   <div class="col-sm-8">
                       <div class="input-group">
-                        <input class="form-control datepicker" id="tglLahir" 
-                        data-date-format="yyyy/mm/dd"
-                        placeholder="Tanggal Penyerahan">
-
+                        <?php
+                          $id = "tj_akt_peny_tgl";
+                          $arrInput = array(
+                            'name'          => $id,
+                            'id'            => $id,
+                            'class'         => "form-control datepicker",
+                            'value'         => misc_helper::get_form_value(
+                              $ctlArrData, $id),
+                            'placeholder'   => "Tanggal Penyerahan ",
+                            'data-date-format' => "yyyy/mm/dd"
+                          );
+                          echo form_input($arrInput);
+                        ?>
                         <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
                       </div>
                   </div>
@@ -481,12 +923,21 @@
                   <label for="inputPassword3" class="col-sm-4 control-label">
                     Baptis
                   </label>
-
                   <div class="col-sm-8">
-                      <select class="form-control">
-                        <option>Sudah dibaptis</option>
-                        <option>Belum dibaptis</option>
-                      </select>
+                      <?php
+                      $arrInput = array(
+                        "class" => "form-control"
+                      );
+
+                      $option = array(
+                        "0" => "Belum dibaptis",
+                        "1" => "Sudah dibaptis",
+                      );
+
+                      echo form_dropdown("tj_akt_bap_status", $option, misc_helper::get_form_value(
+                          $ctlArrData, "tj_akt_bap_status"), $arrInput
+                      )
+                      ?>
                   </div>
                 </div>
 
@@ -496,9 +947,19 @@
                   </label>
 
                   <div class="col-sm-8">
-                      <select class="form-control">
-                        <option>Diselam</option>
-                      </select>
+                      <?php
+                      $arrInput = array(
+                        "class" => "form-control"
+                      );
+
+                      $option = array(
+                        "1" => "Di selam"
+                      );
+
+                      echo form_dropdown("tj_akt_peny_surat", $option, misc_helper::get_form_value(
+                          $ctlArrData, "tj_akt_peny_surat"), $arrInput
+                      )
+                      ?>
                   </div>
                 </div>
 
@@ -508,7 +969,18 @@
                   </label>
 
                   <div class="col-sm-8">
-                      <input type="email" class="form-control" id="inputEmail3" placeholder="Pendeta">
+                      <?php
+                          $id = "tj_akt_bap_dilayani";
+                          $arrInput = array(
+                            'name'          => $id,
+                            'id'            => $id,
+                            'class'         => "form-control",
+                            'value'         => misc_helper::get_form_value(
+                              $ctlArrData, $id),
+                            'placeholder'   => "Pdt. ",
+                          );
+                          echo form_input($arrInput);
+                        ?>
                   </div>
                 </div>
 
@@ -518,10 +990,20 @@
                   </label>
 
                   <div class="col-sm-8">
-                      <select class="form-control">
-                        <option>Sudah Punya</option>
-                        <option>Belum Punya</option>
-                      </select>
+                      <?php
+                      $arrInput = array(
+                        "class" => "form-control"
+                      );
+
+                      $option = array(
+                        "0" => "Belum Punya",
+                        "1" => "Sudah Punya"
+                      );
+
+                      echo form_dropdown("tj_akt_bap_surat", $option, misc_helper::get_form_value(
+                          $ctlArrData, "tj_akt_bap_surat"), $arrInput
+                      )
+                      ?>
                   </div>
                 </div>
 
@@ -531,7 +1013,18 @@
                   </label>
 
                   <div class="col-sm-8">
-                      <input type="email" class="form-control" id="inputEmail3" placeholder="Nomor Surat">
+                      <?php
+                          $id = "tj_akt_bap_no_surat";
+                          $arrInput = array(
+                            'name'          => $id,
+                            'id'            => $id,
+                            'class'         => "form-control",
+                            'value'         => misc_helper::get_form_value(
+                              $ctlArrData, $id),
+                            'placeholder'   => "Nomor ... ",
+                          );
+                          echo form_input($arrInput);
+                        ?>
                   </div>
                 </div>
 
@@ -541,7 +1034,18 @@
                   </label>
 
                   <div class="col-sm-8">
-                      <input type="email" class="form-control" id="inputEmail3" placeholder="Nama Gereja">
+                      <?php
+                          $id = "tj_akt_bap_jemaat";
+                          $arrInput = array(
+                            'name'          => $id,
+                            'id'            => $id,
+                            'class'         => "form-control",
+                            'value'         => misc_helper::get_form_value(
+                              $ctlArrData, $id),
+                            'placeholder'   => "Nama Gereja",
+                          );
+                          echo form_input($arrInput);
+                        ?>
                   </div>
                 </div>
 
@@ -552,10 +1056,19 @@
 
                   <div class="col-sm-8">
                       <div class="input-group">
-                        <input class="form-control datepicker" id="tglLahir" 
-                        data-date-format="yyyy/mm/dd"
-                        placeholder="Tanggal Baptis">
-
+                        <?php
+                          $id = "tj_akt_bap_tgl";
+                          $arrInput = array(
+                            'name'          => $id,
+                            'id'            => $id,
+                            'class'         => "form-control datepicker",
+                            'value'         => misc_helper::get_form_value(
+                              $ctlArrData, $id),
+                            'placeholder'   => "Tanggal Baptis",
+                            'data-date-format' => "yyyy-mm-dd"
+                          );
+                          echo form_input($arrInput);
+                        ?>
                         <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
                       </div>
                   </div>
@@ -578,18 +1091,29 @@
                 </label>
 
                 <div class="col-sm-8">
-                    <select class="form-control">
-                      <option>TK</option>
-                      <option>SD</option>
-                      <option>SMP</option>
-                      <option>SMA</option>
-                      <option>D1</option>
-                      <option>D2</option>
-                      <option>D3</option>
-                      <option>S1</option>
-                      <option>S2</option>
-                      <option>S3</option>
-                    </select>
+                    <?php
+                      $arrInput = array(
+                        "class" => "form-control"
+                      );
+
+                      $option = array(
+                        "" => " - ",
+                        "TK" => "TK",
+                        "SD" => "SD",
+                        "SMP" => "SMP",
+                        "SMA" => "SMA",
+                        "D1" => "D1",
+                        "D2" => "D2",
+                        "D3" => "D3",
+                        "S1" => "S1",
+                        "S2" => "S2",
+                        "S3" => "S3"
+                      );
+
+                      echo form_dropdown("tj_pd_um_tingkat", $option, misc_helper::get_form_value(
+                          $ctlArrData, "tj_pd_um_tingkat"), $arrInput
+                      )
+                      ?>
                 </div>
               </div>
 
@@ -599,7 +1123,18 @@
                 </label>
 
                 <div class="col-sm-8">
-                    <input type="email" class="form-control" id="inputEmail3" placeholder="Jurusan">
+                    <?php
+                      $id = "tj_pd_um_jurusan";
+                      $arrInput = array(
+                        'name'          => $id,
+                        'id'            => $id,
+                        'class'         => "form-control",
+                        'value'         => misc_helper::get_form_value(
+                          $ctlArrData, $id),
+                        'placeholder'   => "Jurusan jika ada",
+                      );
+                      echo form_input($arrInput);
+                    ?>
                 </div>
               </div>
 
@@ -609,7 +1144,18 @@
                 </label>
 
                 <div class="col-sm-8">
-                    <input type="email" class="form-control" id="inputEmail3" placeholder="Nama Sekolah / Kampus / Universitas" >
+                    <?php
+                      $id = "tj_pd_um_nama_ins";
+                      $arrInput = array(
+                        'name'          => $id,
+                        'id'            => $id,
+                        'class'         => "form-control",
+                        'value'         => misc_helper::get_form_value(
+                          $ctlArrData, $id),
+                        'placeholder'   => "Nama Sekolah / Kampus / Universitas",
+                      );
+                      echo form_input($arrInput);
+                    ?>
                 </div>
               </div>
 
@@ -619,7 +1165,18 @@
                 </label>
 
                 <div class="col-sm-8">
-                    <input type="email" class="form-control" id="inputEmail3" placeholder="Alamat Sekolah / Kampus / Universitas">
+                    <?php
+                      $id = "tj_pd_um_alamat_ins";
+                      $arrInput = array(
+                        'name'          => $id,
+                        'id'            => $id,
+                        'class'         => "form-control",
+                        'value'         => misc_helper::get_form_value(
+                          $ctlArrData, $id),
+                        'placeholder'   => "Alamat Sekolah / Kampus / Universitas",
+                      );
+                      echo form_input($arrInput);
+                    ?>
                 </div>
               </div>
 
@@ -629,7 +1186,18 @@
                 </label>
 
                 <div class="col-sm-8">
-                    <input type="email" class="form-control" id="inputEmail3" placeholder="Telephone Sekolah / Kampus / Universitas">
+                    <?php
+                      $id = "tj_pd_um_telp_ins";
+                      $arrInput = array(
+                        'name'          => $id,
+                        'id'            => $id,
+                        'class'         => "form-control",
+                        'value'         => misc_helper::get_form_value(
+                          $ctlArrData, $id),
+                        'placeholder'   => "Telephone Sekolah / Kampus / Universitas",
+                      );
+                      echo form_input($arrInput);
+                    ?>
                 </div>
               </div>
           </div>
@@ -648,12 +1216,23 @@
                 </label>
 
                 <div class="col-sm-8">
-                    <select class="form-control">
-                      <option>Sekolah Alkitab</option>
-                      <option>STT</option>
-                      <option>Institut</option>
-                      <option>Seminari</option>
-                    </select>
+                    <?php
+                      $arrInput = array(
+                        "class" => "form-control"
+                      );
+
+                      $option = array(
+                        "" => " - ",
+                        "SA" => "Sekolah Alkitab",
+                        "STT" => "Sekolah Tinggi Theologia",
+                        "Ins" => "Institut",
+                        "Sem" => "Seminari"
+                      );
+
+                      echo form_dropdown("tj_pd_teo_tingkat", $option, misc_helper::get_form_value(
+                          $ctlArrData, "tj_pd_teo_tingkat"), $arrInput
+                      )
+                      ?>
                 </div>
               </div>
 
@@ -663,7 +1242,18 @@
                 </label>
 
                 <div class="col-sm-8">
-                    <input type="email" class="form-control" id="inputEmail3" placeholder="Jurusan">
+                    <?php
+                      $id = "tj_pd_teo_jurusan";
+                      $arrInput = array(
+                        'name'          => $id,
+                        'id'            => $id,
+                        'class'         => "form-control",
+                        'value'         => misc_helper::get_form_value(
+                          $ctlArrData, $id),
+                        'placeholder'   => "Jurusan",
+                      );
+                      echo form_input($arrInput);
+                    ?>
                 </div>
               </div>
 
@@ -673,7 +1263,18 @@
                 </label>
 
                 <div class="col-sm-8">
-                    <input type="email" class="form-control" id="inputEmail3" placeholder="Nama Sekolah / Kampus / Universitas" >
+                    <?php
+                      $id = "tj_pd_teo_nama_ins";
+                      $arrInput = array(
+                        'name'          => $id,
+                        'id'            => $id,
+                        'class'         => "form-control",
+                        'value'         => misc_helper::get_form_value(
+                          $ctlArrData, $id),
+                        'placeholder'   => "Nama Sekolah / Kampus / Universitas",
+                      );
+                      echo form_input($arrInput);
+                    ?>
                 </div>
               </div>
 
@@ -683,7 +1284,18 @@
                 </label>
 
                 <div class="col-sm-8">
-                    <input type="email" class="form-control" id="inputEmail3" placeholder="Alamat Sekolah / Kampus / Universitas">
+                    <?php
+                      $id = "tj_pd_teo_alamat_ins";
+                      $arrInput = array(
+                        'name'          => $id,
+                        'id'            => $id,
+                        'class'         => "form-control",
+                        'value'         => misc_helper::get_form_value(
+                          $ctlArrData, $id),
+                        'placeholder'   => "Alamat Sekolah / Kampus / Universitas",
+                      );
+                      echo form_input($arrInput);
+                    ?>
                 </div>
               </div>
 
@@ -693,7 +1305,18 @@
                 </label>
 
                 <div class="col-sm-8">
-                    <input type="email" class="form-control" id="inputEmail3" placeholder="Telephone Sekolah / Kampus / Universitas">
+                    <?php
+                      $id = "tj_pd_teo_telp_ins";
+                      $arrInput = array(
+                        'name'          => $id,
+                        'id'            => $id,
+                        'class'         => "form-control",
+                        'value'         => misc_helper::get_form_value(
+                          $ctlArrData, $id),
+                        'placeholder'   => "Telephone Sekolah / Kampus / Universitas",
+                      );
+                      echo form_input($arrInput);
+                    ?>
                 </div>
               </div>
           </div>
@@ -702,137 +1325,180 @@
         <div id="kerohanian" class="tab-pane fade">
           <h3>Kerohanian</h3>
 
+
             <div class="form-group">
               <label for="inputPassword3" class="col-sm-3 control-label">
-                Partisipasi Dalam Pelayanan
+                Jabatan
               </label>
 
-              <div class="col-sm-3">
-                  <select class="form-control">
-                    <option>Sudah Melayani</option>
-                    <option>Belum Melayani</option>
-                  </select>
+              <div class="col-sm-5">
+                  <?php
+                    $id = "tj_roh_wadah_jab";
+                    $arrInput = array(
+                      'name'          => $id,
+                      'id'            => $id,
+                      'class'         => "form-control",
+                      'value'         => misc_helper::get_form_value(
+                        $ctlArrData, $id),
+                      'placeholder'   => "Nama Jabatan",
+                    );
+                    echo form_input($arrInput);
+                  ?>
+              </div>
+
+              <div class="col-sm-2">
+                  <?php
+                    $id = "tj_roh_wadah_start";
+                    $arrInput = array(
+                      'name'          => $id,
+                      'id'            => $id,
+                      'class'         => "form-control",
+                      'value'         => misc_helper::get_form_value(
+                        $ctlArrData, $id),
+                      'placeholder'   => "Thn. Mulai",
+                    );
+                    echo form_input($arrInput);
+                  ?>
+              </div>
+
+              <div class="col-sm-2">
+                  <?php
+                    $id = "tj_roh_wadah_end";
+                    $arrInput = array(
+                      'name'          => $id,
+                      'id'            => $id,
+                      'class'         => "form-control",
+                      'value'         => misc_helper::get_form_value(
+                        $ctlArrData, $id),
+                      'placeholder'   => "Thn Selesai",
+                    );
+                    echo form_input($arrInput);
+                  ?>
+              </div>
+            </div>
+
+            
+            <div class="form-group">
+              <label for="inputPassword3" class="col-sm-3 control-label">
+                Pelayanan Lainnya
+              </label>
+
+              <div class="col-sm-9">
+                  <?php
+                    $id = "tj_roh_talenta";
+                    $arrInput = array(
+                      'name'          => $id,
+                      'id'            => $id,
+                      'class'         => "form-control",
+                      'value'         => misc_helper::get_form_value(
+                        $ctlArrData, $id),
+                      'placeholder'   => "WL / Musik / Singer / Tanners",
+                    );
+                    echo form_input($arrInput);
+                  ?>
               </div>
             </div>
 
             <div class="form-group">
               <label for="inputPassword3" class="col-sm-3 control-label">
-                Talenta
+                Komunitas Lainnya
               </label>
 
               <div class="col-sm-3">
-                  <input type="email" class="form-control" id="inputEmail3" placeholder="Pisahkan dengan tanda koma">
-              </div>
-            </div>
+                  <?php
+                    $arrInput = array(
+                      "class" => "form-control"
+                    );
 
-            <div class="form-group">
-              <label for="inputPassword3" class="col-sm-3 control-label">
-                Karunia
-              </label>
+                    $option = array(
+                      "Sektor" => "Sektor",
+                      "Rayon" => "Rayon",
+                      "Pos Penginjilan" => "Pos Penginjilan"
+                    );
 
-              <div class="col-sm-3">
-                  <input type="email" class="form-control" id="inputEmail3" placeholder="Pisahkan dengan tanda koma">
-              </div>
-            </div>
-
-            <div class="form-group">
-              <label for="inputPassword3" class="col-sm-3 control-label">
-                Keimanan
-              </label>
-
-              <div class="col-sm-3">
-                  <select class="form-control">
-                    <option>Kurang</option>
-                    <option>Sedang</option>
-                    <option>Teguh</option>
-                  </select>
+                    echo form_dropdown("tj_roh_kl", $option, misc_helper::get_form_value(
+                        $ctlArrData, "tj_roh_kl"), $arrInput
+                    )
+                  ?>
               </div>
             </div>
 
 
             <div class="form-group">
               <label for="inputPassword3" class="col-sm-3 control-label">
-                Kepengurusan
+                Jabatan
               </label>
 
-              <div class="col-sm-3">
-                  <input type="email" class="form-control" id="inputEmail3" placeholder="Pisahkan dengan tanda koma">
+              <div class="col-sm-5">
+                  <?php
+                    $id = "tj_roh_kl_jab";
+                    $arrInput = array(
+                      'name'          => $id,
+                      'id'            => $id,
+                      'class'         => "form-control",
+                      'value'         => misc_helper::get_form_value(
+                        $ctlArrData, $id),
+                      'placeholder'   => "Nama Jabatan",
+                    );
+                    echo form_input($arrInput);
+                  ?>
               </div>
-            </div>
 
-            <div class="form-group">
-              <label for="inputPassword3" class="col-sm-3 control-label">
-                Pelayanan
-              </label>
-
-              <div class="col-sm-3">
-                  <input type="email" class="form-control" id="inputEmail3" placeholder="Pisahkan dengan tanda koma">
+              <div class="col-sm-2">
+                  <?php
+                    $id = "tj_roh_kl_start";
+                    $arrInput = array(
+                      'name'          => $id,
+                      'id'            => $id,
+                      'class'         => "form-control",
+                      'value'         => misc_helper::get_form_value(
+                        $ctlArrData, $id),
+                      'placeholder'   => "Thn. Mulai",
+                    );
+                    echo form_input($arrInput);
+                  ?>
               </div>
-            </div>
 
-            <div class="form-group">
-              <label for="inputPassword3" class="col-sm-3 control-label">
-                Kepribadian
-              </label>
-
-              <div class="col-sm-3">
-                  <input type="email" class="form-control" id="inputEmail3" placeholder="">
-              </div>
-            </div>
-
-            <div class="form-group">
-              <label for="inputPassword3" class="col-sm-3 control-label">
-                Kecerdasan
-              </label>
-
-              <div class="col-sm-3">
-                  <select class="form-control">
-                    <option>Baik</option>
-                    <option>Cukup</option>
-                    <option>Kurang Baik</option>
-                  </select>
-              </div>
-            </div>
-
-            <div class="form-group">
-              <label for="inputPassword3" class="col-sm-3 control-label">
-                Pertumbuhan
-              </label>
-
-              <div class="col-sm-3">
-                  <select class="form-control">
-                    <option>Cepat</option>
-                    <option>Lambat</option>
-                    <option>Sedang</option>
-                  </select>
+              <div class="col-sm-2">
+                  <?php
+                    $id = "tj_roh_kl_end";
+                    $arrInput = array(
+                      'name'          => $id,
+                      'id'            => $id,
+                      'class'         => "form-control",
+                      'value'         => misc_helper::get_form_value(
+                        $ctlArrData, $id),
+                      'placeholder'   => "Thn Selesai",
+                    );
+                    echo form_input($arrInput);
+                  ?>
               </div>
             </div>
       </div>
+
+
 
         <div id="pekerjaan" class="tab-pane fade">
           <h3>Pekerjaan</h3>
 
             <div class="form-group">
               <label for="inputPassword3" class="col-sm-3 control-label">
-                Status Kerja
-              </label>
-
-              <div class="col-sm-3">
-                  <select class="form-control">
-                    <option>Bekerja</option>
-                    <option>Menganggur</option>
-                    <option>Pensiun</option>
-                  </select>
-              </div>
-            </div>
-
-            <div class="form-group">
-              <label for="inputPassword3" class="col-sm-3 control-label">
                 Pekerjaan
               </label>
 
-              <div class="col-sm-3">
-                  <input type="email" class="form-control" id="inputEmail3" placeholder="Pekerjaan">
+              <div class="col-sm-6">
+                  <?php
+                    $id = "tj_pk_pekerjaan";
+                    $arrInput = array(
+                      'name'          => $id,
+                      'id'            => $id,
+                      'class'         => "form-control",
+                      'value'         => misc_helper::get_form_value(
+                        $ctlArrData, $id),
+                      'placeholder'   => "Jenis Pekerjaan",
+                    );
+                    echo form_input($arrInput);
+                  ?>
               </div>
             </div>
 
@@ -842,54 +1508,42 @@
               </label>
 
               <div class="col-sm-3">
-                  <input type="email" class="form-control" id="inputEmail3" placeholder="Contoh 2 - 5 jt / bulan">
+                <?php
+                    $id = "tj_pk_penghasilan";
+                    $arrInput = array(
+                      'name'          => $id,
+                      'id'            => $id,
+                      'class'         => "form-control",
+                      'value'         => misc_helper::get_form_value(
+                        $ctlArrData, $id),
+                      'placeholder'   => "Jumlah Penghasilan",
+                    );
+                    echo form_input($arrInput);
+                  ?>
               </div>
             </div>
 
             <div class="form-group">
               <label for="inputPassword3" class="col-sm-3 control-label">
-                Nama Tempat Kerja
+                Tempat Kerja
               </label>
 
               <div class="col-sm-3">
-                  <input type="email" class="form-control" id="inputEmail3" placeholder="Contoh 2 - 5 jt / bulan">
+                  <?php
+                    $id = "tj_pk_nama_ins";
+                    $arrInput = array(
+                      'name'          => $id,
+                      'id'            => $id,
+                      'class'         => "form-control",
+                      'value'         => misc_helper::get_form_value(
+                        $ctlArrData, $id),
+                      'placeholder'   => "Tempat Kerja",
+                    );
+                    echo form_input($arrInput);
+                  ?>
               </div>
             </div>
 
-
-            <div class="form-group">
-              <label for="inputPassword3" class="col-sm-3 control-label">
-                Alamat Tempat Kerja
-              </label>
-
-              <div class="col-sm-3">
-                  <input type="email" class="form-control" id="inputEmail3" placeholder="Alamat">
-              </div>
-            </div>
-
-            <div class="form-group">
-              <label for="inputPassword3" class="col-sm-3 control-label">
-                Rutinitas Kerja
-              </label>
-
-              <div class="col-sm-3">
-                  <input type="email" class="form-control" id="inputEmail3" placeholder="Jam Berangkat">
-              </div>
-
-              <div class="col-sm-3">
-                  <input type="email" class="form-control" id="inputEmail3" placeholder="Jam Pulang">
-              </div>
-            </div>
-
-            <div class="form-group">
-              <label for="inputPassword3" class="col-sm-3 control-label">
-                Transportasi
-              </label>
-
-              <div class="col-sm-3">
-                  <input type="email" class="form-control" id="inputEmail3" placeholder="">
-              </div>
-            </div>
 
       </div>
 
@@ -897,7 +1551,6 @@
     </div>
 
 
-  </form>
   </div>
 
   <div class="box-footer">
@@ -905,13 +1558,14 @@
     <div class="col-sm-12">
       <a href="<?php echo $ctlPilihGereja; ?>"
         class="btn btn-default" >
-        Pilih ulang Gereja
+        <i class="fa fa-chevron-left" ></i> Kembali
       </a>
       <button class="btn btn-primary" type="submit">
-          Simpan
+          <i class="fa fa-check-square-o" ></i> Simpan
       </button>
     </div>
 
   </div>
 
+  </form>
 </div>

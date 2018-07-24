@@ -24,15 +24,18 @@
                 <li class="list-group-item">
                   <b>Jumlah Gereja</b>
                   <a class="pull-right">
-                    <?php echo $ctlArrData["total"]; ?>
+                    <?php echo $ctlCountGereja; ?>
                   </a>
                 </li>          
               </ul>
 
+              <?php if ($ctlEditStat) { ?>
               <a href="<?php echo $ctlUrlEdit; ?>"
                   class="btn btn-warning btn-block">
                 <span class="glyphicon glyphicon-edit"></span> <b>Edit Data Wilayah</b>
-              </a>
+              </a>  
+              <?php } ?>
+              
             </div>
             <!-- /.box-body -->
           </div>
@@ -57,19 +60,66 @@
 
               <hr>
 
-              <strong><i class="fa fa-server margin-r-5"></i> Inventaris Wilayah</strong>
+            </div>
+            <!-- /.box-body -->
+          </div>
 
-              <p class="text-muted">
-                <?php
+        <div class="box box-primary">
+          <div class="box-header with-border">
+              <h3 class="box-title"><i class="fa fa-server margin-r-5"></i> Inventaris Wilayah</h3>
+            </div>
 
-                $inventaris = $ctlArrData["tw_inventaris"];
-                
-                echo nl2br($inventaris);
-                ?>
+            <div class="box-body">
+             
+             <?php if (count($ctlArrAset) > 0) { ?>
+              <table class="table table-bordered table-hover">
+                  <tr>
+                    <th>Nama Aset</th>
+                    <th>Keterangan</th>
+                    <th></th>
+                  </tr>
+                <?php foreach($ctlArrAset as $key => $arrVal) { ?>
+                  <tr>
+                    <td>
+                      <?php echo $arrVal["ta_nama"]; ?>
+                    </td>
+                    <td><?php echo $arrVal["ta_ket"]; ?></td>
 
-              </p>
+                    <?php
+                        $text = "Anda yakin ingin menghapus data ini -- Aset "
+                          .$arrVal["ta_nama"]."?";
+                    ?>
+                    <td>
+                      <a href="<?php echo $ctlUrlBase."/form_aset/".$ctlArrData["tw_id"]."/".
+                        $arrVal["ta_id"];?>"
+                        class="btn btn-xs btn-default">
+                        <i class="fa fa-pencil"></i>
+                      </a>
 
-              <hr>
+                      <a href="<?php echo $ctlUrlBase."/delete_aset/".$ctlArrData["tw_id"]."/".
+                        $arrVal["ta_id"];?>"
+                        onclick="return confirm('<?php echo $text; ?>');"
+                        class="btn btn-xs btn-default">
+                        <i class="fa fa-times"></i>
+                      </a>
+                    </td>
+                  </tr>
+                <?php } ?>
+              </table>
+              
+              <?php } else { ?>
+                <div class="callout callout-warning">
+                  <h4>Data Masih Kosong.</h4>
+                </div>
+              <?php } ?>
+
+              <hr />
+              <a href="<?php echo $ctlUrlBase."/form_aset/". $ctlArrData["tw_id"]; ?>"
+                class="btn btn-xs btn-success pull-right">
+                <i class="fa fa-plus"></i> Tambah Data
+              </a>
+
+
             </div>
             <!-- /.box-body -->
           </div>

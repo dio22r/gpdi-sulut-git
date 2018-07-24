@@ -64,19 +64,7 @@
 		                </div>
 
 					</div>
-
-					<div class="col-md-6">
-
-		                <div class="form-group">
-		                  	<label for="tw_inventaris" class="col-sm-3 control-label">
-		                  		Inventaris
-	                  		</label>
-		                  <div class="col-sm-9">
-		                    <textarea name="tw_inventaris" id="tw_inventaris" class="form-control" rows="10" placeholder="Inventaris ..."><?php echo misc_helper::get_form_value($ctlArrData, "tw_inventaris"); ?></textarea>
-		                  </div>
-		                </div>
-
-					</div>
+					
 				</div>
 			
 		</div>

@@ -37,7 +37,6 @@ class statistik extends CI_Controller {
         $this->arrSession = $this->lib_login->get_session_data();
         // endof load libraries
         
-        $this->lib_login->redir_ifnot_login();
         
         $this->lib_defaultView = new default_view($this->load, $this->lib_login);
         $this->lib_defaultView->set_libLogin($this->lib_login);

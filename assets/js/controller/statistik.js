@@ -3,8 +3,8 @@
     //-------------
     // Get context with jQuery - using jQuery's .get() method.
     var pieChartCanvas = $('#pieChart').get(0).getContext('2d');
-
-    var wadahData = {
+/*
+    var umur = {
         labels: [
             "Pelprip",
             "Pelwap",
@@ -22,16 +22,16 @@
                 ]
             }]
     };
-
-    var wadah = new Chart(pieChartCanvas, {
+*/
+    var umur = new Chart(pieChartCanvas, {
       type: 'doughnut',
-      data: wadahData
+      data: umurData
     });
 
 
 
     var pieChartCanvas2 = $('#pieChart2').get(0).getContext('2d');
-
+/*
     var wadahData = {
         labels: [
             "Pria",
@@ -46,8 +46,27 @@
                 ]
             }]
     };
+*/
+
 
     var priawanita = new Chart(pieChartCanvas2, {
       type: 'doughnut',
+      data: priaWanitaData
+    });
+
+
+    var pieChartCanvas2 = $('#pieChart3').get(0).getContext('2d');
+
+    var wadah = new Chart(pieChartCanvas2, {
+      type: 'doughnut',
       data: wadahData
+    });
+
+    //-------------
+    //- LINE CHART -
+    //--------------
+    var lineChartCanvas          = $('#lineChart').get(0).getContext('2d')
+    var lineChart                = new Chart(lineChartCanvas, {
+        type: 'line',
+        data: tahunData,
     });

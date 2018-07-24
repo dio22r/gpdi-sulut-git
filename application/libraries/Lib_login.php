@@ -18,23 +18,13 @@ class lib_login {
             
             return false;
         } else {
-            $isAllow = $this->check_previlage();
-
-            if ($isAllow) {
-                return true;
-            } else {
-                show_404();
-            }
+            return true;
         }
-    }
-
-    public function check_previlage() {
-        
-        return true;
     }
 
     public function set_cookies($arrCookies) {
         $date = date("Y-m-d H:i:s", strtotime("+ 30 Minutes"));
+        
         foreach ($arrCookies as $key => $val) {
             set_cookie($key, $val, $date, "localhost");
         }
@@ -110,5 +100,17 @@ class lib_login {
         $this->session->set_userdata("count_try", $count);
         
         return $count;
+    }
+
+    public function previlage($strAllowed = "") {
+
+        $arrUser = $this->get_session_data();
+
+        $currentUser = $arrUser["arrUser"]["usertype"];
+        if (is_array($strAllowed) && !in_array($currentUser, $strAllowed)) {
+            redirect(base_url(), "refresh");
+        } else if ($strAllowed != $currentUser) {
+            redirect(base_url(), "refresh");
+        }
     }
 }

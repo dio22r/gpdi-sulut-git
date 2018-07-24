@@ -9,17 +9,21 @@
 
               <div class="box-tools">
 
-                <div class="input-group input-group-sm" style="width: 250px;">
-                  <input type="text" name="table_search" class="form-control pull-right" placeholder="Search">
+                <form method="post" action="<?php echo $ctlUrlSubmit; ?>">
+                  <div class="input-group input-group-sm" style="width: 250px;">
+                    <input type="text" name="table_search" class="form-control pull-right" 
+                    value="<?php echo $ctlSearch; ?>"
+                    placeholder="Search">
 
-                  <div class="input-group-btn">
-                    <button type="submit" class="btn btn-default"><i class="fa fa-search"></i></button>
-                     <a href="<?php echo base_url("index.php/wilayah/form/"); ?>" class="btn btn-warning disabled">
-                        <i class="glyphicon glyphicon-plus"></i> Tambah Data
-                     </a>
+                    <div class="input-group-btn">
+                      <button type="submit" class="btn btn-default"><i class="fa fa-search"></i></button>
+                       <a href="<?php echo base_url("index.php/wilayah/form/"); ?>" class="btn btn-warning disabled">
+                          <i class="glyphicon glyphicon-plus"></i> Tambah Data
+                       </a>
+                    </div>
+
                   </div>
-
-                </div>
+                </form>
               </div>
             </div>
             <!-- /.box-header -->
@@ -43,11 +47,14 @@
                     <th width="15%">
                       Nama Wilayah
                     </th>
-                    <th  width="25%">
+                    <th  width="20%">
                       Kabupaten / Kota
                     </th>
-                    <th  width="15%">
+                    <th  width="10%">
                       Jumlah Gereja
+                    </th>
+                    <th  width="10%">
+                      Total Jemaat
                     </th>
                     <th  width="5%">
                       Action
@@ -63,7 +70,8 @@
                   <td><?php echo $arrVal["tw_nomor_induk"]; ?></td>
                   <td><?php echo $arrVal["tw_nama"]; ?></td>
                   <td><?php echo $arrVal["tkab_nama"]; ?></td>
-                  <td><?php echo $arrVal["total"]; ?></td>
+                  <td><?php echo $arrVal["total"]; ?> Gereja</td>
+                  <td><?php echo $arrVal["total_jemaat"]; ?> Jiwa</td>
                   <td>
                     <div class="input-group-btn">
                         <a href="<?php echo $arrVal["editUrl"]; ?>"

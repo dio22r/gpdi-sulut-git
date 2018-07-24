@@ -56,7 +56,7 @@ class tbl_simple_form extends CI_Model {
             ->where("t1.tg_status", 1)
             ->group_by("t1.tg_id")
             ->order_by("t1.tg_nama ASC");
- 
+
         if ($arrWhere) {
             $query->where($arrWhere);
         }

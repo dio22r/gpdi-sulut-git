@@ -107,7 +107,8 @@ desired effect
       Majelis Daerah GPdI Sulut
     </div>
     <!-- Default to the left -->
-    <strong>Copyright &copy; 2017 <a href="#">GPdI Sulut</a>.</strong> All rights reserved.
+    <strong>Copyright &copy; 2017 <a href="#">GPdI Sulut</a>.</strong>
+    <br /> WebMaster Dio Ratar, Support Systerm Lucky Jacky Polii All rights reserved.
   </footer>
 
   <!-- Control Sidebar -->

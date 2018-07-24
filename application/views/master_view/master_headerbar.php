@@ -1,6 +1,6 @@
 
     <!-- Logo -->
-    <a href="index2.html" class="logo">
+    <a href="#" class="logo">
       <!-- mini logo for sidebar mini 50x50 pixels -->
       <span class="logo-mini">GPdI</span>
       <!-- logo for regular state and mobile devices -->
@@ -136,11 +136,14 @@
               <!-- Menu Body -->
               <li class="user-body">
                 <div class="row">
+<!--
                   <div class="col-xs-5 text-center">
+                    
                     <a href="#">
                       <span class="glyphicon glyphicon-edit"></span>
                       &nbsp;Edit Profile
                     </a>
+                    
                   </div>
                   <div class="col-xs-7 text-center">
                     <a href="#">
@@ -148,15 +151,17 @@
                       &nbsp;Ganti Password
                     </a>
                   </div>
+                -->
                 </div>
                 <!-- /.row -->
               </li>
               <!-- Menu Footer-->
               <li class="user-footer">
                 <div class="pull-left">
-                  <a href="#" class="btn btn-default btn-flat">
+                  <a href="<?php echo $ctlUrlGantiPwd; ?>"
+                    class="btn btn-default btn-flat">
                     <span class="glyphicon glyphicon-user"></span>
-                    &nbsp;Profile
+                    &nbsp;Ganti Password
                   </a>
                 </div>
                 <div class="pull-right">

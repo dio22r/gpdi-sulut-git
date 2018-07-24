@@ -14,6 +14,8 @@ class wilayah extends CI_Controller {
     protected $thisurl;
     protected $lib_defaultView;
 
+    public $userAllowed = "md";
+
     public function __construct() {
         parent::__construct();
         // load helper
@@ -32,27 +34,48 @@ class wilayah extends CI_Controller {
         $this->lib_login = new lib_login($arrConfig);
 
         $this->lib_login->redir_ifnot_login();
-        $this->isLogin = $this->lib_login->check_login();
+        $this->lib_login->previlage($this->userAllowed);
         $this->arrSession = $this->lib_login->get_session_data();
         // endof load libraries
-        
-        $this->lib_login->redir_ifnot_login();
         
         $this->lib_defaultView = new default_view($this->load, $this->lib_login);
         $this->lib_defaultView->set_libLogin($this->lib_login);
 
         $this->thisurl = base_url("index.php/wilayah");
+
+        $this->thisurlGereja = base_url("index.php/gereja");
     }
     
     public function index($search = "all", $start = 0) {
+        $arrPost = $this->input->post();
 
+        $arrLike = array();
+        $plainSearch = "";
+        
+
+        if ($arrPost || $search != "all") {
+            if ($arrPost) {
+                $plainSearch = $arrPost["table_search"];
+                $search = $this->_base64_url_encode($plainSearch);
+            } else {
+                $plainSearch = $this->_base64_url_decode($search);
+            }
+
+            $arrLike = array(
+                "tw_nama" => $plainSearch //str_replace(" ", "%%", $plainSearch)
+            );
+
+            if (trim($plainSearch) == "") {
+                $search = "all";
+            }
+        }
 
 		$thisurl = $this->thisurl."/index/".$search;
 
         $limit = 20;
-        $countData = $this->tbl_wilayah->count_data(array());
+        $countData = $this->tbl_wilayah->count_data($arrLike);
         $arrData = $this->tbl_wilayah->select_data(
-            array(), $start, $limit
+            $arrLike, $start, $limit
         );
 
         foreach($arrData as $key => $arrVal) {
@@ -67,7 +90,9 @@ class wilayah extends CI_Controller {
         $arrView = array(
             "ctlArrData" => $arrData,
             "ctlPaging" => $pagination,
-            "ctlStart" => $start + 1
+            "ctlStart" => $start + 1,
+            "ctlUrlSubmit" => $thisurl,
+            "ctlSearch" => $plainSearch
         );
 
         $arrData = array(
@@ -86,6 +111,16 @@ class wilayah extends CI_Controller {
         );
         $this->load->view('master_view/master_index', $arrData);
     }	
+
+    protected function _base64_url_encode($input) {
+        return strtr(base64_encode($input), '+/=', '._-');
+    }
+
+    protected function _base64_url_decode($input) {
+        $str = base64_decode(strtr($input, '._-', '+/='));
+        $str = utf8_encode($str);
+        return $str;
+    }
 
 	public function form($id = "") {
 
@@ -129,6 +164,8 @@ class wilayah extends CI_Controller {
 	}
 
     public function profile($id = "") {
+        $this->load->model("tbl_aset");
+
         $arrData = $this->tbl_wilayah->select_by_id($id);
 
         if (!$arrData) {
@@ -139,11 +176,30 @@ class wilayah extends CI_Controller {
             array("t1.tw_id" => $id)
         );
 
+        $count = count($arrGereja);
+        $arrWhere = array(
+            "rel_id" => $id,
+            "rel_tipe" => 3,
+            "ta_status" => 1
+        );
+
+        $arrAset = $this->tbl_aset->select_det_by_id($arrWhere);
+
+        if ($this->userAllowed == "md") {
+            $editStat = true;
+        } else {
+            $editStat = false;
+        }
+
         $arrForm = array(
             "ctlArrData" => $arrData[0],
+            "ctlArrAset" => $arrAset,
+            "ctlUrlBase" => $this->thisurl,
             "ctlUrlEdit" => $this->thisurl . "/form/" . $id,
             "ctlArrGereja" => $arrGereja,
-            "ctlUrlBaseTbl" => base_url("index.php/gereja/")
+            "ctlUrlBaseTbl" => $this->thisurlGereja,
+            "ctlCountGereja" => $count,
+            "ctlEditStat" => $editStat
         );
 
         $arrData = array(
@@ -284,6 +340,114 @@ class wilayah extends CI_Controller {
         print_r($arrWilayah);
 
         //$this->tbl_wilayah->insertdata($arrWilayah);
+    }
+
+
+    public function form_aset($idWilayah = "", $idDet = "") {
+        
+        $this->load->model("tbl_aset");
+
+        $this->_submit_aset();
+
+        $arrData[0] = array(
+            "rel_id" => $idWilayah
+        );
+
+        if (is_numeric($idDet)) {
+            $arrWhere = array(
+                "rel_id" => $idWilayah,
+                "rel_tipe" => 3,
+                "ta_id" => $idDet
+            );
+
+            $arrData = $this->tbl_aset->select_det_by_id($arrWhere);
+            if (!$arrData) {
+                show_404();
+            }
+        }
+        
+        if ($arrData) {
+            $arrData = $arrData[0];
+        }
+
+        $arrForm = array(
+            "ctlUrlSubmit" => $this->thisurl . "/form_aset/".$idWilayah."/".$idDet,
+            "ctlUrlBack" => $this->thisurl . "/profile/".$idWilayah,
+            "ctlArrData" => $arrData
+        );
+
+        $content = $this->load->view(
+            "wilayah/vw_form_aset", $arrForm, true
+        );
+
+        $arrData = array(
+            "ctlTitle" => "Data Jemaat",
+            "ctlSubTitle" => "GPdI Sulawesi Utara",
+
+            "ctlSideBar" => $this->lib_defaultView->retrieve_menu($this->activeMenu),
+            "ctlHeaderBar" => $this->lib_defaultView->retrieve_header(),
+            "ctlContentArea" => $content,
+            "ctlSideBarR" => $this->lib_defaultView->retrieve_sidebar_r(),
+            "ctlArrJs" => array(),
+            "ctlArrCss" => array()
+        );
+        $this->load->view('master_view/master_index', $arrData);
+    }
+
+    protected function _submit_aset($type = "") {
+        
+
+        $arrPost = $this->input->post();
+
+        if ($arrPost) {
+            if (is_numeric($arrPost["ta_id"])) {
+                // update
+                $arrUpdate = $arrPost;
+                $arrWhere = array(
+                    "ta_id" => $arrPost["ta_id"],
+                    "rel_tipe" => 3,
+                    "rel_id" => $arrPost["rel_id"],
+                );
+
+                $return = $this->tbl_aset->update_det_by_id($arrUpdate, $arrWhere);
+
+                if ($return) {
+                    redirect($this->thisurl . "/profile/" . $arrPost["rel_id"], "refresh");
+                } else {
+                    return false;
+                }
+            } else {
+                // insert
+                $arrInsert = $arrPost;
+                $arrInsert["rel_tipe"] = 3;
+                $return = $this->tbl_aset->insert_det_by_id($arrInsert);
+
+                if ($return) {
+                    redirect($this->thisurl . "/profile/" . $arrPost["rel_id"], "refresh");
+                } else {
+                    return false;
+                }
+            }
+        }
+    }
+
+    public function delete_aset($idJemaat, $idDet) {
+        $this->load->model("tbl_aset");
+
+        $arrWhere = array(
+            "rel_tipe" => 3,
+            "rel_id" => $idJemaat,
+            "ta_id" => $idDet
+        );
+            
+        $arrUpdate = array(
+            "ta_status" => 0
+        );
+
+        $return = $this->tbl_aset->update_det_by_id($arrUpdate, $arrWhere);
+
+        redirect($this->thisurl . "/profile/" . $idJemaat, "refresh");
+
     }
 }
     

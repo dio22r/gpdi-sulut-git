@@ -28,6 +28,8 @@ class dashboard extends CI_Controller {
         $this->load->model("tbl_wilayah");
         $this->load->model("tbl_gereja");
         $this->load->model("tbl_gembala");
+        $this->load->model("tbl_kabupaten");
+        $this->load->model("tbl_jemaat");
         
         // load libraries
 
@@ -51,17 +53,91 @@ class dashboard extends CI_Controller {
     public function index($search = "all", $start = 0) {
         $codeWilayah = "";
 
+
+        //$arrTotalJemaat = $this->tbl_kabupaten->count_total_kab();
+        /*
+        $arrWhere = array("tj_roh_wadah" => "PELNAP");
+        $arrTotalAnak = $this->tbl_kabupaten->count_total_kab($arrWhere);
+        $arrWhere = array("tj_roh_wadah !=" => "PELNAP");
+        $arrTotalDewasa = $this->tbl_kabupaten->count_total_kab($arrWhere);
+        */
+
+        $arrWhere = array("age <" => 12);
+        $arrTotalAnak = $this->tbl_kabupaten->count_tblView($arrWhere);
+        $arrWhere = array("age >=" => 12,"age <" => 18);
+        $arrTotalRemaja = $this->tbl_kabupaten->count_tblView($arrWhere);
+        $arrWhere = array("age >=" => 18);
+        $arrTotalDewasa = $this->tbl_kabupaten->count_tblView($arrWhere);
+
+        $arrTotalAnakFix = $arrTotalRemajaFix = $arrTotalDewasaFix = array();
+        foreach($arrTotalAnak as $key => $arrVal) {
+            $tkab_id = $arrVal["tkab_id"];
+
+            $arrTotalAnakFix[$tkab_id] = $arrVal["total"];
+
+            $tempRemaja = isset($arrTotalRemaja[$key]["total"]) ? $arrTotalRemaja[$key]["total"] : 0;
+            $arrTotalRemajaFix[$tkab_id] = $tempRemaja;
+
+            $tempDewasa = isset($arrTotalDewasa[$key]["total"]) ? $arrTotalDewasa[$key]["total"] : 0;
+            $arrTotalDewasaFix[$tkab_id] = $tempDewasa;
+        }
+
+        $arrKab = $this->tbl_kabupaten->retrieve_data();
+
+        $arrCountWilayah = $this->tbl_kabupaten->count_wilayah();
+        
+        $arrTempWilayah = array();
+        foreach($arrCountWilayah as $key => $arrVal) {
+            $arrTempWilayah[$arrVal["tkab_id"]] = $arrVal["total_wilayah"];
+        }
+
+        $totalDewasa = $totalAnak = $totalRemaja = 0;
+        foreach($arrKab as $key => $arrVal) {
+            //$arrKab[$key]["total"] = $arrTotalJemaat[$key]["jumlah"];
+            $arrKab[$key]["total_wilayah"] = $arrTempWilayah[$arrVal["tkab_id"]];
+
+            $tempAnak = 0;
+            if (isset($arrTotalAnakFix[$arrVal["tkab_id"]])) {
+                $tempAnak = $arrTotalAnakFix[$arrVal["tkab_id"]];
+            }
+
+            $tempRemaja = 0;
+            if (isset($arrTotalRemajaFix[$arrVal["tkab_id"]])) {
+                $tempRemaja = $arrTotalRemajaFix[$arrVal["tkab_id"]];
+            }
+
+            $tempDewasa = 0;
+            if (isset($arrTotalDewasaFix[$arrVal["tkab_id"]])) {
+                $tempDewasa = $arrTotalDewasaFix[$arrVal["tkab_id"]];
+            }
+
+            $totalAnak += $tempAnak;
+            $totalRemaja += $tempRemaja;
+            $totalDewasa += $tempDewasa;
+
+            $arrKab[$key]["tkab_total_dewasa"] = $tempDewasa;
+            $arrKab[$key]["tkab_total_remaja"] = $tempRemaja;
+            $arrKab[$key]["tkab_total_anak"] = $tempAnak;
+            $arrKab[$key]["total"] = $tempAnak + $tempDewasa + $tempRemaja;
+        }
+
+        //$arrWhere = array("tj_status" => 1);
+
+        $countData = $this->tbl_jemaat->count_data(array());
+        
+        $arrWhereGem = array(
+        	"tgem_tipe" => 1
+        );
+
         $arrView = array(
             "ctlCntGereja" => $this->tbl_gereja->count_data(array("t1.tg_status" => 1)),
             "ctlCntWilayah" => $this->tbl_wilayah->count_data(),
-            "ctlCntGbl" => $this->tbl_gembala->count_data(),
-            "ctlCntJemaat" => 0,
-            "ctlCntPelprip" => 0,
-            "ctlCntPelwap" => 0,
-            "ctlCntPelpap" => 0,
-            "ctlCntPelrap" => 0,
-            "ctlCntPelnap" => 0,
-            "ctlCntPelhat" => 0
+            "ctlCntGbl" => $this->tbl_gembala->count_data($arrWhereGem),
+            "ctlCntJemaat" => $countData,
+            "ctlTotalDewasa" => $totalDewasa,
+            "ctlTotalRemaja" => $totalRemaja,
+            "ctlTotalAnak" => $totalAnak,
+            "ctlArrKab" => $arrKab
         );
         
         $arrData = array(

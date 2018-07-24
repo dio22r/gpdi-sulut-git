@@ -20,7 +20,7 @@ class misc_helper {
     static function get_form_arrData_todb($arrData = array(), $prefix = "", $omited ="") {
         $arrRet = array();
         foreach ($arrData as $key => $value) {
-            if (strpos($key, $prefix) !== false) {
+            if (strpos($key, $prefix) === 0) {
                 $index = str_replace($omited, "", $key);
                 $arrRet[$index] = $value;
             }
@@ -177,6 +177,7 @@ class misc_helper {
     }
 	
     static function format_idDate($date) {
+        
         $arrMonth = misc_helper::$arrMonth;
         
         list($year, $month, $day) = explode("-", $date);
@@ -184,6 +185,8 @@ class misc_helper {
         $strMonth = "";
         if (isset($arrMonth[$month])) {
             $strMonth = $arrMonth[$month];
+        } else {
+            return " - ";
         }
         $strIdFormat = $day . " " . $strMonth . " " . $year;
         

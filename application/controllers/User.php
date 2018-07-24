@@ -33,11 +33,9 @@ class user extends CI_Controller {
         $this->lib_login = new lib_login($arrConfig);
 
         $this->lib_login->redir_ifnot_login();
-        $this->isLogin = $this->lib_login->check_login();
+        $this->lib_login->previlage("md");
         $this->arrSession = $this->lib_login->get_session_data();
         // endof load libraries
-        
-        $this->lib_login->redir_ifnot_login();
         
         $this->lib_defaultView = new default_view($this->load, $this->lib_login);
         $this->lib_defaultView->set_libLogin($this->lib_login);
@@ -161,7 +159,7 @@ class user extends CI_Controller {
             if ($arrPost["tu_tipe_user"] == 3) {
                 $arrData["tu_tipe_id"] = $arrPost["tipe_id_wil"];
             } else if ($arrPost["tu_tipe_user"] == 5) {
-                $arrData["tu_tipe_id"] = $arrPost["tipe_id_gem"];
+                $arrData["tu_tipe_id"] = $arrPost["tipe_id_grj"];
             } else {
                 $arrData["tu_tipe_id"] = 0;
             }
@@ -254,7 +252,7 @@ class user extends CI_Controller {
         if ($arrPost["tu_tipe_user"] == 3) {
             $arrInput["tu_tipe_id"] = $arrPost["tipe_id_wil"];
         } else if ($arrPost["tu_tipe_user"] == 5) {
-            $arrInput["tu_tipe_id"] = $arrPost["tipe_id_gem"];
+            $arrInput["tu_tipe_id"] = $arrPost["tipe_id_grj"];
         } else {
             $arrInput["tu_tipe_id"] = 0;
         }
@@ -289,32 +287,19 @@ class user extends CI_Controller {
 
     public function after_submit($id) {
         $arrData = $this->tbl_user->select_by_id($id);
-                
+
+        
         if (!$arrData) {
             show_404();
         }
 
-        $this->load->model("tbl_wilayah");
-
-        $idTipe = $arrData[0]["tu_tipe_id"];
-        if ($arrData[0]["tu_tipe_user"] == 3) {
-            $arrDetail = $this->tbl_wilayah->select_by_id($idTipe);
-            $strNama = "Wilayah ". $arrDetail[0]["tw_nomor_induk"] ." ". $arrDetail[0]["tw_nama"];
-        } elseif ($arrData[0]["tu_tipe_user"] == 5) {
-            //$arrDetail = $this->tbl_wilayah->select_by_id($id);
-            $strNama = "";
-        }
-
         $arrData[0]["tu_status"] = $this->arrStatus[$arrData[0]["tu_status"]];
-        $arrData[0]["tu_tipe_user_str"] = $this->arrTipe[$arrData[0]["tu_tipe_user"]];
-        $arrData[0]["tu_tipe_user_det"] = $strNama;
-
+        $arrData[0]["tu_tipe_user"] = $this->arrTipe[$arrData[0]["tu_tipe_user"]];
 
         $arrView = array(
             "ctlArrData" => $arrData[0],
             "ctlFormUrl" => $this->thisurl . "/form/" . $id,
-            "ctlProfileUrl" => $this->thisurl . "/profile/" . $id,
-            "ctlHomeUrl" => $this->thisurl
+            "ctlProfileUrl" => $this->thisurl . "/form/" . $id
         );
 
         $arrData = array(
@@ -323,10 +308,9 @@ class user extends CI_Controller {
             
             "ctlSideBar" => $this->lib_defaultView->retrieve_menu("user"),
             "ctlHeaderBar" => $this->lib_defaultView->retrieve_header(),
-            "ctlContentArea" => $this->load->view("user/vw_after_submit", $arrView, true),
+            "ctlContentArea" => $this->load->view("user/vw_profile_user", $arrView, true),
             "ctlSideBarR" => $this->lib_defaultView->retrieve_sidebar_r(),
             "ctlArrJs" => array(
-                
             ),
             "ctlArrCss" => array(
                 base_url("assets/css/jquery-ui.structure.min.css"),
@@ -340,7 +324,6 @@ class user extends CI_Controller {
 
     public function profile($id = "") {
         $arrData = $this->tbl_user->select_by_id($id);
-
 
         if (!$arrData) {
             show_404();

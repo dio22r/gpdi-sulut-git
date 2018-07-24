@@ -18,13 +18,17 @@ class tbl_gereja extends CI_Model {
     }
     
     public function updatedata($arrUpdate = array(), $id = "") {
-        unset($arrUpdate["as_id"]);
-        $return = $this->db->update($this->table1, $arrUpdate, "tw_id = ".$id);
+        unset($arrUpdate["tg_id"]);
+        $return = $this->db->update($this->table1, $arrUpdate, "tg_id = ".$id);
         
         return $return;
     }
 
-    public function retrieve_data($arrWhere, $start = 0, $limit = 20, $order_by = "") {
+    public function get_last_id() {
+        return $this->db->insert_id();
+    }
+
+    public function retrieve_data($arrWhere, $start = 0, $limit = 20, $order_by = "", $arrLike = array()) {
         $query = $this->db->select("t1.*, t2.*, count(t3.tj_id) as total, t4.*")
             ->from($this->table1 . " t1")
             ->join($this->table2 . " t2", "t1.tgem_id = t2.tgem_id", "left")
@@ -39,8 +43,13 @@ class tbl_gereja extends CI_Model {
         } else {
             $query->order_by("t1.tg_nama ASC");
         }
+
         if ($arrWhere) {
             $query->where($arrWhere);
+        }
+
+        if ($arrLike) {
+            $query->like($arrLike);
         }
 
         $result = $this->db->get();
@@ -81,13 +90,17 @@ class tbl_gereja extends CI_Model {
         return $result;   
     }
 
-    public function count_data($arrWhere) {
+    public function count_data($arrWhere = array(), $arrLike = array()) {
         $query = $this->db->select("count(*) as total")
             ->from($this->table1 . " t1")
             ->where("t1.tg_status", 1);
 
         if ($arrWhere) {
             $query->where($arrWhere);
+        }
+
+        if ($arrLike) {
+            $query->like($arrLike);
         }
 
         $result = $this->db->get();

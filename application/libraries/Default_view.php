@@ -134,7 +134,7 @@ class default_view {
 		        ),
 		        "simple_form" => array(
 					"icon" => "fa-sun-o text-aqua",
-					"href" => $baseUrl . "/simple_form",
+					"href" => $baseUrl . "/simple_form/edit_table/",
 				  	"title" => "Hepler Form",
 				  	"class" => "",
 				  	"style" => ""
@@ -159,6 +159,12 @@ class default_view {
 				  	"title" => "Pengumuman",
 				  	"class" => ""
 				),
+				"wilayah" => array(
+					"icon" => "fa-bank",
+					"href" => $baseUrl . "/mw_wilayah",
+				  	"title" => "Wilayah",
+				  	"class" => ""
+		        ),
 				"gereja" => array(
 					"icon" => "fa-home",
 					"href" => $baseUrl . "/mw_gereja",
@@ -183,6 +189,82 @@ class default_view {
 				  	"title" => "Statistik",
 				  	"class" => ""
 		        )
+			),
+			"grj" => array(
+				"dashboard" => array(
+					"icon" => "fa-dashboard",
+				  	"href" => $baseUrl . "/dashboard",
+				  	"title" => "Beranda",
+				  	"class" => ""
+				),
+				"struktur_md" => array(
+					"icon" => "fa-cubes",
+				  	"href" => $baseUrl . "/struktur_md",
+				  	"title" => "Struktur MD",
+				  	"class" => ""
+				),
+				"pengumuman" => array(
+					"icon" => "fa-envelope",
+				  	"href" => $baseUrl . "/mw_pengumuman",
+				  	"title" => "Pengumuman",
+				  	"class" => ""
+				),
+				"gereja" => array(
+					"icon" => "fa-home",
+					"href" => $baseUrl . "/jem_gereja",
+				  	"title" => "Profile Gereja",
+				  	"class" => ""
+		        ),
+				"gembala" => array(
+					"icon" => "fa-graduation-cap",
+					"href" => $baseUrl . "/jem_gembala",
+				  	"title" => "Data Gembala",
+				  	"class" => ""
+		        ),
+				"jemaat" => array(
+					"icon" => "fa-street-view",
+					"href" => $baseUrl . "/#",
+				  	"title" => "Jemaat",
+				  	"class" => "treeview",
+				  	"sub" => array(
+				  		"daftar_jemaat" => array(
+					  		"icon" => "fa-building-o",
+					        "href" => $baseUrl . "/jem_data_jemaat",
+					        "title" => "Daftar Jemaat",
+					        "class" => ""
+				    	),
+				    	"hut_sepekan" => array(
+					  		"icon" => "fa-birthday-cake",
+					        "href" => $baseUrl . "/jem_data_jemaat/hut_sepekan",
+					        "title" => "Hut Sepekan",
+					        "class" => ""
+				    	),
+				    	"daftar_kk" => array(
+					  		"icon" => "fa-smile-o",
+					        "href" => $baseUrl . "/jem_data_jemaat/daftar_kk",
+					        "title" => "Daftar Keluarga",
+					        "class" => ""
+				    	),
+				    	"daftar_kelompok" => array(
+					  		"icon" => "fa-rocket",
+					        "href" => $baseUrl . "/jem_data_jemaat/daftar_kelompok",
+					        "title" => "Daftar Kelompok",
+					        "class" => ""
+				    	),
+				    	"mutasi_jemaat" => array(
+					  		"icon" => "fa-refresh",
+					        "href" => $baseUrl . "/jem_data_jemaat/mutasi_jemaat",
+					        "title" => "Mutasi Jemaat",
+					        "class" => ""
+				    	),
+				  	)
+		        ),
+				"statistik" => array(
+					"icon" => "fa-pie-chart",
+					"href" => $baseUrl . "/jem_statistik",
+				  	"title" => "Statistik",
+				  	"class" => ""
+		        )
 			)
 		);
     	
@@ -202,6 +284,7 @@ class default_view {
 
     	$arrData = array(
     		"ctlUrlLogout" => $baseUrl."/login/logout",
+    		"ctlUrlGantiPwd" => $baseUrl."/self_user/ganti_pwd",
     		"ctlUsername" => $arrUserData["displayname"]
 		);
     	$html = $this->loadClass->view("master_view/master_headerbar", $arrData, true);

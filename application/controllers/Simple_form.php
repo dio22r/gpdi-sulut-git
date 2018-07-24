@@ -34,11 +34,9 @@ class simple_form extends CI_Controller {
         $this->lib_login = new lib_login($arrConfig);
 
         $this->lib_login->redir_ifnot_login();
-        $this->isLogin = $this->lib_login->check_login();
+        $this->lib_login->previlage("md");
         $this->arrSession = $this->lib_login->get_session_data();
         // endof load libraries
-        
-        $this->lib_login->redir_ifnot_login();
         
         $this->lib_defaultView = new default_view($this->load, $this->lib_login);
         $this->lib_defaultView->set_libLogin($this->lib_login);
@@ -268,10 +266,6 @@ class simple_form extends CI_Controller {
         $this->load->view('master_view/master_index', $arrData);
 	}
 
-    public function edit_form($id = "") {
-        
-    }
-
     public function submitEdit() {
         $arrPost = $this->input->post();
 
@@ -279,6 +273,7 @@ class simple_form extends CI_Controller {
             "update" => array(
                 "tg_nama" => $arrPost["tg_nama"],
                 "tw_id" => $arrPost["tw_id"]
+                
             ),
             "where" => array(
                 "tg_id" => $arrPost["tg_id"]
@@ -294,6 +289,7 @@ class simple_form extends CI_Controller {
                 "tgem_id" => $arrPost["tgem_id"]
             )
         );
+
 
         $status = $this->tbl_simple_form->updateGereja(
             $arrGereja, $arrGembala
@@ -345,7 +341,6 @@ class simple_form extends CI_Controller {
 
     public function submit() {
         $arrPost = $this->input->post();
-
         $isAllow = true;
         $arrError = array();
 
@@ -376,6 +371,7 @@ class simple_form extends CI_Controller {
 
             $result = false;
         } else {
+
             $result = $this->tbl_simple_form->insertdata(
                 $arrGembala, $arrGereja
             );
@@ -395,6 +391,67 @@ class simple_form extends CI_Controller {
                 "arrDet" => $arrError
             );
         }
+    }
+
+
+    public function data_kabupaten($id = "") {
+
+        $this->load->model("tbl_kabupaten");
+
+        $arrPost = $this->input->post();
+        
+        $arrKab = array();
+        if (is_numeric($id)) {
+            $arrKab = $this->tbl_kabupaten->select_by_id($id);
+            $arrKab = $arrKab[0];
+        }
+
+        if ($arrPost) {
+            $arrUpdate = $arrPost;
+            $idUpdate = $arrUpdate["tkab_id"];
+            unset($arrUpdate["tkab_id"]);
+            $return = $this->tbl_kabupaten->updatedata(
+                $arrUpdate, $idUpdate
+            );
+        }
+
+        $arrData = $this->tbl_kabupaten->retrieve_data();
+
+        $totalDewasa = $totalAnak = 0;
+        foreach($arrData as $key => $arrVal) {
+            $arrData[$key]["total"] = $arrVal["tkab_total_dewasa"] + $arrVal["tkab_total_anak"];
+            $totalDewasa += $arrVal["tkab_total_dewasa"];
+            $totalAnak += $arrVal["tkab_total_anak"];
+        }
+
+        $arrForm = array(
+            "ctlArrKab" => $arrKab,
+            "ctlArrData" => $arrData,
+            "ctlUrlSubmit" => current_url(),
+            "ctlUrlEdit" => $this->thisurl . "/data_kabupaten/",
+            "ctlUrlCancel" => $this->thisurl . "/data_kabupaten/",
+            "ctlUrlGereja" => $this->thisurl,
+            "ctlStatErr" => false,
+            "ctlStatSubmit" => false
+        );
+
+        $arrData = array(
+            "ctlTitle" => "Data Kabupaten",
+            "ctlSubTitle" => "GPdI Sulawesi Utara",
+
+            "ctlSideBar" => $this->lib_defaultView->retrieve_menu("simple_form"),
+            "ctlHeaderBar" => $this->lib_defaultView->retrieve_header(),
+            "ctlContentArea" => $this->load->view("simple_form/vw_kab_form", $arrForm, true),
+            "ctlSideBarR" => $this->lib_defaultView->retrieve_sidebar_r(),
+            "ctlArrJs" => array(
+                base_url("assets/js/controller/simple_form.js"),
+                base_url("assets/js/select2.full.min.js")
+            ),
+            "ctlArrCss" => array(
+                base_url("assets/css/select2.min.css"),
+            )
+        );
+        $this->load->view('master_view/master_index', $arrData);
     }
 
 }
