@@ -47,12 +47,98 @@ class jemaat extends CI_Controller {
     }
 
     public function index($search = "all", $start = 0) {
-
-        $arrRet = $this->retrieve_data($search, $start);
-
-        $arrData = $arrRet[0];
-        $countTotal = $arrRet[1];
+        $arrGet = $this->input->get();
         $perpage = 20;
+
+        $arrWhere = array();
+
+        $arrSortHeader = array(
+            "tj_nama" => array(
+                "text" => "Nama",
+                "sort" => true,
+                "type" => "ASC",
+                "class" => "sorting"
+            ),
+            "tj_jk" => array(
+                "text" => "Jenis Kelamin",
+                "sort" => false,
+                "class" => ""
+            ),
+            "age" => array(
+                "text" => "Umur",
+                "sort" => false,
+                "type" => "ASC",
+                "class" => ""
+            ),
+            "tj_tgl_lahir" => array(
+                "text" => "Tgl. Lahir",
+                "sort" => true,
+                "type" => "ASC",
+                "class" => "sorting"
+            ),
+            "tj_status_nikah" => array(
+                "text" => "Status Menikah",
+                "sort" => true,
+                "type" => "ASC",
+                "class" => "sorting"
+            ),
+            "tj_status_nikah" => array(
+                "text" => "Status Menikah",
+                "sort" => true,
+                "type" => "ASC",
+                "class" => "sorting"
+            ),
+            "tg_nama" => array(
+                "text" => "Nama Gereja",
+                "sort" => true,
+                "type" => "ASC",
+                "class" => "sorting"
+            ),
+            "action" => array(
+                "text" => "Edit/View",
+                "sort" => false,
+                "class" => ""
+            ),
+        );
+
+        $sortUrl = $this->thisurl."";
+        foreach ($arrSortHeader as $key => $arrVal)  {
+            $class = "sorting";
+
+            $href = "#";
+            if ($arrVal["sort"]) {
+
+                if (isset($arrGet["sort_field"]) && $key == $arrGet["sort_field"]) {
+
+                    $class = "sorting_desc";
+                    if (strtolower($arrGet["sort_type"]) == "asc") {
+                        $arrVal["type"] = "DESC";
+                        $class = "sorting_asc";
+                    }
+
+                }
+
+                $href = $this->thisurl."?sort_field=".$key."&sort_type=".$arrVal["type"];
+                $arrSortHeader[$key]["href"] = $href;
+                $arrSortHeader[$key]["class"] = $class;
+            }
+            
+
+            $arrSortHeader[$key]["href"] = $href;
+        }
+
+        $orderBy = "tj_nama ASC";
+        if (isset($arrGet["sort_field"]) && isset($arrGet["sort_type"])) {
+            $orderBy = $arrGet["sort_field"] . " " . $arrGet["sort_type"];
+        }
+
+        
+        $arrData = $this->tbl_jemaat->retrieve_data(
+            $arrWhere, $start, $perpage,
+            "t1.*, t2.*, floor(DATEDIFF(NOW(), STR_TO_DATE(t1.tj_tgl_lahir, '%Y-%m-%d'))/365) as age", $orderBy
+        );
+
+        $countTotal = $this->tbl_jemaat->count_data($arrWhere);
 
         $arrStsNikah = array(
             "S" => "Singel",
@@ -67,6 +153,7 @@ class jemaat extends CI_Controller {
           );
 
         $arrView = array(
+            "ctlStart" => $start,
             "ctlArrData" => $arrData,
             "ctlStsNikah" => $arrStsNikah,
             "ctlArrJk" => $arrJk,
@@ -74,6 +161,7 @@ class jemaat extends CI_Controller {
             "ctlUrlEdit" => $this->thisurl . "/form/",
             "ctlUrlProfile" => $this->thisurl . "/profile/",
             "ctlPagination" => $this->_pagination($this->thisurl."/index/all/", $countTotal, $perpage, 4),
+            "ctlArrSortHeader" => $arrSortHeader
 
         );
 
@@ -83,7 +171,7 @@ class jemaat extends CI_Controller {
 
             "ctlSideBar" => $this->lib_defaultView->retrieve_menu($this->activeMenu),
             "ctlHeaderBar" => $this->lib_defaultView->retrieve_header(),
-            "ctlContentArea" => $this->load->view("jemaat/vw_main",
+            "ctlContentArea" => $this->load->view("jemaat/vw_main_sorting",
                 $arrView, true),
             "ctlSideBarR" => $this->load->view("master_view/master_sidebar_r", array(), true),
 

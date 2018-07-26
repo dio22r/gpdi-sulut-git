@@ -86,7 +86,8 @@ class trans_statistik_jemaat extends CI_Model {
     public function count_tblView($arrWhere = array()) {
         $query = $this->db->select("count(*) as total")
             ->from($this->tblview1 . " tv1")
-            ->join($this->table1 . " t1", "t1.tj_id = tv1.tj_id");
+            ->join($this->table1 . " t1", "t1.tj_id = tv1.tj_id")
+            ->join($this->table2 . " t2", "t1.tg_id = t2.tg_id");
 
         if ($arrWhere) {
             $query->where($arrWhere);
@@ -101,8 +102,46 @@ class trans_statistik_jemaat extends CI_Model {
     public function count_by_year($arrWhere = array()) {
         $query = $this->db->select("YEAR(t1.tj_tgl_lahir) as year, count(*) as total")
             ->from($this->table1 . " t1")
+            ->join($this->table2 . " t2", "t1.tg_id = t2.tg_id")
             ->where("t1.tj_status", 1)
+            ->where("t2.tg_status", 1)
             ->group_by("YEAR(t1.tj_tgl_lahir)");
+
+        if ($arrWhere) {
+            $query->where($arrWhere);
+        }
+
+        $result = $this->db->get();
+        $result = $result->result_array();
+                
+        return $result;
+    }
+
+    public function count_penyerahan_by_year($arrWhere = array()) {
+        $query = $this->db->select("YEAR(t1.tj_akt_peny_tgl) as year, count(*) as total")
+            ->from($this->table1 . " t1")
+            ->join($this->table2 . " t2", "t1.tg_id = t2.tg_id")
+            ->where("t1.tj_status", 1)
+            ->where("t2.tg_status", 1)
+            ->group_by("YEAR(t1.tj_akt_peny_tgl)");
+
+        if ($arrWhere) {
+            $query->where($arrWhere);
+        }
+
+        $result = $this->db->get();
+        $result = $result->result_array();
+                
+        return $result;
+    }
+
+    public function count_baptis_by_year($arrWhere = array()) {
+        $query = $this->db->select("YEAR(t1.tj_akt_bap_tgl ) as year, count(*) as total")
+            ->from($this->table1 . " t1")
+            ->join($this->table2 . " t2", "t1.tg_id = t2.tg_id")
+            ->where("t1.tj_status", 1)
+            ->where("t2.tg_status", 1)
+            ->group_by("YEAR(t1.tj_akt_bap_tgl )");
 
         if ($arrWhere) {
             $query->where($arrWhere);

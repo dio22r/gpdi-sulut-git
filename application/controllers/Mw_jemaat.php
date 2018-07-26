@@ -82,6 +82,12 @@ class mw_jemaat extends jemaat {
                 "type" => "ASC",
                 "class" => "sorting"
             ),
+            "tg_nama" => array(
+                "text" => "Nama Gereja",
+                "sort" => true,
+                "type" => "ASC",
+                "class" => "sorting"
+            ),
             "action" => array(
                 "text" => "Edit/View",
                 "sort" => false,
@@ -103,7 +109,6 @@ class mw_jemaat extends jemaat {
                         $arrVal["type"] = "DESC";
                         $class = "sorting_asc";
                     }
-
                 }
 
                 $href = $this->thisurl."?sort_field=".$key."&sort_type=".$arrVal["type"];
@@ -141,6 +146,7 @@ class mw_jemaat extends jemaat {
           );
 
         $arrView = array(
+            "ctlStart" => $start,
             "ctlArrData" => $arrData,
             "ctlStsNikah" => $arrStsNikah,
             "ctlArrJk" => $arrJk,

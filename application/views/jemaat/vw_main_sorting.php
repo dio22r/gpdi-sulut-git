@@ -30,6 +30,7 @@
                     <table id="example2" class="table table-bordered table-hover dataTable" role="grid" aria-describedby="example2_info">
                       <thead>
                       <tr role="row">
+                            <th>No. </th>
                           <?php foreach($ctlArrSortHeader as $key => $arrVal) { ?>
                             <th class="<?php echo $arrVal["class"]; ?>">
                                 <a href="<?php echo $arrVal["href"]; ?>" style="display:block;" >
@@ -43,11 +44,13 @@
 
                       <?php foreach($ctlArrData as $key => $arrVal) { ?>
                       <tr role="row" class="odd">
+                        <td><?php echo $ctlStart + $key + 1; ?></td>
                         <td><?php echo $arrVal["tj_nama"]; ?></td>
                         <td><?php echo $ctlArrJk[$arrVal["tj_jk"]]; ?></td>
                         <td><?php echo $arrVal["age"]; ?> thn</td>
                         <td><?php echo misc_helper::format_idDate($arrVal["tj_tgl_lahir"]); ?></td>
                         <td><?php echo $ctlStsNikah[$arrVal["tj_status_nikah"]]; ?></td>
+                        <td><?php echo $arrVal["tg_nama"]; ?></td>
                         <td>
                           <div class="input-group-btn">
                               <a href="<?php echo $ctlUrlEdit .$arrVal["tg_id"]."/".$arrVal["tj_id"]; ?>" class="btn btn-warning btn-xs">

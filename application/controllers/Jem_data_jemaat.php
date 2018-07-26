@@ -147,6 +147,7 @@ class jem_data_jemaat extends jemaat {
 
 
         $arrView = array(
+            "ctlStart" => $start,
             "ctlArrData" => $arrData,
             "ctlStsNikah" => $arrStsNikah,
             "ctlArrJk" => $arrJk,

@@ -1,6 +1,6 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
-class statistik extends CI_Controller {
+class mw_statistik extends CI_Controller {
 
     protected $activeMenu = "dashboard";
     protected $title = "Data Arsip Surat";
@@ -42,13 +42,14 @@ class statistik extends CI_Controller {
         $this->lib_defaultView->set_libLogin($this->lib_login);
 
         $this->thisurl = base_url("index.php/dashboard");
-
+        $this->mwId = $this->session->userdata["arrUser"]["usrt_id"];
     }
     
     public function index($search = "all", $start = 0) {
-        
+		
         $arrWhere = array(
             "t1.tj_jk" => "L",
+            "t2.tw_id" => $this->mwId
         );
         $countL = $this->trans_statistik_jemaat->count_data($arrWhere);
 
@@ -97,21 +98,25 @@ class statistik extends CI_Controller {
 
         $arrWhere = array(
             "age <" => 12,
+            "t2.tw_id" => $this->mwId,
             "t1.tj_status" => 1
         );
         $totalAnak = $this->trans_statistik_jemaat->count_tblView($arrWhere);
         $arrWhere = array(
             "age >=" => 12,"age <" => 18,
+            "t2.tw_id" => $this->mwId,
             "t1.tj_status" => 1
         );
         $totalRemaja = $this->trans_statistik_jemaat->count_tblView($arrWhere);
         $arrWhere = array(
             "age >=" => 18, "age <" => 60,
+            "t2.tw_id" => $this->mwId,
             "t1.tj_status" => 1
         );
         $totalDewasa = $this->trans_statistik_jemaat->count_tblView($arrWhere);
         $arrWhere = array(
             "age >=" => 60,
+            "t2.tw_id" => $this->mwId,
             "t1.tj_status" => 1
         );
         $totalLansia = $this->trans_statistik_jemaat->count_tblView($arrWhere);
@@ -135,23 +140,27 @@ class statistik extends CI_Controller {
         $arrWhere = array(
             "t1.tj_status_nikah !=" => "S",
             "t1.tj_jk" => "P",
+            "t2.tw_id" => $this->mwId,
             "t1.tj_status" => 1
         );
         $totaPelwap = $this->trans_statistik_jemaat->count_tblView($arrWhere);
         $arrWhere = array(
             "age >=" => 12,"age <" => 18,
+            "t2.tw_id" => $this->mwId,
             "t1.tj_status" => 1
         );
         $totalPelprip = $this->trans_statistik_jemaat->count_tblView($arrWhere);
         $arrWhere = array(
             "t1.tj_status_nikah !=" => "S",
             "t1.tj_jk" => "L",
+            "t2.tw_id" => $this->mwId,
             "t1.tj_status" => 1
         );
         $totalPelnap = $this->trans_statistik_jemaat->count_tblView($arrWhere);
         $arrWhere = array(
             "age >=" => 17,
             "t1.tj_status_nikah" => "S",
+            "t2.tw_id" => $this->mwId,
             "t1.tj_status" => 1
         );
         $totalPelpap = $this->trans_statistik_jemaat->count_tblView($arrWhere);
@@ -159,6 +168,7 @@ class statistik extends CI_Controller {
             "age <=" => 17,
             "age >" => 12,
             "t1.tj_status_nikah" => "S",
+            "t2.tw_id" => $this->mwId,
             "t1.tj_status" => 1
         );
         $totalPelrap = $this->trans_statistik_jemaat->count_tblView($arrWhere);
@@ -183,17 +193,20 @@ class statistik extends CI_Controller {
     protected function _count_on_year() {
         $arrCountYear = $this->trans_statistik_jemaat->count_by_year(
             array(
+                "t2.tw_id" => $this->mwId,
                 "YEAR(t1.tj_tgl_lahir) >" => date("Y") - 20
             )
         );
         $arrBapYear = $this->trans_statistik_jemaat->count_baptis_by_year(
             array(
+                "t2.tw_id" => $this->mwId,
                 "YEAR(t1.tj_akt_bap_tgl) >" => date("Y") - 20,
                 "t1.tj_akt_bap_tgl !=" => "0000-00-00"
             )
         );
         $arrPenyYear = $this->trans_statistik_jemaat->count_penyerahan_by_year(
             array(
+                "t2.tw_id" => $this->mwId,
                 "YEAR(t1.tj_akt_peny_tgl) >" => date("Y") - 20,
                 "t1.tj_akt_peny_tgl !=" => "0000-00-00"
             )

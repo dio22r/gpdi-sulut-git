@@ -185,7 +185,7 @@ class default_view {
 		        ),
 				"statistik" => array(
 					"icon" => "fa-pie-chart",
-					"href" => $baseUrl . "/statistik",
+					"href" => $baseUrl . "/mw_statistik",
 				  	"title" => "Statistik",
 				  	"class" => ""
 		        )
