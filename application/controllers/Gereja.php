@@ -85,6 +85,7 @@ class gereja extends CI_Controller {
         }
     	
 		$arrView = array(
+            "ctlStart" => $start,
             "ctlUrlForm"  => $this->thisurl."/form/",
             "ctlUrlSearch"  => $this->thisurl,
             "ctlUserType" => $this->usertype,

@@ -87,6 +87,12 @@ class jem_data_jemaat extends jemaat {
                 "type" => "ASC",
                 "class" => "sorting"
             ),
+            "tg_nama" => array(
+                "text" => "Nama Gereja",
+                "sort" => false,
+                "type" => "ASC",
+                "class" => ""
+            ),
             "action" => array(
                 "text" => "Edit/View",
                 "sort" => false,

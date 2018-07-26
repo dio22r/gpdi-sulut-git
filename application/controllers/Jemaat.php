@@ -176,7 +176,7 @@ class jemaat extends CI_Controller {
             "ctlSideBarR" => $this->load->view("master_view/master_sidebar_r", array(), true),
 
             "ctlArrJs" => array(),
-            "ctlArrCss" => array()
+            "ctlArrCss" => array(base_url("assets/css/jquery.dataTables.min.css"))
         );
         $this->load->view('master_view/master_index', $arrData);
     }

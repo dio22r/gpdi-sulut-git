@@ -69,6 +69,7 @@ class mw_gereja extends gereja {
         }
         
         $arrView = array(
+            "ctlStart" => $start,
             "ctlUrlForm"  => $this->thisurl."/form/",
             "ctlUrlSearch"  => $this->thisurl,
             "ctlUserType" => $this->usertype,

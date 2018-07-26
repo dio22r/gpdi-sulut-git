@@ -35,7 +35,10 @@
                 <table class="table table-bordered table-hover">
                 <thead>
                 <tr role="row">
-                    <th width="30%">
+                    <th width="5%">
+                      No.
+                    </th>
+                    <th width="25%">
                       Nama Gereja
                     </th>
                     <th width="15%">
@@ -68,6 +71,7 @@
                         . $arrVal["tw_nama"];
                 ?>
                 <tr role="row" class="odd">
+                  <td><?php echo $ctlStart + $key + 1; ?></td>
                   <td><?php echo $arrVal["tg_nama"]; ?></td>
                   <td><?php echo $arrVal["tg_lokasi"]; ?></td>
                   <td><?php echo $arrVal["tg_tgl_berdiri"]; ?></td>
