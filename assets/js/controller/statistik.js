@@ -58,7 +58,7 @@
     var pieChartCanvas2 = $('#pieChart3').get(0).getContext('2d');
 
     var wadah = new Chart(pieChartCanvas2, {
-      type: 'doughnut',
+      type: 'bar',
       data: wadahData
     });
 
@@ -69,4 +69,5 @@
     var lineChart                = new Chart(lineChartCanvas, {
         type: 'line',
         data: tahunData,
+        options: tahunOption
     });

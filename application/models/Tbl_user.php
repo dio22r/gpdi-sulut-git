@@ -52,6 +52,11 @@ class tbl_user extends CI_Model {
             ->where("tu_status", 1)
             ->limit($limit, $start);
 
+        if ($arrWhere) {
+            $query->where($arrWhere);
+        }
+        
+
         $result = $this->db->get();
         $result = $result->result_array();
         

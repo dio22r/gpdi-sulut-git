@@ -60,5 +60,6 @@
         var umurData = <?php echo json_encode($ctlArrUmur); ?>;
         var priaWanitaData = <?php echo json_encode($ctlArrLP); ?>;
         var wadahData = <?php echo json_encode($ctlArrWadah); ?>;
-        var tahunData = <?php echo json_encode($ctlArrYear); ?>;
+        var tahunData = <?php echo json_encode($ctlArrYear["data"]); ?>;
+        var tahunOption = <?php echo json_encode($ctlArrYear["options"]); ?>;
       </script>

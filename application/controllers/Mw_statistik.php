@@ -177,6 +177,7 @@ class mw_statistik extends CI_Controller {
             "labels" => array("Pelwap", "Pelprip", "Pelnap", "Pelpap", "Pelrap"),
             "datasets" => array(
                 array(
+                    "label" => "Data Wadah",
                     "data" => array(
                         $totaPelwap, $totalPelprip, $totalPelnap, $totalPelpap, $totalPelrap
                     ),
@@ -237,26 +238,34 @@ class mw_statistik extends CI_Controller {
         }
 
         $arrYear = array(
-            "labels" => $arrYear,
-            "datasets" => array(
-                array(
-                    "label" => "Kelahiran",
-                    "fill" => "false",
-                    "borderColor" => "#3e95cd",
-                    "data" => $arrFxLahir
+            "data" => array(
+                "labels" => $arrYear,
+                "datasets" => array(
+                    array(
+                        "label" => "Kelahiran",
+                        "fill" => "false",
+                        "borderColor" => "#3e95cd",
+                        "data" => $arrFxLahir
+                    ),
+                    array(
+                        "label" => "Penyerahan",
+                        "fill" => "false",
+                        "borderColor" => "#00a65a",
+                        "data" => $arrFxPeny
+                    ),
+                    array(
+                        "label" => "Baptis",
+                        "fill" => "false",
+                        "borderColor" => "#f39c12",
+                        "data" => $arrFxBap
+                    )
                 ),
-                array(
-                    "label" => "Penyerahan",
-                    "fill" => "false",
-                    "borderColor" => "#00a65a",
-                    "data" => $arrFxPeny
+            ),
+            "options" => array(
+                "tooltips" => array(
+                    "mode" => "index",
+                    "intersect" => false,
                 ),
-                array(
-                    "label" => "Baptis",
-                    "fill" => "false",
-                    "borderColor" => "#f39c12",
-                    "data" => $arrFxBap
-                )
             )
         );
 

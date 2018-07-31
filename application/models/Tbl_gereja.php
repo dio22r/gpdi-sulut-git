@@ -108,4 +108,19 @@ class tbl_gereja extends CI_Model {
         
         return $result[0]["total"];
     }
+
+    public function retrieve_nama_gereja($arrWhere = array()) {
+        $query = $this->db->select("t1.tg_id, t1.tg_nama")
+            ->from($this->table1 . " t1")
+            ->where("t1.tg_status", 1);
+
+        if ($arrWhere) {
+            $query->where($arrWhere);
+        }
+
+        $result = $this->db->get();
+        $result = $result->result_array();
+        
+        return $result;
+    }
 }
