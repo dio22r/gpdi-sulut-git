@@ -75,31 +75,11 @@ class jem_statistik extends CI_Controller {
 
         );
 
-        $arrYear = $arrtotal = array();
-
-        foreach($arrCountYear as $key => $arrVal) {
-            $arrYear[] = $arrVal["year"];
-            $arrtotal[] = $arrVal["total"];
-        }
-
-        $arrYear = array(
-            "labels" => $arrYear,
-            "datasets" => array(
-                array(
-                              
-                    "label" => "Kelahiran / Tahun",
-                    "fill" => "false",
-                    "borderColor" => "#3e95cd",
-                    "data" => $arrtotal
-                )
-            )
-        );
-
         $arrView = array(
             "ctlArrUmur" => $this->_countUmur(),
             "ctlArrLP" => $arrLP,
             "ctlArrWadah" => $this->_count_wadah(),
-            "ctlArrYear" => $arrYear
+            "ctlArrYear" => $this->_count_on_year()
         );
 
         $arrData = array(
@@ -217,8 +197,85 @@ class jem_statistik extends CI_Controller {
         return $arrUmur;
     }
 
-    protected function _count_birth_year() {
+    protected function _count_on_year() {
+        $arrCountYear = $this->trans_statistik_jemaat->count_by_year(
+            array(
+                "t1.tg_id" => $this->grjId,
+                "YEAR(t1.tj_tgl_lahir) >" => date("Y") - 20
+            )
+        );
+        $arrBapYear = $this->trans_statistik_jemaat->count_baptis_by_year(
+            array(
+                "t1.tg_id" => $this->grjId,
+                "YEAR(t1.tj_akt_bap_tgl) >" => date("Y") - 20,
+                "t1.tj_akt_bap_tgl !=" => "0000-00-00"
+            )
+        );
+        $arrPenyYear = $this->trans_statistik_jemaat->count_penyerahan_by_year(
+            array(
+                "t1.tg_id" => $this->grjId,
+                "YEAR(t1.tj_akt_peny_tgl) >" => date("Y") - 20,
+                "t1.tj_akt_peny_tgl !=" => "0000-00-00"
+            )
+        );
 
+        $arrLahir = $arrBaptis = $arrPenyerahan = array();
+
+        foreach ($arrCountYear as $key => $arrVal) {
+            $arrLahir[$arrVal["year"]] = $arrVal["total"];
+        }
+        
+        foreach ($arrBapYear as $key => $arrVal) {
+            $arrBaptis[$arrVal["year"]] = $arrVal["total"];
+        }
+
+        foreach ($arrPenyYear as $key => $arrVal) {
+            $arrPenyerahan[$arrVal["year"]] = $arrVal["total"];
+        }
+
+        $arrYear = $arrFxLahir = $arrFxBap = $arrFxPeny = array();
+        $yNow = date("Y");
+        for ($i = $yNow - 20; $i <= $yNow; $i ++) {
+            $arrYear[] = $i;
+
+            $arrFxLahir[] = isset($arrLahir[$i]) ? $arrLahir[$i] : 0;
+            $arrFxBap[] = isset($arrBaptis[$i]) ? $arrBaptis[$i] : 0;
+            $arrFxPeny[] = isset($arrPenyerahan[$i]) ? $arrPenyerahan[$i] : 0;
+        }
+
+        $arrYear = array(
+            "data" => array(
+                "labels" => $arrYear,
+                "datasets" => array(
+                    array(
+                        "label" => "Kelahiran",
+                        "fill" => "false",
+                        "borderColor" => "#3e95cd",
+                        "data" => $arrFxLahir
+                    ),
+                    array(
+                        "label" => "Penyerahan",
+                        "fill" => "false",
+                        "borderColor" => "#00a65a",
+                        "data" => $arrFxPeny
+                    ),
+                    array(
+                        "label" => "Baptis",
+                        "fill" => "false",
+                        "borderColor" => "#f39c12",
+                        "data" => $arrFxBap
+                    )
+                ),
+            ),
+            "options" => array(
+                "tooltips" => array(
+                    "mode" => "index",
+                    "intersect" => false,
+                ),
+            )
+        );
+
+        return $arrYear;
     }
 
 }

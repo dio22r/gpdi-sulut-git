@@ -224,28 +224,34 @@ class statistik extends CI_Controller {
         }
 
         $arrYear = array(
-            "labels" => $arrYear,
-            "legendTemplate" => '<ul class="<%=name.toLowerCase()%>-legend"><% for (var i=0; i<segments.length; i++){%><li><span style="background-color:<%=segments[i].fillColor%>"></span><%if(segments[i].label){%><%=segments[i].label%><%}%></li><%}%></ul>',
-            
-            "datasets" => array(
-                array(
-                    "label" => "Kelahiran",
-                    "fill" => "false",
-                    "borderColor" => "#3e95cd",
-                    "data" => $arrFxLahir
+            "data" => array(
+                "labels" => $arrYear,
+                "datasets" => array(
+                    array(
+                        "label" => "Kelahiran",
+                        "fill" => "false",
+                        "borderColor" => "#3e95cd",
+                        "data" => $arrFxLahir
+                    ),
+                    array(
+                        "label" => "Penyerahan",
+                        "fill" => "false",
+                        "borderColor" => "#00a65a",
+                        "data" => $arrFxPeny
+                    ),
+                    array(
+                        "label" => "Baptis",
+                        "fill" => "false",
+                        "borderColor" => "#f39c12",
+                        "data" => $arrFxBap
+                    )
                 ),
-                array(
-                    "label" => "Penyerahan",
-                    "fill" => "false",
-                    "borderColor" => "#00a65a",
-                    "data" => $arrFxPeny
+            ),
+            "options" => array(
+                "tooltips" => array(
+                    "mode" => "index",
+                    "intersect" => false,
                 ),
-                array(
-                    "label" => "Baptis",
-                    "fill" => "false",
-                    "borderColor" => "#f39c12",
-                    "data" => $arrFxBap
-                )
             )
         );
 
