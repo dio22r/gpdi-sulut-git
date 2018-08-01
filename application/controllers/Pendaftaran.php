@@ -74,6 +74,7 @@ class pendaftaran extends CI_Controller {
 			$status = $this->tbl_user->insertdata(array($arrData));
 			if ($status) {
 				$id = $this->tbl_user->last_insert_id();
+				$this->session->set_flashdata('message_name', $arrPost["tu_password"]);
 		        redirect($this->thisurl . "/success/" . $id, "refresh");
 			}
 		} else {
@@ -130,6 +131,19 @@ class pendaftaran extends CI_Controller {
 		$this->load->model("tbl_user");
 		$arrData = $this->tbl_user->select_by_id($id);
 
-		print_r($arrData);
+		if (!$arrData) {
+			show_404();
+		}
+
+		$pwd = $this->session->flashdata('message_name');
+
+		$arrData = array(
+			"ctlLogo" => base_url("assets/img/logo-gpdi.png"),
+			"ctlLogoMd" => base_url("assets/img/logo-gpdi-md-sulut.png"),
+			"ctlUsername" => $arrData[0]["tu_username"],
+			"ctlPassword" => $pwd
+		);
+		$this->load->view('user/vw_thanks', $arrData);
+
 	}
 }

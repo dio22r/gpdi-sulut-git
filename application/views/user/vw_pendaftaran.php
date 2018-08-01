@@ -103,7 +103,39 @@
         <span class="glyphicon glyphicon-user form-control-feedback"></span>
         <span class="help-block has-error"><?php echo $errMsg; ?></span>
       </div>
+    
+        <?php
 
+          $id = "tu_contact";
+          $arrAttr = array(
+            "class" => "form-control",
+            "id" => $id,
+            "placeholder" => "No. Telp / Email"
+          );
+
+          $forminput = form_input(
+            $id, 
+            misc_helper::get_form_value(
+              $ctlArrData, $id
+            ),
+            $arrAttr
+          );
+
+          $errMsg = misc_helper::get_form_value(
+              $ctlArrErr, $id
+            );
+
+          $classErr = "";
+          if ($errMsg) {
+            $classErr = "has-error";
+          }
+        ?>
+
+      <div class="form-group has-feedback <?php echo $classErr; ?>">
+        <?php echo $forminput; ?>
+        <span class="glyphicon glyphicon-envelope form-control-feedback"></span>
+        <span class="help-block has-error"><?php echo $errMsg; ?></span>
+      </div>
       
         <?php
 

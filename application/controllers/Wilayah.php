@@ -74,11 +74,22 @@ class wilayah extends CI_Controller {
 
         $limit = 20;
         $countData = $this->tbl_wilayah->count_data($arrLike);
-        $arrData = $this->tbl_wilayah->select_data(
+        $arrData = $this->tbl_wilayah->select_count_gereja(
             $arrLike, $start, $limit
         );
 
+        $arrDataJemaat = $this->tbl_wilayah->select_count_jemaat(
+            $arrLike, $start, $limit
+        );
+
+        $arrTemp = array();
+        foreach($arrDataJemaat as $key => $arrVal) {
+            $arrTemp[$arrVal["tw_id"]] = $arrVal["total_jemaat"];
+        }
+
+
         foreach($arrData as $key => $arrVal) {
+            $arrData[$key]["total_jemaat"] = $arrTemp[$arrVal["tw_id"]];
             $arrData[$key]["editUrl"] =
                 $this->thisurl . "/form/" . $arrVal["tw_id"];
             $arrData[$key]["profileUrl"] =

@@ -167,6 +167,7 @@ class statistik extends CI_Controller {
             "labels" => array("Pelwap", "Pelprip", "Pelnap", "Pelpap", "Pelrap"),
             "datasets" => array(
                 array(
+                    "label" => "Data Wadah",
                     "data" => array(
                         $totaPelwap, $totalPelprip, $totalPelnap, $totalPelpap, $totalPelrap
                     ),

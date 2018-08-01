@@ -25,7 +25,7 @@ class tbl_wilayah extends CI_Model {
         return $return;
     }
 
-    public function select_data($arrWhere, $start = 0, $limit = 10) {
+    public function select_data($arrWhere, $start = 0, $limit = 10, $groupBy = "t1.tw_id") {
         $query = $this->db->select("t1.*, t3.tkab_nama, count(t2.tg_id) as total,
             count(t4.tj_id) as total_jemaat")
             ->from($this->table1 . " t1")
@@ -43,6 +43,48 @@ class tbl_wilayah extends CI_Model {
         $result = $this->db->get();
         $result = $result->result_array();
         
+        //echo $this->db->last_query();
+        return $result;
+    }
+
+    public function select_count_gereja($arrWhere, $start = 0, $limit = 10) {
+        $query = $this->db->select("t1.*, t3.tkab_nama, count(t2.tg_id) as total")
+            ->from($this->table1 . " t1")
+            ->join($this->table2 . " t2", "t1.tw_id = t2.tw_id", "left")
+            ->join($this->table3 . " t3", "t1.tkab_id = t3.tkab_id", "left")
+            ->where("t1.tw_status", 1)
+            ->limit($limit, $start)
+            ->order_by("t1.tw_id ASC")
+            ->group_by("t1.tw_id");
+
+        if ($arrWhere) {
+            $query->like($arrWhere);
+        }
+
+        $result = $this->db->get();
+        $result = $result->result_array();
+        
+        //echo $this->db->last_query();
+        return $result;
+    }
+
+    public function select_count_jemaat($arrWhere, $start = 0, $limit = 10) {
+        $query = $this->db->select("t1.tw_id, count(t4.tj_id) as total_jemaat")
+            ->from($this->table1 . " t1")
+            ->join($this->table2 . " t2", "t1.tw_id = t2.tw_id", "left")
+            ->join($this->table4 . " t4", "t2.tg_id = t4.tg_id", "left")
+            ->where("t1.tw_status", 1)
+            ->limit($limit, $start)
+            ->order_by("t1.tw_id ASC")
+            ->group_by("t1.tw_id");
+
+        if ($arrWhere) {
+            $query->like($arrWhere);
+        }
+
+        $result = $this->db->get();
+        $result = $result->result_array();
+
         //echo $this->db->last_query();
         return $result;
     }
