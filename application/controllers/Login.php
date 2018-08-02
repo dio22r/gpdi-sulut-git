@@ -45,7 +45,8 @@ class login extends CI_Controller {
         if (!$this->lib_login->check_login()) {
             
             $arrWhere = array(
-                "tu_username" => $arrPost["form-username"]
+                "tu_username" => $arrPost["form-username"],
+                "tu_status" => 1
             );
             $arrData = $this->tbl_user->retrieve_data($arrWhere);
             $countTry = $this->lib_login->count_try();

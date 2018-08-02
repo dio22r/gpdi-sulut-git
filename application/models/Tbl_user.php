@@ -4,6 +4,7 @@
 class tbl_user extends CI_Model {
 
     protected $table1 = "tbl_user";
+    protected $table2 = "tbl_gereja";
     
     public function __construct() {
         parent::__construct();
@@ -49,7 +50,6 @@ class tbl_user extends CI_Model {
     public function retrieve_data($arrWhere, $start = 0, $limit = 10) {
         $query = $this->db->select("*")
             ->from($this->table1)
-            ->where("tu_status", 1)
             ->limit($limit, $start);
 
         if ($arrWhere) {
@@ -61,13 +61,15 @@ class tbl_user extends CI_Model {
         $result = $result->result_array();
         
         return $result;
-
     }
 
     public function count_data($arrWhere) {
         $query = $this->db->select("count(*) as total")
-            ->from($this->table1)
-            ->where("tu_status", 1);
+            ->from($this->table1);
+
+        if ($arrWhere) {
+            $query->where($arrWhere);
+        }
 
         $result = $this->db->get();
         $result = $result->result_array();
@@ -88,5 +90,21 @@ class tbl_user extends CI_Model {
     public function last_insert_id() {
          $insertId = $this->db->insert_id();
          return $insertId;
+    }
+
+    public function retrieve_data_user_gereja($arrWhere = array(), $start = 0, $limit = 20) {
+        $query = $this->db->select("t1.*, t2.*")
+            ->from($this->table1 . " t1")
+            ->join($this->table2 . " t2", "t1.tu_tipe_id = t2.tg_id")
+            ->limit($limit, $start);
+
+        if ($arrWhere) {
+            $query->where($arrWhere);
+        }
+        
+        $result = $this->db->get();
+        $result = $result->result_array();
+        
+        return $result;
     }
 }

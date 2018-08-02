@@ -47,12 +47,13 @@ class user extends CI_Controller {
             2 => "MD Viewer",
             3 => "Majelis Wilayah",
             4 => "MW Viewer",
-            5 => "Gembala"
+            5 => "Gereja"
         );
 
         $this->arrStatus = array(
+            0 => "Non-aktif",
             1 => "Aktif",
-            2 => "Non-aktif"
+            2 => "Perlu Konfirmasi"
         );
     }
     
@@ -353,6 +354,85 @@ class user extends CI_Controller {
                 base_url("assets/css/jquery-ui.theme.min.css"),
                 base_url("assets/css/jquery-ui.css"),
             )
+        );
+        $this->load->view('master_view/master_index', $arrData);
+    }
+
+    public function aktifasi($id, $status, $urlEncode = "") {
+
+        if ($status != 1) {
+            $status = 1;
+        } else {
+            $status = 0;
+        }
+        $arrUpdate = array(
+            "tu_status" =>  $status
+        );
+
+        $url = $this->_base64_url_decode($urlEncode);
+
+        print_r($arrUpdate);
+
+        
+        $status = $this->tbl_user->updatedata($arrUpdate, $id);
+        
+        redirect($url, "refresh");
+    }
+
+    protected function _base64_url_encode($input) {
+        return strtr(base64_encode($input), '+/=', '._-');
+    }
+
+    protected function _base64_url_decode($input) {
+        return base64_decode(strtr($input, '._-', '+/='));
+    }
+
+    public function proses_daftar($search = "", $start = 0) {
+
+        $thisurl = $this->thisurl;
+
+        $curUrl = current_url();
+        $encCurUrl = $this->_base64_url_encode($curUrl);
+
+
+        $limit = 20;
+        $arrWhere = array(
+            "tu_tipe_registered" => 0
+        );
+        $arrData = $this->tbl_user->retrieve_data_user_gereja($arrWhere, $start, $limit);
+
+        $total = $this->tbl_user->count_data($arrWhere);
+
+        $pagination = $this->_pagination($thisurl."/proses_daftar/".$search, $total, $limit, 4);
+
+        $arrTipe = $this->arrTipe;
+        $arrStatus = $this->arrStatus;
+
+        $arrView = array(
+            "ctlEncUrl" => $encCurUrl,
+            "ctlActifasiUrl" => $thisurl . "/aktifasi/",
+            "ctlArrData" => $arrData,
+            "ctlArrTipe" => $arrTipe,
+            "ctlArrStatus" => $arrStatus,
+            "ctlPaging" => $pagination,
+            "ctlStart" => $start + 1,
+            "ctlLimit" => $limit,
+            "ctlTotal" => $total,
+            "ctlProfileUrl" => $thisurl . "/profile/",
+            "ctlFormUrl" => $thisurl . "/form/",
+        );
+
+        $arrData = array(
+            "ctlTitle" => "Data User",
+            "ctlSubTitle" => "GPdI Sulawesi Utara",
+
+            "ctlSideBar" => $this->lib_defaultView->retrieve_menu("user"),
+            "ctlHeaderBar" => $this->lib_defaultView->retrieve_header(),
+            "ctlContentArea" => $this->load->view("user/vw_main_daftar", $arrView, true),
+            "ctlSideBarR" => $this->load->view("master_view/master_sidebar_r", array(), true),
+
+            "ctlArrJs" => array(),
+            "ctlArrCss" => array()
         );
         $this->load->view('master_view/master_index', $arrData);
     }
