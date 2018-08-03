@@ -3,7 +3,7 @@
 
           <div class="box box-info">
             <div class="box-header">
-              <h3 class="box-title">Table Data Use Mendaftar</h3>
+              <h3 class="box-title">Table Data User Mendaftar</h3>
 
               <div class="box-tools">
 
@@ -26,17 +26,17 @@
 
                 <div class="row">
                   <div class="col-sm-12">
-                    <table id="example2" class="table table-bordered table-hover">
+                    <table id="example2"class="table table-bordered table-hover dataTable" role="grid" >
                 <thead>
                 <tr role="row">
                     <th width="5%">No.</th>
-                    <th width="15%">Username</th>
-                    <th width="25%">Nama</th>
-                    <th width="15%">Tipe User</th>
-                    <th width="20%">Gereja</th>
-                    <th width="10%">Status</th>
-                    <th width="10%">Tgl. Daftar</th>
-                    <th width="10%">Action</th>
+                    <?php foreach($ctlArrSortHeader as $key => $arrVal) { ?>
+                      <th class="<?php echo $arrVal["class"]; ?>">
+                          <a href="<?php echo $arrVal["href"]; ?>" style="display:block;" >
+                            <?php echo $arrVal["text"]; ?>
+                          </a>
+                      </th>
+                    <?php } ?>
                 </tr>
                 </thead>
                 <tbody>

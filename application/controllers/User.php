@@ -58,27 +58,94 @@ class user extends CI_Controller {
     }
     
     public function index($search = "all", $start = 0) {
-		
+		$arrGet = $this->input->get();
         $thisurl = $this->thisurl;
+        $perpage = 20;
+        $curUrl = current_url();
+        $encCurUrl = $this->_base64_url_encode($curUrl);
 
-        $limit = 20;
         $arrWhere = array();
-        $arrData = $this->tbl_user->retrieve_data($arrWhere, $start, $limit);
+
+        $arrSortHeader = array(
+            "tu_username" => array(
+                "text" => "Username",
+                "sort" => true,
+                "type" => "ASC",
+                "class" => "sorting"
+            ),
+            "tu_display_name" => array(
+                "text" => "Nama",
+                "sort" => true,
+                "type" => "ASC",
+                "class" => "sorting"
+            ),
+            "tu_tipe_user" => array(
+                "text" => "Tipe User",
+                "sort" => false,
+                "type" => "ASC",
+                "class" => ""
+            ),
+            "tu_status" => array(
+                "text" => "Status",
+                "sort" => true,
+                "type" => "ASC",
+                "class" => "sorting"
+            ),
+            "action" => array(
+                "text" => "Edit/View",
+                "sort" => false,
+                "class" => ""
+            ),
+        );
+
+        $sortUrl = $thisurl."/";
+        foreach ($arrSortHeader as $key => $arrVal)  {
+            $class = "sorting";
+
+            $href = "#";
+            if ($arrVal["sort"]) {
+
+                if (isset($arrGet["sort_field"]) && $key == $arrGet["sort_field"]) {
+
+                    $class = "sorting_desc";
+                    if (strtolower($arrGet["sort_type"]) == "asc") {
+                        $arrVal["type"] = "DESC";
+                        $class = "sorting_asc";
+                    }
+                }
+
+                $href = $sortUrl."?sort_field=".$key."&sort_type=".$arrVal["type"];
+                $arrSortHeader[$key]["href"] = $href;
+                $arrSortHeader[$key]["class"] = $class;
+            }
+
+            $arrSortHeader[$key]["href"] = $href;
+        }
+
+        $orderBy = "tu_registered DESC";
+        if (isset($arrGet["sort_field"]) && isset($arrGet["sort_type"])) {
+            $orderBy = $arrGet["sort_field"] . " " . $arrGet["sort_type"];
+        }
+
+        $arrData = $this->tbl_user->retrieve_data($arrWhere, $start, $perpage, $orderBy);
 
         $total = $this->tbl_user->count_data($arrWhere);
 
-        $pagination = $this->_pagination($thisurl."/index/".$search, $total, $limit, 4);
+        $pagination = $this->_pagination($thisurl."/index/".$search, $total, $perpage, 4);
 
         $arrTipe = $this->arrTipe;
         $arrStatus = $this->arrStatus;
 
         $arrView = array(
+            "ctlArrSortHeader" => $arrSortHeader,
+            "ctlEncUrl" => $encCurUrl,
+            "ctlActifasiUrl" => $thisurl . "/aktifasi/",
             "ctlArrData" => $arrData,
             "ctlArrTipe" => $arrTipe,
             "ctlArrStatus" => $arrStatus,
             "ctlPaging" => $pagination,
             "ctlStart" => $start + 1,
-            "ctlLimit" => $limit,
+            "ctlLimit" => $perpage,
             "ctlTotal" => $total,
             "ctlProfileUrl" => $thisurl . "/profile/",
             "ctlFormUrl" => $thisurl . "/form/",
@@ -96,7 +163,9 @@ class user extends CI_Controller {
             "ctlArrJs" => array(
                 
             ),
-            "ctlArrCss" => array()
+            "ctlArrCss" => array(
+                base_url("assets/css/jquery.dataTables.min.css")
+            )
         );
         $this->load->view('master_view/master_index', $arrData);
     }	
@@ -387,28 +456,106 @@ class user extends CI_Controller {
         return base64_decode(strtr($input, '._-', '+/='));
     }
 
-    public function proses_daftar($search = "", $start = 0) {
-
+    public function proses_daftar($search = "all", $start = 0) {
+        $arrGet = $this->input->get();
         $thisurl = $this->thisurl;
-
-        $curUrl = current_url();
+        $perpage = 20;
+        $curUrl = current_url()."?".http_build_query($arrGet);
         $encCurUrl = $this->_base64_url_encode($curUrl);
 
-
-        $limit = 20;
         $arrWhere = array(
-            "tu_tipe_registered" => 0
+            "tu_tipe_registered" => 1
         );
-        $arrData = $this->tbl_user->retrieve_data_user_gereja($arrWhere, $start, $limit);
+
+
+        $arrSortHeader = array(
+            "tu_username" => array(
+                "text" => "Username",
+                "sort" => true,
+                "type" => "ASC",
+                "class" => "sorting"
+            ),
+            "tu_display_name" => array(
+                "text" => "Nama",
+                "sort" => true,
+                "type" => "ASC",
+                "class" => "sorting"
+            ),
+            "tu_tipe_user" => array(
+                "text" => "Tipe User",
+                "sort" => false,
+                "type" => "ASC",
+                "class" => ""
+            ),
+            "tg_nama" => array(
+                "text" => "Nama Gereja",
+                "sort" => true,
+                "type" => "ASC",
+                "class" => "sorting"
+            ),
+            "tu_status" => array(
+                "text" => "Status",
+                "sort" => true,
+                "type" => "ASC",
+                "class" => "sorting"
+            ),
+            "tu_registered" => array(
+                "text" => "Tanggal Daftar",
+                "sort" => true,
+                "type" => "ASC",
+                "class" => "sorting"
+            ),
+            "action" => array(
+                "text" => "Edit/View",
+                "sort" => false,
+                "class" => ""
+            ),
+        );
+
+        $sortUrl = $thisurl."/proses_daftar/";
+        foreach ($arrSortHeader as $key => $arrVal)  {
+            $class = "sorting";
+
+            $href = "#";
+            if ($arrVal["sort"]) {
+
+                if (isset($arrGet["sort_field"]) && $key == $arrGet["sort_field"]) {
+
+                    $class = "sorting_desc";
+                    if (strtolower($arrGet["sort_type"]) == "asc") {
+                        $arrVal["type"] = "DESC";
+                        $class = "sorting_asc";
+                    }
+                }
+
+                $href = $sortUrl."?sort_field=".$key."&sort_type=".$arrVal["type"];
+                $arrSortHeader[$key]["href"] = $href;
+                $arrSortHeader[$key]["class"] = $class;
+            }
+
+            $arrSortHeader[$key]["href"] = $href;
+        }
+
+        $orderBy = "tu_registered DESC";
+        if (isset($arrGet["sort_field"]) && isset($arrGet["sort_type"])) {
+            $orderBy = $arrGet["sort_field"] . " " . $arrGet["sort_type"];
+        }
+        
+        $arrData = $this->tbl_user->retrieve_data_user_gereja(
+            $arrWhere, $start, $perpage, $orderBy
+        );
 
         $total = $this->tbl_user->count_data($arrWhere);
 
-        $pagination = $this->_pagination($thisurl."/proses_daftar/".$search, $total, $limit, 4);
+        $pagination = $this->_pagination(
+            $thisurl."/proses_daftar/".$search."/", $total, $perpage, 4
+        );
 
         $arrTipe = $this->arrTipe;
         $arrStatus = $this->arrStatus;
 
         $arrView = array(
+            "ctlArrSortHeader" => $arrSortHeader,
             "ctlEncUrl" => $encCurUrl,
             "ctlActifasiUrl" => $thisurl . "/aktifasi/",
             "ctlArrData" => $arrData,
@@ -416,7 +563,7 @@ class user extends CI_Controller {
             "ctlArrStatus" => $arrStatus,
             "ctlPaging" => $pagination,
             "ctlStart" => $start + 1,
-            "ctlLimit" => $limit,
+            "ctlLimit" => $perpage,
             "ctlTotal" => $total,
             "ctlProfileUrl" => $thisurl . "/profile/",
             "ctlFormUrl" => $thisurl . "/form/",
@@ -432,7 +579,9 @@ class user extends CI_Controller {
             "ctlSideBarR" => $this->load->view("master_view/master_sidebar_r", array(), true),
 
             "ctlArrJs" => array(),
-            "ctlArrCss" => array()
+            "ctlArrCss" => array(
+                base_url("assets/css/jquery.dataTables.min.css")
+            )
         );
         $this->load->view('master_view/master_index', $arrData);
     }

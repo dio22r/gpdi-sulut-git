@@ -47,7 +47,7 @@ class tbl_user extends CI_Model {
         return $result;
     }
 
-    public function retrieve_data($arrWhere, $start = 0, $limit = 10) {
+    public function retrieve_data($arrWhere, $start = 0, $limit = 10, $orderby = "") {
         $query = $this->db->select("*")
             ->from($this->table1)
             ->limit($limit, $start);
@@ -56,6 +56,9 @@ class tbl_user extends CI_Model {
             $query->where($arrWhere);
         }
         
+        if ($orderby) {
+            $query->order_by($orderby);
+        }
 
         $result = $this->db->get();
         $result = $result->result_array();
@@ -92,7 +95,7 @@ class tbl_user extends CI_Model {
          return $insertId;
     }
 
-    public function retrieve_data_user_gereja($arrWhere = array(), $start = 0, $limit = 20) {
+    public function retrieve_data_user_gereja($arrWhere = array(), $start = 0, $limit = 20, $orderby = "") {
         $query = $this->db->select("t1.*, t2.*")
             ->from($this->table1 . " t1")
             ->join($this->table2 . " t2", "t1.tu_tipe_id = t2.tg_id")
@@ -102,6 +105,10 @@ class tbl_user extends CI_Model {
             $query->where($arrWhere);
         }
         
+        if ($orderby) {
+            $query->order_by($orderby);
+        }
+
         $result = $this->db->get();
         $result = $result->result_array();
         

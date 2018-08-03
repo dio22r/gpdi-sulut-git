@@ -67,6 +67,7 @@ class pendaftaran extends CI_Controller {
 			$arrData = $arrPost;
 			$arrData["tu_password"] = md5($arrPost["tu_password"]);
 			$arrData["tu_tipe_user"] = 5;
+			$arrData["tu_tipe_registered"] = 1;
 			$arrData["tu_status"] = 2;
 			
 			unset($arrData["re_password"]);

@@ -26,15 +26,17 @@
 
                 <div class="row">
                   <div class="col-sm-12">
-                    <table id="example2" class="table table-bordered table-hover">
+                    <table id="example2" class="table table-bordered table-hover dataTable" role="grid" >
                 <thead>
                 <tr role="row">
                     <th width="5%">No.</th>
-                    <th width="25%">Username</th>
-                    <th width="30%">Nama</th>
-                    <th width="20%">Tipe User</th>
-                    <th width="10%">Status</th>
-                    <th width="10%">Action</th>
+                    <?php foreach($ctlArrSortHeader as $key => $arrVal) { ?>
+                      <th class="<?php echo $arrVal["class"]; ?>">
+                          <a href="<?php echo $arrVal["href"]; ?>" style="display:block;" >
+                            <?php echo $arrVal["text"]; ?>
+                          </a>
+                      </th>
+                    <?php } ?>
                 </tr>
                 </thead>
                 <tbody>
@@ -46,7 +48,24 @@
                   <td class="sorting_1"><?php echo $arrVal["tu_username"]; ?></td>
                   <td><?php echo $arrVal["tu_display_name"]; ?></td>
                   <td><?php echo $ctlArrTipe[$arrVal["tu_tipe_user"]]; ?></td>
-                  <td><?php echo $ctlArrStatus[$arrVal["tu_status"]]; ?></td>
+                  <td>
+                    <?php
+                      if ($arrVal["tu_status"] == 0) {
+                        $class = "btn-danger";
+                      } elseif ($arrVal["tu_status"] == 1) {
+                        $class = "btn-success";
+                      } elseif ($arrVal["tu_status"] == 2) {
+                        $class = "btn-warning";
+                      } else {
+                        $class = "";
+                      }
+
+                    ?>
+                    <a href="<?php echo $ctlActifasiUrl . $arrVal["tu_id"] . "/" . $arrVal["tu_status"] . "/" . $ctlEncUrl ?>"
+                      class="btn-xs <?php echo $class; ?>">
+                    <?php echo $ctlArrStatus[$arrVal["tu_status"]]; ?>
+                    </a>
+                  </td>
                   <td>
                     <div class="input-group-btn">
                         <a href="<?php echo $ctlFormUrl.$arrVal["tu_id"]; ?>" class="btn btn-warning btn-xs">
