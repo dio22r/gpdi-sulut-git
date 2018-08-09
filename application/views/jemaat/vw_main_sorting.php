@@ -23,7 +23,7 @@
               </div>
             </div>
             <!-- /.box-header -->
-            <div class="box-body">
+            <div class="box-body table-responsive">
               <div id="example2_wrapper" class="dataTables_wrapper form-inline dt-bootstrap">
                 <div class="row">
                   <div class="col-sm-12">
@@ -53,12 +53,15 @@
                         <td><?php echo $arrVal["tg_nama"]; ?></td>
                         <td>
                           <div class="input-group-btn">
-                              <a href="<?php echo $ctlUrlEdit .$arrVal["tg_id"]."/".$arrVal["tj_id"]; ?>" class="btn btn-warning btn-xs">
-                                  <span class="glyphicon glyphicon-edit"></span>
+                              <a href="<?php echo $ctlUrlEdit .$arrVal["tg_id"]."/".$arrVal["tj_id"]; ?>" class="btn btn-default btn-xs">
+                                  <span class="glyphicon glyphicon-edit" style="color:#f39c12"></span>
+                              </a>
+                              <a href="#delete<?php echo $arrVal["tj_id"]; ?>" class="btn btn-default btn-xs delete" data-target="#myModal" data-toggle= "modal" data-id="<?php echo $arrVal["tj_id"]; ?>">
+                                  <span class="glyphicon glyphicon-trash" style="color:red"></span>
                               </a>
                               <a href="<?php echo $ctlUrlProfile.$arrVal["tj_id"]; ?>"
                                   class="btn btn-default btn-xs">
-                                  <span class="glyphicon glyphicon-eye-open"></span>
+                                  <span class="glyphicon glyphicon-eye-open" style="color:#337ab7"></span>
                               </a>
                           </div>
                         </td>
@@ -91,3 +94,158 @@
         </div>
         <!-- /.col -->
       </div>
+
+      <script>
+        var apiUrlProfileJemaat = "<?php echo $ctlUrlProfileJemaat ?>";       
+
+      </script>
+
+
+<form class="form-horizontal"
+      action="<?php echo $ctlUrlSubmit; ?>"
+      method="post">
+      <div class="modal fade" tabindex="-1" id="myModal" role="dialog">
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+              <h4 class="modal-title">Mutasi Jemaat</h4>
+            </div>
+            <div class="modal-body">
+              <table class="table">
+                  <tbody>
+                    <tr>
+                      <th style="width:40%">Nama : </th>
+                      <td class="data-nama"></td>
+                    </tr>
+                    <tr>
+                      <th>Tgl. Lahir :</th>
+                      <td class="data-tgl-lahir">20 Juli 1989</td>
+                    </tr>
+                    <tr>
+                      <th>Umur :</th>
+                      <td class="data-umur">29 tahun</td>
+                    </tr>
+                    <tr>
+                      <th>Jenis Kelamin :</th>
+                      <td class="data-jk">Laki-laki</td>
+                    </tr>
+                </tbody>
+              </table>
+
+              <div class="row">
+                <div class="col-md-12">
+                  <div class="form-group">
+                    <label for="tjm_tipe" class="col-sm-3 control-label">
+                      Tipe Mutasi :
+                    </label>
+
+                    <div class="col-sm-9">
+                      <?php
+                        $arrAttr = array(
+                            'type'  => 'hidden',
+                            'name'  => 'tj_id',
+                            'id'    => 'tj_id',
+                            'value' => '0',
+                            'class' => 'tj_id'
+                        );
+                        echo form_input($arrAttr);
+
+
+                        $arrAttr = array(
+                            'type'  => 'hidden',
+                            'name'  => 'cur_url',
+                            'id'    => 'cur_url',
+                            'value' => $ctlCurUrl,
+                            'class' => 'cur_url'
+                        );
+                        echo form_input($arrAttr);
+
+                        $id = "tjm_tipe";
+                        $val = misc_helper::get_form_value(
+                          $ctlArrData, $id
+                        );
+
+                        $arrAttr = array(
+                          "class" => "form-control",
+                          "id" => $id,
+                          "style" => "width: 100%;"
+                        );
+
+                        $arrSelect = array(
+                          "5" => "Hapus Data",
+                          "1" => "Meninggal",
+                          "2" => "Pindah Jemaat",
+                          "3" => "Pindah Gereja",
+                          "4" => "Pindah Agama"
+                        );
+
+                        echo form_dropdown(
+                          $id, $arrSelect, $val, $arrAttr
+                        );
+                  ?>
+                    </div>
+                  </div>
+
+                   <div class="form-group">
+
+                      <div class="meninggal">
+                        <label for="tjm_tgl_mutasi" class="col-sm-3 control-label tjm_tgl_mutasi">
+                          Tgl. Mutasi :
+                        </label>
+
+                        <div class="col-sm-9">
+
+                        <?php
+                          $id = "tjm_tgl_mutasi";
+                          $arrInput = array(
+                            'name'          => $id,
+                            'id'            => $id,
+                            'class'         => "form-control datepicker",
+                            'value'         => misc_helper::get_form_value(
+                              $ctlArrData, $id),
+                            'placeholder'   => "Tanggal Meninggal",
+                            "data-date-format" => "yyyy-mm-dd",
+                            "autocomplete" => "off"
+                          );
+                          echo form_input($arrInput);
+                        ?>
+                        </div>
+                      </div>
+                  </div>
+
+                  <div class="form-group">
+                    <div class="pindah">
+                      <label for="tjm_ket" class="col-sm-3 control-label">Keterangan :</label>
+
+                      <div class="col-sm-9">
+
+                      <?php
+                        $id = "tjm_ket";
+                        $arrInput = array(
+                          'name'          => $id,
+                          'id'            => $id,
+                          'class'         => "form-control",
+                          'value'         => misc_helper::get_form_value(
+                            $ctlArrData, $id),
+                          'placeholder'   => "Keterangan Atas Mutasi Jemaat",
+                          'required' => 'required'
+                        );
+                        echo form_textarea($arrInput);
+                      ?>
+                      </div>
+                    </div>
+                    
+                  </div>
+                </div>
+              </div>
+
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-default" data-dismiss="modal">Tutup</button>
+              <button type="submit" class="btn btn-primary">Ya, Mutasikan</button>
+            </div>
+          </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+      </div><!-- /.modal -->
+</form>

@@ -48,6 +48,8 @@ class jem_data_jemaat extends jemaat {
         	"t2.tg_id" => $this->grjId
         );
 
+        $curUrl = current_url() . "?" . http_build_query($arrGet);
+
         $perpage = 20;
 
 
@@ -152,6 +154,7 @@ class jem_data_jemaat extends jemaat {
         );
 
 
+        $apiUrl = base_url("index.php/api/api_jemaat/profile/");
         $arrView = array(
             "ctlStart" => $start,
             "ctlArrData" => $arrData,
@@ -160,6 +163,9 @@ class jem_data_jemaat extends jemaat {
             "ctlUrlAdd" => $this->thisurl . "/form/",
             "ctlUrlEdit" => $this->thisurl . "/form/",
             "ctlUrlProfile" => $this->thisurl . "/profile/",
+            "ctlUrlProfileJemaat" => $apiUrl ,
+            "ctlCurUrl" => $curUrl,
+            "ctlUrlSubmit" => $this->thisurl . "/submit_mutasi/",
             "ctlPagination" => $this->_pagination($this->thisurl."/index/all/", $countTotal, $perpage, 4),
             "ctlArrSortHeader" => $arrSortHeader
 
@@ -174,9 +180,13 @@ class jem_data_jemaat extends jemaat {
                 $arrView, true),
             "ctlSideBarR" => $this->load->view("master_view/master_sidebar_r", array(), true),
 
-            "ctlArrJs" => array(),
+            "ctlArrJs" => array(
+                base_url("assets/js/controller/api_jemaat.js"),
+                base_url("assets/js/bootstrap-datepicker.min.js"),
+            ),
             "ctlArrCss" => array(
-                base_url("assets/css/jquery.dataTables.min.css")
+                base_url("assets/css/jquery.dataTables.min.css"),
+                base_url("assets/css/bootstrap-datepicker3.min.css"),
             )
         );
         $this->load->view('master_view/master_index', $arrData);

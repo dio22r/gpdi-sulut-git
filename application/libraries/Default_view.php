@@ -251,12 +251,14 @@ class default_view {
 					        "title" => "Daftar Kelompok",
 					        "class" => ""
 				    	),
+				    	/**
 				    	"mutasi_jemaat" => array(
 					  		"icon" => "fa-refresh",
 					        "href" => $baseUrl . "/jem_data_jemaat/mutasi_jemaat",
 					        "title" => "Mutasi Jemaat",
 					        "class" => ""
 				    	),
+				    	*/
 				  	)
 		        ),
 				"statistik" => array(

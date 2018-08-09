@@ -50,6 +50,8 @@ class jemaat extends CI_Controller {
         $arrGet = $this->input->get();
         $perpage = 20;
 
+        $curUrl = current_url() . "?" . http_build_query($arrGet);
+
         $arrWhere = array();
 
         $arrSortHeader = array(
@@ -152,6 +154,7 @@ class jemaat extends CI_Controller {
             "P" => "Perempuan"
           );
 
+        $apiUrl = base_url("index.php/api/api_jemaat/profile/");
         $arrView = array(
             "ctlStart" => $start,
             "ctlArrData" => $arrData,
@@ -160,6 +163,9 @@ class jemaat extends CI_Controller {
             "ctlUrlAdd" => $this->thisurl . "/pilih_gereja/",
             "ctlUrlEdit" => $this->thisurl . "/form/",
             "ctlUrlProfile" => $this->thisurl . "/profile/",
+            "ctlUrlProfileJemaat" => $apiUrl ,
+            "ctlCurUrl" => $curUrl,
+            "ctlUrlSubmit" => $this->thisurl . "/submit_mutasi/",
             "ctlPagination" => $this->_pagination($this->thisurl."/index/all/", $countTotal, $perpage, 4),
             "ctlArrSortHeader" => $arrSortHeader
 
@@ -175,8 +181,14 @@ class jemaat extends CI_Controller {
                 $arrView, true),
             "ctlSideBarR" => $this->load->view("master_view/master_sidebar_r", array(), true),
 
-            "ctlArrJs" => array(),
-            "ctlArrCss" => array(base_url("assets/css/jquery.dataTables.min.css"))
+            "ctlArrJs" => array(
+                base_url("assets/js/controller/api_jemaat.js"),
+                base_url("assets/js/bootstrap-datepicker.min.js"),
+            ),
+            "ctlArrCss" => array(
+                base_url("assets/css/jquery.dataTables.min.css"),
+                base_url("assets/css/bootstrap-datepicker3.min.css"),
+            )
         );
         $this->load->view('master_view/master_index', $arrData);
     }
@@ -863,5 +875,106 @@ class jemaat extends CI_Controller {
 
         redirect($this->thisurl . "/profile/" . $idJemaat, "refresh");
 
+    }
+
+
+    public function submit_mutasi() {
+        $arrPost = $this->input->post();
+
+        if (!$arrPost) {
+            show_404();
+        }
+
+        $postStatus = true;
+        $idUser = $this->arrSession["arrUser"]["usr_id"];
+        $userType = $this->arrSession["arrUser"]["usertype"];
+        $sql = "";
+
+        // update table jemaat to 0
+
+        $id = isset($arrPost["tj_id"]) ? $arrPost["tj_id"] : "";
+
+        $arrWhere = array();
+        switch($userType) {
+            case "grj":
+                $idGrj = $this->arrSession["arrUser"]["usrt_id"];
+                $arrWhere = array(
+                    "t1.tj_id" => $id,
+                    "t2.tg_id" => $idGrj
+                );
+                break;
+
+            case "mw":
+                $idMw = $this->arrSession["arrUser"]["usrt_id"];
+                $arrWhere = array(
+                    "t1.tj_id" => $id,
+                    "t2.tw_id" => $idMw
+                );
+                break;
+
+            case "md":
+                $arrWhere = array("t1.tj_id" => $id);
+                break;
+
+            default:
+                show_404();
+        }
+
+        if (!$arrWhere) {
+            show_404();
+        }
+
+        $arrData = $this->tbl_jemaat->retrieve_data(
+            $arrWhere, 0, 1, "t1.tj_nama, t2.tg_nama"
+        );
+
+        if ($arrData) {
+            $this->db->trans_start();            
+
+            $date = $arrPost["tjm_tgl_mutasi"];
+            if ($arrPost["tjm_tipe"] == 5) {
+                $date = date("Y-m-d");
+            }
+
+            $arrInsert = array(
+                "tj_id" => $arrPost["tj_id"],
+                "tu_id" => $idUser,
+                "tjm_tipe" => $arrPost["tjm_tipe"],
+                "tjm_tgl_mutasi" => $date,
+                "tjm_ket" => $arrPost["tjm_ket"],
+                "tjm_status" => 1,
+                "tjm_sql_statement" => $sql
+            );
+
+            $result = $this->tbl_jemaat->insert_det_by_id("table1g", $arrInsert);
+
+            $arrWhere = array(
+                "tj_id" => $id
+            );
+
+            $arrUpdate = array("tj_status" => 0);
+            $result = $this->tbl_jemaat->update_det_by_id(
+                "table1", $arrUpdate, $arrWhere
+            );
+
+            $this->db->trans_complete();
+
+            if ($this->db->trans_status() === FALSE) {
+                $this->db->trans_rollback();
+                $msg = "Data Jemaat Gagal Dimutasi, ada kesalahan pada sistem <br />"
+                    . $arrData[0]["tj_nama"] . " dari " . $arrData[0]["tg_nama"];
+                $result = false;
+            } else {
+                $this->db->trans_commit();
+                $msg = "Data Jemaat Berhasil Dimutasi <br />"
+                    . $arrData[0]["tj_nama"] . "dari " . $arrData[0]["tg_nama"];
+                $result = true;
+                $url = $arrPost["cur_url"];
+                
+                redirect($url, "refresh");
+            }
+        } else {
+            show_404();
+        }
     }
 }
