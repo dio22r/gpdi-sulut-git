@@ -120,15 +120,19 @@
                     </tr>
                     <tr>
                       <th>Tgl. Lahir :</th>
-                      <td class="data-tgl-lahir">20 Juli 1989</td>
+                      <td class="data-tgl-lahir">-</td>
                     </tr>
                     <tr>
                       <th>Umur :</th>
-                      <td class="data-umur">29 tahun</td>
+                      <td class="data-umur">- tahun</td>
                     </tr>
                     <tr>
                       <th>Jenis Kelamin :</th>
-                      <td class="data-jk">Laki-laki</td>
+                      <td class="data-jk">-</td>
+                    </tr>
+                    <tr>
+                      <th>Gereja :</th>
+                      <td class="data-gereja">-</td>
                     </tr>
                 </tbody>
               </table>

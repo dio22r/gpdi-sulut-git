@@ -149,6 +149,7 @@ class user extends CI_Controller {
             "ctlTotal" => $total,
             "ctlProfileUrl" => $thisurl . "/profile/",
             "ctlFormUrl" => $thisurl . "/form/",
+            "ctlUrlPendaftar" => $thisurl . "/proses_daftar/"
         );
 
         $arrData = array(
@@ -567,6 +568,7 @@ class user extends CI_Controller {
             "ctlTotal" => $total,
             "ctlProfileUrl" => $thisurl . "/profile/",
             "ctlFormUrl" => $thisurl . "/form/",
+            "ctlBaseUrl" => $thisurl
         );
 
         $arrData = array(

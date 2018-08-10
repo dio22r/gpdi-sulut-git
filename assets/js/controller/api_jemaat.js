@@ -15,6 +15,7 @@ $( document ).ready( function () {
 	    	$(".data-tgl-lahir").html(msg.tj_tgl_lahir);
 	    	$(".data-umur").html(msg.age);
 	    	$(".data-jk").html(msg.tj_jk);
+	    	$(".data-gereja").html(msg.tg_nama);
 
 	    	$(".tj_id").val(msg.tj_id);
 	  });
