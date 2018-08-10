@@ -31,6 +31,7 @@ class default_view {
 		$this->arrUserData = array(
 			"displayname" => $arrUserData["usr_surename"],
 			"menu" => $arrUserData["usertype"],
+			"usertype_disp" => $arrUserData["usertype_disp"]
 		);
 
     }
@@ -59,7 +60,8 @@ class default_view {
 
     	$arrData = array(
     		"ctlArrMenu" => $arrMenu,
-    		"ctlUsername" => $arrUserData["displayname"]
+    		"ctlUsername" => $arrUserData["displayname"],
+    		"ctlUserType" => $arrUserData["usertype_disp"]
 		);
 
     	$html = $this->loadClass->view("master_view/master_menu", $arrData, true);
@@ -287,7 +289,8 @@ class default_view {
     	$arrData = array(
     		"ctlUrlLogout" => $baseUrl."/login/logout",
     		"ctlUrlGantiPwd" => $baseUrl."/self_user/ganti_pwd",
-    		"ctlUsername" => $arrUserData["displayname"]
+    		"ctlUsername" => $arrUserData["displayname"],
+    		"ctlUserType" => $arrUserData["usertype_disp"]
 		);
     	$html = $this->loadClass->view("master_view/master_headerbar", $arrData, true);
     	return $html;

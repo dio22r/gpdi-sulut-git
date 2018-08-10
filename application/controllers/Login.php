@@ -68,6 +68,9 @@ class login extends CI_Controller {
             		"usr_username" => $arrData[0]["tu_username"],
             		"usr_surename" => $arrData[0]["tu_display_name"],
             		"usertype" => $arrUserTipe[$arrData[0]["tu_tipe_user"]],
+                    "usertype_disp" => $this->_retrieve_tipe_user(
+                        $arrData[0]["tu_tipe_user"], $arrData[0]["tu_tipe_id"]
+                    ),
             		"usrt_id" => $arrData[0]["tu_tipe_id"]
             	);
                 
@@ -103,6 +106,37 @@ class login extends CI_Controller {
         return $arrReturn;
         */
 	}
+
+    protected function _retrieve_tipe_user($idTipe, $linkedId) {
+        $displayType = "Majelis Daerah";
+
+        switch ($idTipe) {
+            case 1:
+                $displayType = "Majelis Daerah";
+                break;
+            
+            case 3:
+                $this->load->model("tbl_wilayah");
+                $arrData = $this->tbl_wilayah->select_by_id($linkedId);
+                $noInduk = $arrData[0]["tw_nomor_induk"];
+                $nama = $arrData[0]["tw_nama"];
+                $displayType = "MW ". $noInduk . " " . $nama;
+                break;
+
+            case 5:
+                $this->load->model("tbl_gereja");
+                $arrWhere = array("tg_id" => $linkedId);
+                $arrData = $this->tbl_gereja->retrieve_nama_gereja($arrWhere);
+                $displayType = $arrData[0]["tg_nama"];
+                break;
+
+            default:
+                $displayType = "";
+                break;
+        }
+
+        return $displayType;
+    }
 
 	public function logout() {
 	    $this->session->sess_destroy();

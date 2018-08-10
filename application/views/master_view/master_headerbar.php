@@ -130,7 +130,7 @@
 
                 <p>
                   <?php echo $ctlUsername; ?>
-                  <small>Member since Aug. 2017</small>
+                  <small><?php echo $ctlUserType; ?></small>
                 </p>
               </li>
               <!-- Menu Body -->
